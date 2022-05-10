@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -15,6 +14,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
+        <Route path="" element={<Calculator />}></Route>
         <Route path="calculator" element={<Calculator />}></Route>
         <Route path="regles" element={<Rules />}></Route>
         <Route path="jouer" element={<Play />}></Route>
