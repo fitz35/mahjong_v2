@@ -496,6 +496,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: rgb(102 67 20 / var(--tw-bg-opacity));
 }
 
+.bg-pageVeryDark {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 31 5 / var(--tw-bg-opacity));
+}
+
 .object-left {
   object-position: left;
 }
@@ -525,4 +530,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
+}
+
+.hover\:bg-pageVeryDark:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 31 5 / var(--tw-bg-opacity));
 }

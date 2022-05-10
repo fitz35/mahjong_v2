@@ -15,7 +15,6 @@ root.render(
     <Routes>
       <Route path="/" element={<App />}>
         <Route path="" element={<Calculator />}></Route>
-        <Route path="calculator" element={<Calculator />}></Route>
         <Route path="regles" element={<Rules />}></Route>
         <Route path="jouer" element={<Play />}></Route>
       </Route>
