@@ -1,0 +1,23 @@
+nom;ouvert;cache;multiplicateur
+suite;;;
+Paire;;;
+Paire de 1 ou de 9;;;
+Paire de vents ou de dragons dominant;2;2;1
+Paire de vents ou de dragons du joueur;2;2;1
+Paire de vents ou de dragons;2;2;1
+Paire de vents ou de dragons du joueur dominant;2;2;1
+Brelan;2;4;1
+Brelan de vents ou de dragons;4;8;2
+Brelan de 1 ou de 9;4;8;1
+Brelan de vents ou de dragons du joueur;4;8;4
+Brelan de vents ou de dragons dominant;4;8;4
+Brelan de vents ou de dragons du joueur dominant;4;8;4
+Carre;8;16;2
+Carre de vents ou de dragons;16;32;4
+Carre de 1 ou de 9;16;32;2
+Carre de vents ou de dragons du joueur;16;32;8
+Carre de vents ou de dragons dominant;16;32;8
+Carre de vents ou de dragons du joueur dominant;16;32;4
+honneur ;4;;1
+honneur  du joueur;4;;2
+honneur Carre;16;;4

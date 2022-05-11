@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Calculator from './routes/Calculator';
 import Rules from './routes/Rules';
 import Play from './routes/Play';
+import { CookiesProvider } from 'react-cookie';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,7 +15,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
-        <Route path="" element={<Calculator />}></Route>
+        <Route path="" element={<CookiesProvider><Calculator /></CookiesProvider>}></Route>
         <Route path="regles" element={<Rules />}></Route>
         <Route path="jouer" element={<Play />}></Route>
       </Route>
