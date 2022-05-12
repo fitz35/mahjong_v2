@@ -19,9 +19,9 @@ export function getCombiScoring(callBack : {(record : CombiScoring[])  : void}) 
                     rowArray.map((value : string) => {return value.split(";")}).map((value : string[]) : CombiScoring => {
                         return {
                             name : value[0],
-                            open : parseInt(value[1]),
-                            hidden : parseInt(value[2]),
-                            multiplicator : parseInt(value[3])
+                            open : value[1] === "" ? 0 : parseInt(value[1]),
+                            hidden : value[2] === "" ? 0 : parseInt(value[2]),
+                            multiplicator : value[3] === "" ? 1 : parseInt(value[3])
                         }
                     })
                 );
