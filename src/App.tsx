@@ -9,7 +9,7 @@ function App() {
     <div className="App bg-pageBase text-white h-screen">
       <header className='bg-pageDark items-center h-16 flex'>
         <img className="h-16" src={logo} alt="Logo" />
-        <h1 className="flex-1 object-left text-3xl font-bold underline">Mahjong</h1>
+        <h1 className="flex-1 text-white object-left text-3xl font-bold underline">Mahjong</h1>
         <CustomNavbar></CustomNavbar>
       </header>
       <Outlet />

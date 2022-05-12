@@ -36,13 +36,13 @@ export class CustomNavbar extends React.Component <{}, NavbarState>{
                     <tbody>
                         <tr>
                             <td className={td1}>
-                                <NavLink className="hover:bg-pageVeryDark" onClick={() => this.setState({link : 1})} to="/">Calculateur</NavLink>
+                                <NavLink className="text-white hover:bg-pageVeryDark" onClick={() => this.setState({link : 1})} to="/">Calculateur</NavLink>
                             </td>
                             <td className={td2}>
-                                <NavLink className="hover:bg-pageVeryDark" onClick={() => this.setState({link : 2})} to="/regles">Régles</NavLink>
+                                <NavLink className="text-white hover:bg-pageVeryDark" onClick={() => this.setState({link : 2})} to="/regles">Régles</NavLink>
                             </td>
                             <td className={td3}>
-                                <NavLink className="hover:bg-pageVeryDark" onClick={() => this.setState({link : 3})} to="/jouer">Jouer</NavLink>
+                                <NavLink className="text-white hover:bg-pageVeryDark" onClick={() => this.setState({link : 3})} to="/jouer">Jouer</NavLink>
                             </td>
                         </tr>
                     </tbody>
