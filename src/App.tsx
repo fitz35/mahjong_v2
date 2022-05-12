@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from "./logo.png"
 import './css/output.css';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { CustomNavbar } from './component/navbar/CustomNavbar';
 
 function App() {

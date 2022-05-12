@@ -1,7 +1,9 @@
+import { CustomRules } from "../component/rules/CustomRules";
+
 export default function Rules() {
     return (
       <main>
-        <h2>Règles</h2>
+        <CustomRules></CustomRules>
       </main>
     );
   }
