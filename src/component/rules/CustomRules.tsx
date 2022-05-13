@@ -56,7 +56,7 @@ export class CustomRules extends React.Component <{}, RulesState>{
               ];
 
             combiComponent = 
-                <Table id="combiTableRules" title={() => 'Points des combinaisons'} pagination={{ pageSize: 1000 }} scroll={{ y: 240 }} dataSource={this.state.combiScoring} columns={columns} />;    
+                <Table title={() => 'Points des combinaisons'} pagination={{ pageSize: 1000 }} scroll={{ y: 240 }} dataSource={this.state.combiScoring} columns={columns} />;    
             
             ;
         }

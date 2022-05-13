@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from "./logo.png"
-import './css/output.css';
+//import './css/output.css';
+//import 'antd/dist/antd.css';
+import './css/input.less';
 import { Outlet } from 'react-router-dom';
 import { CustomNavbar } from './component/navbar/CustomNavbar';
 
