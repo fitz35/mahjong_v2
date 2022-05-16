@@ -112,4 +112,7 @@ module.exports = {
 
 ```
 
+the var to overwrite : https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+
+
 https://ant.design/docs/react/use-with-create-react-app
