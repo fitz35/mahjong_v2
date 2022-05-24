@@ -1,13 +1,8 @@
 import React from "react";
+import { MahjongPiecesPannel } from "./MahjongPiecesPannel";
 
-export class CustomCalculator extends React.Component <{}, {}>{
-    constructor(props: {}) {
-        super(props)
-
-    }
-
-    render() {
-        return (<h2>Calculateur</h2>)
-    }
+export const CustomCalculator = () => {
+        return (MahjongPiecesPannel())
+    
 
 }
