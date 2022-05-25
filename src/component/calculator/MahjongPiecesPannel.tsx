@@ -41,7 +41,9 @@ function MahjongPieceArea(x : number, y : number, piece : Piece, setSelection : 
     const coord = x + "," + y + "," + (x + width) + "," + (y + height);
 
     return (
-        <area shape="rect" 
+        <area 
+            key={"area_" + piece.getFrDisplayName()}
+            shape="rect" 
             coords={coord} 
             alt={piece.getFrDisplayName()} 
             title={piece.getFrDisplayName()} 
@@ -63,10 +65,37 @@ export function MahjongPiecesPannel() {
     let areaBuffer  : Array<JSX.Element> = [];
 
     //3 bases famille
-    for (let line = 0; line < 3; line ++) {
-        for (let colonne = 1; colonne <= 9; colonne ++) {
-            const familles = [Famille.Caractere, Famille.Cercle, Famille.Bambou];
-            areaBuffer.push(MahjongPieceArea(x, y, new Piece(colonne.toString(), familles[line]), setTooltipInfo));
+    const baseFamilles = [Famille.Caractere, Famille.Cercle, Famille.Bambou];
+    for (let baseFamille = 0; baseFamille < baseFamilles.length; baseFamille ++) {
+        for (let numero = 1; numero <= 9; numero ++) {
+            areaBuffer.push(MahjongPieceArea(x, y, new Piece(numero.toString(), baseFamilles[baseFamille]), setTooltipInfo));
+            x += width + espace_w;
+        }
+        x = x_init;
+        y += height + espace_h;
+    }
+    // vent
+    const ventNumeros = ["E", "S", "O", "N"];
+    for (let vent = 0; vent < ventNumeros.length; vent ++) {
+        areaBuffer.push(MahjongPieceArea(x, y, new Piece(ventNumeros[vent], Famille.Vent), setTooltipInfo));
+        x += width + espace_w;
+    }
+    x = x_init;
+    y += height + espace_h;
+    // dragon
+    const dragonNumero = ["R", "V", "B"];
+    for (let dragon = 0; dragon < dragonNumero.length; dragon ++) {
+        areaBuffer.push(MahjongPieceArea(x, y, new Piece(dragonNumero[dragon], Famille.Dragon), setTooltipInfo));
+        x += width + espace_w;
+    }
+    x = x_init;
+    y += height + espace_h;
+
+    // fleurs and saisons
+    const bonuss = [Famille.Fleurs, Famille.Saison];
+    for(let bonus = 0 ; bonus < bonuss.length; bonus++){
+        for(let numero = 1 ; numero <= 4 ; numero ++){
+            areaBuffer.push(MahjongPieceArea(x, y, new Piece(numero.toString(), bonuss[bonus]), setTooltipInfo));
             x += width + espace_w;
         }
         x = x_init;
