@@ -15,6 +15,9 @@ type RulesState = {
 
 }
 
+/**
+ * display the rulling 
+ */
 export class CustomRules extends React.Component <{}, RulesState>{
     constructor(props: {}) {
         super(props)

@@ -2,6 +2,10 @@ import { Col, Row } from "antd";
 import { MahjongPiecesPannel } from "./MahjongPiecesPannel";
 import { Mains } from "./Mains";
 
+/**
+ * manage all the element at the screen for the calculator
+ * @returns 
+ */
 export const CustomCalculator = () => {
 
 

@@ -1,7 +1,187 @@
+import { sort } from "../utils/sort";
+import { Piece } from "./Piece";
+import { BaseCombi, CombiAuth, Famille, isSuiteFamille, ModificateurCombi, NumeroVent } from "./types";
+
+/**
+ * compare 2 piece to sort it for isSuite function
+ * If no numero (dragon, vent), it is greater than the other
+ * @param piece1 
+ * @param piece2 
+ */
+export function compareForSuiteSort(piece1 : Piece, piece2 : Piece) : number {
+    if(!isSuiteFamille(piece1.famille) && !isSuiteFamille(piece2.famille)){
+        return 0; // no sortable
+    }else if (!isSuiteFamille(piece1.famille) && isSuiteFamille(piece2.famille)){
+        return 1;
+    }else if (isSuiteFamille(piece1.famille) && !isSuiteFamille(piece2.famille)){
+        return -1;
+    }else{
+        // compare the numero
+        if(Number(piece1.numero) > Number(piece2.numero))
+            return 1;
+        else if(Number(piece1.numero) === Number(piece2.numero))
+            return 0;
+        else
+            return -1;
+    }
+}
+
+/**
+ * test if all the pieces are the famille
+ * @param pieces the pieces to tests
+ * @returns 
+ */
+function isSameFamille(pieces : Piece[]) : boolean {
+    const familleRef : Famille = pieces[0].famille;
+    let sameFamille = true;
+
+    for(let i = 1 ; i < pieces.length ; i ++){
+        sameFamille = sameFamille && familleRef === pieces[i].famille
+    }
+    return sameFamille;
+}
+
+
+/**
+ * @param pieces 
+ * @returns if the pieces are a suite. If 0 piece, false, if 1 false, if 2 false, if 3 test
+ */
+export function isSuite(pieces : Piece[]) : CombiAuth | undefined{
+    sort<Piece>(pieces, compareForSuiteSort);
+    if(pieces.length >= 3){
+        // cant be a suite if it isn't a same famille combinaison and a famille without suite
+        if(isSameFamille(pieces) && isSuiteFamille(pieces[0].famille)){
+            let allFollow = true;
+            for(let i : number = 0; i < pieces.length - 1; i ++){
+                allFollow = allFollow && (
+                    Number(pieces[i].numero) === Number(pieces[i + 1].numero) - 1
+                );
+            }
+            if(allFollow){
+                return {
+                    base : BaseCombi.Suite,
+                    modificateur : new Set()
+                };
+            }else{
+                return undefined;
+            }
+        }else{
+            return undefined;
+        }
+
+    }else{
+        return undefined;
+    }
+}
+
+
+/**
+ * test if a combinaison is a carre, brelan or pair
+ * @param pieces the pieces to test
+ * @param joueurVent the joueur who hold the combi
+ * @param dominantVent the dominant wind
+ * @returns 
+ */
+export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiAuth | undefined {
+    if(pieces.length === 4 || pieces.length === 3 || pieces.length === 2){
+        const familleRef : Famille = pieces[0].famille;
+        const numeroRef : string = pieces[0].numero;
+        let sameFamille = true;
+        let sameNumero = true;
+
+        for(let i = 1 ; i < pieces.length ; i ++){
+            sameFamille = sameFamille && familleRef === pieces[i].famille
+            sameNumero = sameNumero && numeroRef === pieces[i].numero
+        }
+
+        let baseCombi : BaseCombi;
+        switch(pieces.length){
+            case 2:
+                baseCombi = BaseCombi.Paire;
+                break;
+            case 3:
+                baseCombi = BaseCombi.Brelan;
+                break;
+            case 4:
+                baseCombi = BaseCombi.Carre;
+                break;
+            default:
+                baseCombi = BaseCombi.Carre;
+        }
+
+
+        if(sameFamille && sameNumero){
+            if(isSuiteFamille(familleRef)){// can be a Extrem carre
+                if(numeroRef === "1" || numeroRef === "9"){
+                    return {
+                        base : baseCombi,
+                        modificateur : new Set([ModificateurCombi.ExtremNumero])
+                    };
+                }else{
+                    return {
+                        base : baseCombi,
+                        modificateur : new Set()
+                    };
+                }
+            }else{// can be joueur or dominant
+                let modificateur : Set<ModificateurCombi> = new Set();
+                if(familleRef === Famille.Vent || familleRef === Famille.Dragon){
+                    modificateur.add(ModificateurCombi.VentOuDragon);
+                }
+                if(familleRef === Famille.Vent && numeroRef === joueurVent){
+                    modificateur.add(ModificateurCombi.Joueur);
+                }
+                if(familleRef === Famille.Vent && numeroRef === dominantVent){
+                    modificateur.add(ModificateurCombi.Dominant);
+                }
+
+                return {
+                    base : baseCombi,
+                    modificateur : modificateur
+                };
+            }
+        }else{
+            return undefined;
+        }
+    }else{
+        return undefined;
+    }
+}
+
+
+
+/**
+ * 
+ * @param pieces the pieces to tests
+ * @return if the pieces are a valid combinaison
+ */
+export function isCombiValid(pieces : Piece[]) : boolean{
+    // if no piece, valid
+    if(pieces.length >= 1){
+        return true;
+    }else{
+        return true;
+    }
+}
+
+/**
+ * represente a combinaison of multiple piece, and some usefull function
+ */
 export class Combinaison {
+    readonly pieces : Piece[];
 
+    /**
+     * sort the numero of the piece if it is numero
+     * @param pieces 
+     */
+    constructor(pieces : Piece[]){
+        this.pieces = pieces;
+        sort<Piece>(this.pieces, compareForSuiteSort);
+    }
 
-
+    public isValid = () : boolean => {
+        return isCombiValid(this.pieces);
+    }
 
 
     

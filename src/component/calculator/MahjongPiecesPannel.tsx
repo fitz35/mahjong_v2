@@ -54,7 +54,10 @@ function MahjongPieceArea(x : number, y : number, piece : Piece, setSelection : 
             </area>
     );
 }
-
+/**
+ * Make the mahjong image mapping to allow cliking and manage it
+ * @returns 
+ */
 export function MahjongPiecesPannel() {
     const [tooltipInfos, setTooltipInfo] = useState<TooltypeState>();
 

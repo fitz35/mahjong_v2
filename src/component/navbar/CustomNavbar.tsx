@@ -1,6 +1,10 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+/**
+ * navbar
+ * @returns 
+ */
 export function CustomNavbar() {
   const location = useLocation();
   var td1: string = "w-40 border-r border-white";

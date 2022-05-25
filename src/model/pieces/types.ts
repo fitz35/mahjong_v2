@@ -1,19 +1,49 @@
-
+/////////////////////////////////////////////////////
+// famille
 
 export enum Famille{
     Caractere = "C",
     Cercle = "R", // for rond
     Bambou = "B",
+
     Vent = "V",
     Dragon = "D",
+
     Fleurs = "F",
     Saison = "S"
 }
 
-export function checkFamille(numero : string) : boolean {
-    return (Object as any).values(Famille).includes(numero);
+export enum NumeroVent {
+    Est = "E",
+    Ouest = "O",
+    Nord = "N",
+    Sud = "S"
 }
 
+/**
+ * check if memebers of a famille can be compared with his numero to form a suite
+ * @param famille the famille to test
+ * @returns 
+ */
+export function isSuiteFamille(famille : Famille) : boolean {
+    return famille === Famille.Caractere || famille === Famille.Cercle || famille === Famille.Bambou;
+}
+
+/**
+ * check if the famille is a real famille
+ * @param famille the famille to check 
+ * @returns 
+ */
+export function checkFamille(famille : string) : boolean {
+    return (Object as any).values(Famille).includes(famille);
+}
+
+/**
+ * check if numero can be applied to famille
+ * @param numero 
+ * @param famille 
+ * @returns 
+ */
 export function checkCoherence(numero : string, famille : Famille) : boolean{
     // 3 basics famille
     if(famille === Famille.Bambou || famille === Famille.Caractere || famille === Famille.Cercle){
@@ -27,7 +57,7 @@ export function checkCoherence(numero : string, famille : Famille) : boolean{
     }
     // vent 
     else if(famille === Famille.Vent){
-        return numero === "E" || numero === "S" || numero === "O" || numero === "N"
+        return (Object as any).values(NumeroVent).includes(numero);
     }
     // dragon
     else if(famille === Famille.Dragon){
@@ -45,4 +75,26 @@ export function checkCoherence(numero : string, famille : Famille) : boolean{
 
 
     return false;
+}
+////////////////////////////////////////////////////////////////////
+// combinaison
+
+export enum BaseCombi {
+    Paire = "Paire",
+    Suite = "suite",
+    Brelan = "Brelan",
+    Carre = "Carre",
+    Honneur = "honneur"
+}
+
+export enum ModificateurCombi {
+    ExtremNumero = "ExtremNumero", // 1 ou 9
+    VentOuDragon = "VentOuDragon",
+    Dominant = "Dominant",
+    Joueur = "Joueur"
+}
+
+export type CombiAuth = {
+    base : BaseCombi,
+    modificateur : Set<ModificateurCombi>
 }
