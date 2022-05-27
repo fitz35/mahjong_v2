@@ -97,4 +97,6 @@ export enum ModificateurCombi {
 export type CombiAuth = {
     base : BaseCombi,
     modificateur : Set<ModificateurCombi>
+    famille : Famille,
+    number? : number // for the number of honneur if baseCombi is honneur
 }

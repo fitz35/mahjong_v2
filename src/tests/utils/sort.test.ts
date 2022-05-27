@@ -50,5 +50,5 @@ describe('Test the sort algorithme with piece', () => {
         sort<Piece>(toTest, compareForSuiteSort);
         expect(JSON.stringify(toTest)).toBe(JSON.stringify([new Piece("1", Famille.Caractere), new Piece("2", Famille.Caractere), new Piece("3", Famille.Caractere)]));
     });
-
+    
 });

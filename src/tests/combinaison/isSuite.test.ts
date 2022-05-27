@@ -21,7 +21,8 @@ describe('Test the isSuite algorithme', () => {
         const toTest = [new Piece("1", Famille.Caractere), new Piece("3", Famille.Caractere), new Piece("2", Famille.Caractere)];
         expect(JSON.stringify(isSuite(toTest))).toBe(JSON.stringify({
             base : BaseCombi.Suite,
-            modificateur : new Set()
+            modificateur : new Set(),
+            famille : Famille.Caractere
         }));
         expect(JSON.stringify(toTest)).toBe(JSON.stringify([new Piece("1", Famille.Caractere), new Piece("2", Famille.Caractere), new Piece("3", Famille.Caractere)]));
     });
@@ -52,7 +53,8 @@ describe('Test the isSuite algorithme', () => {
         ];
         expect(JSON.stringify(isSuite(toTest))).toBe(JSON.stringify({
             base : BaseCombi.Suite,
-            modificateur : new Set()
+            modificateur : new Set(),
+            famille : Famille.Bambou
         }));
         expect(JSON.stringify(toTest)).toBe(JSON.stringify([
             new Piece("1", Famille.Bambou), 
@@ -89,5 +91,13 @@ describe('Test the isSuite algorithme', () => {
             new Piece("7", Famille.Bambou), 
             new Piece("9", Famille.Bambou), 
         ]));
+    });
+    it("shouldn't be a suite because it isn't a suite family (fleur)", ()=> {
+        const toTest = [new Piece("1", Famille.Fleurs), new Piece("2", Famille.Fleurs), new Piece("3", Famille.Fleurs)];
+        expect(isSuite(toTest)).toBe(undefined);
+    });
+    it("shouldn't be a suite because it isn't a suite family (Saison)", ()=> {
+        const toTest = [new Piece("1", Famille.Saison), new Piece("2", Famille.Saison), new Piece("3", Famille.Saison)];
+        expect(isSuite(toTest)).toBe(undefined);
     });
 });

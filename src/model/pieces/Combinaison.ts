@@ -41,6 +41,16 @@ function isSameFamille(pieces : Piece[]) : boolean {
     return sameFamille;
 }
 
+//function to test if the piece in a array arent the same
+function isNotSame(pieces : Piece[]) : boolean {
+    let notSame = true; 
+    for(let i = 0 ; i < pieces.length ; i ++){
+        for(let j = i + 1 ; j < pieces.length ; j ++){
+            notSame = notSame && (pieces[i].numero !== pieces[j].numero || pieces[i].famille !== pieces[j].famille); 
+        }
+    }
+    return notSame;
+}
 
 /**
  * @param pieces 
@@ -60,7 +70,8 @@ export function isSuite(pieces : Piece[]) : CombiAuth | undefined{
             if(allFollow){
                 return {
                     base : BaseCombi.Suite,
-                    modificateur : new Set()
+                    modificateur : new Set(),
+                    famille : pieces[0].famille,
                 };
             }else{
                 return undefined;
@@ -83,7 +94,7 @@ export function isSuite(pieces : Piece[]) : CombiAuth | undefined{
  * @returns 
  */
 export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiAuth | undefined {
-    if(pieces.length === 4 || pieces.length === 3 || pieces.length === 2){
+    if((pieces.length === 4 || pieces.length === 3 || pieces.length === 2) && pieces[0].famille !== Famille.Fleurs && pieces[0].famille !== Famille.Saison){
         const familleRef : Famille = pieces[0].famille;
         const numeroRef : string = pieces[0].numero;
         let sameFamille = true;
@@ -115,12 +126,14 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
                 if(numeroRef === "1" || numeroRef === "9"){
                     return {
                         base : baseCombi,
-                        modificateur : new Set([ModificateurCombi.ExtremNumero])
+                        modificateur : new Set([ModificateurCombi.ExtremNumero]),
+                        famille : familleRef
                     };
                 }else{
                     return {
                         base : baseCombi,
-                        modificateur : new Set()
+                        modificateur : new Set(),
+                        famille : familleRef
                     };
                 }
             }else{// can be joueur or dominant
@@ -137,7 +150,8 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
 
                 return {
                     base : baseCombi,
-                    modificateur : modificateur
+                    modificateur : modificateur,
+                    famille : familleRef
                 };
             }
         }else{
@@ -148,6 +162,40 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
     }
 }
 
+// test if a combinaison is all honneur
+export function isHonneur(pieces : Piece[]) : CombiAuth | undefined {
+    if(pieces.length <= 4 && isSameFamille(pieces) && isNotSame(pieces) && (pieces[0].famille === Famille.Fleurs || pieces[0].famille === Famille.Saison)){
+        return {
+            base : BaseCombi.Honneur,
+            modificateur : new Set(),
+            famille : pieces[0].famille,
+            number : pieces.length
+        };
+    }else{
+        return undefined;
+    }
+}
+
+// test if an array of pieces is a combinaison and get the combinaison
+export function getCombinaison(pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiAuth | undefined {
+    const combiAuth : CombiAuth | undefined = isMultipleSamePiece(pieces, joueurVent, dominantVent);
+    if(combiAuth !== undefined){
+        return combiAuth;
+    }else{
+        const combiAuth : CombiAuth | undefined = isSuite(pieces);
+        if(combiAuth !== undefined){
+            return combiAuth;
+        }else{
+            const combiAuth : CombiAuth | undefined = isHonneur(pieces);
+            if(combiAuth !== undefined){
+                return combiAuth;
+            }else{
+                return undefined;
+            }
+        }
+    }
+}
+
 
 
 /**
@@ -155,10 +203,15 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
  * @param pieces the pieces to tests
  * @return if the pieces are a valid combinaison
  */
-export function isCombiValid(pieces : Piece[]) : boolean{
+export function isCombiValid(pieces : Piece[], joueur : NumeroVent, dominantVent : NumeroVent) : boolean {
     // if no piece, valid
     if(pieces.length >= 1){
-        return true;
+        // if it is a combinaison, valid
+        if(getCombinaison(pieces, joueur, dominantVent) !== undefined){
+            return true;
+        }else{
+            return false;
+        }
     }else{
         return true;
     }
@@ -180,9 +233,12 @@ export class Combinaison {
     }
 
     public isValid = () : boolean => {
-        return isCombiValid(this.pieces);
+        // joueur and dominant not important, so set to Est
+        return isCombiValid(this.pieces, NumeroVent.Est, NumeroVent.Est);
     }
 
-
+    public getCombinaison = (joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiAuth | undefined => {
+        return getCombinaison(this.pieces, joueurVent, dominantVent);
+    }
     
 }
