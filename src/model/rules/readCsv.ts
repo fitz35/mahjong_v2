@@ -18,10 +18,11 @@ export function getCombiScoring(callBack : {(record : CombiScoring[])  : void}) 
                 callBack (
                     rowArray.map((value : string) => {return value.split(";")}).map((value : string[]) : CombiScoring => {
                         return {
-                            name : value[0],
-                            open : value[1] === "" ? 0 : parseInt(value[1]),
-                            hidden : value[2] === "" ? 0 : parseInt(value[2]),
-                            multiplicator : value[3] === "" ? 1 : parseInt(value[3])
+                            id : value[0] === "" ? 0 : parseInt(value[0]),
+                            name : value[1],
+                            open : value[2] === "" ? 0 : parseInt(value[2]),
+                            hidden : value[3] === "" ? 0 : parseInt(value[3]),
+                            multiplicator : value[4] === "" ? 1 : parseInt(value[4])
                         }
                     })
                 );
@@ -48,10 +49,11 @@ export function getCombiScoring(callBack : {(record : CombiScoring[])  : void}) 
                 callBack (
                     rowArray.map((value : string) => {return value.split(";")}).map((value : string[]) : MahjongScoring => {
                         return {
-                            name : value[0],
-                            open : value[1] === "" ? 0 : parseInt(value[1]),
-                            hidden : value[2] === "" ? 0 : parseInt(value[2]),
-                            multiplicator : value[3] === "" ? 1 : parseInt(value[3])
+                            id : value[0] === "" ? 0 : parseInt(value[0]),
+                            name : value[1],
+                            open : value[2] === "" ? 0 : parseInt(value[2]),
+                            hidden : value[3] === "" ? 0 : parseInt(value[3]),
+                            multiplicator : value[4] === "" ? 1 : parseInt(value[4])
                         }
                     })
                 );

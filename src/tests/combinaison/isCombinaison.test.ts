@@ -6,11 +6,11 @@ describe('Test the isCombinaison algorithme', () => {
     const dominant : NumeroVent = NumeroVent.Ouest;
     it("should be a combi of Fleurs", () => {
         const toTest = [new Piece("1", Famille.Fleurs), new Piece("2", Famille.Fleurs)];
-        expect(getCombinaison(toTest, joueur, dominant)).toStrictEqual({base: BaseCombi.Honneur, modificateur: new Set(), famille: Famille.Fleurs, number: 2});
+        expect(getCombinaison(toTest, joueur, dominant)).toStrictEqual({base: BaseCombi.Honneur, modificateur: new Set([ModificateurCombi.Joueur]), famille: Famille.Fleurs, number: 2});
     });
     it("should be a combi of Saison", () => {
         const toTest = [new Piece("1", Famille.Saison), new Piece("2", Famille.Saison)];
-        expect(getCombinaison(toTest, joueur, dominant)).toStrictEqual({base: BaseCombi.Honneur, modificateur: new Set(), famille: Famille.Saison, number: 2});
+        expect(getCombinaison(toTest, joueur, dominant)).toStrictEqual({base: BaseCombi.Honneur, modificateur: new Set([ModificateurCombi.Joueur]), famille: Famille.Saison, number: 2});
     });
     it("should be a carre of extrem of cercle", () => {
         const toTest = [new Piece("1", Famille.Cercle), new Piece("1", Famille.Cercle), new Piece("1", Famille.Cercle), new Piece("1", Famille.Cercle)];

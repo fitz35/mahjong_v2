@@ -1,6 +1,6 @@
 import { sort } from "../utils/sort";
 import { Piece } from "./Piece";
-import { BaseCombi, CombiAuth, Famille, isSuiteFamille, ModificateurCombi, NumeroVent } from "./types";
+import { BaseCombi, CombiAuth, convertHonneurNumberToVentNumber, Famille, isHonneurFamille, isSuiteFamille, ModificateurCombi, NumeroVent } from "./types";
 
 /**
  * compare 2 piece to sort it for isSuite function
@@ -163,11 +163,26 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
 }
 
 // test if a combinaison is all honneur
-export function isHonneur(pieces : Piece[]) : CombiAuth | undefined {
-    if(pieces.length <= 4 && isSameFamille(pieces) && isNotSame(pieces) && (pieces[0].famille === Famille.Fleurs || pieces[0].famille === Famille.Saison)){
+export function isHonneur(pieces : Piece[], joueur : NumeroVent) : CombiAuth | undefined {
+    if(pieces.length <= 4 && isSameFamille(pieces) && isNotSame(pieces) && isHonneurFamille(pieces[0].famille)){
+        const modificateur : Set<ModificateurCombi> = new Set();
+
+        // check the vent of the joueur
+        
+        for(let i = 0 ; i < pieces.length ; i ++){
+            if(convertHonneurNumberToVentNumber(pieces[i].numero) === joueur){
+                modificateur.add(ModificateurCombi.Joueur);
+            }
+        }
+        
+        // check if this is a carre
+        if(pieces.length === 4){
+            modificateur.add(ModificateurCombi.HonneurCarre);
+        }
+
         return {
             base : BaseCombi.Honneur,
-            modificateur : new Set(),
+            modificateur : modificateur,
             famille : pieces[0].famille,
             number : pieces.length
         };
@@ -186,7 +201,7 @@ export function getCombinaison(pieces : Piece[], joueurVent : NumeroVent, domina
         if(combiAuth !== undefined){
             return combiAuth;
         }else{
-            const combiAuth : CombiAuth | undefined = isHonneur(pieces);
+            const combiAuth : CombiAuth | undefined = isHonneur(pieces, joueurVent);
             if(combiAuth !== undefined){
                 return combiAuth;
             }else{

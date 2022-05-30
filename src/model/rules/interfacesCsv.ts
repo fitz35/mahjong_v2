@@ -1,4 +1,5 @@
 export type CombiScoring = {
+        id : number,
         name : string,
         open : number,
         hidden : number,
@@ -6,6 +7,7 @@ export type CombiScoring = {
 };
 
 export type MahjongScoring = {
+    id : number,
     name : string,
     open : number,
     hidden : number,

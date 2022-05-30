@@ -30,12 +30,31 @@ export function isSuiteFamille(famille : Famille) : boolean {
 }
 
 /**
+ * test if a famille is a bonus one
+ * @param famille the famille to test
+ * @returns if the famille is a bonus one
+ */
+export function isHonneurFamille(famille : Famille) : boolean {
+    return famille === Famille.Saison || famille === Famille.Fleurs;
+}
+
+/**
  * check if the famille is a real famille
  * @param famille the famille to check 
  * @returns 
  */
 export function checkFamille(famille : string) : boolean {
     return (Object as any).values(Famille).includes(famille);
+}
+
+/**
+ * convert a honneur number to a vent number
+ * @param numero the honneur number to convert
+ * @returns the corresponding vent number
+ */
+export function convertHonneurNumberToVentNumber(numero : string) : NumeroVent {
+    const corresp : Array<NumeroVent> = [NumeroVent.Est, NumeroVent.Sud, NumeroVent.Ouest, NumeroVent.Nord];
+    return corresp[Number(numero) - 1];
 }
 
 /**
@@ -91,7 +110,8 @@ export enum ModificateurCombi {
     ExtremNumero = "ExtremNumero", // 1 ou 9
     VentOuDragon = "VentOuDragon",
     Dominant = "Dominant",
-    Joueur = "Joueur"
+    Joueur = "Joueur",
+    HonneurCarre = "HonneurCarre",
 }
 
 export type CombiAuth = {
@@ -99,4 +119,18 @@ export type CombiAuth = {
     modificateur : Set<ModificateurCombi>
     famille : Famille,
     number? : number // for the number of honneur if baseCombi is honneur
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+// mahjong rules
+
+export enum MahjongScoring {
+    normal = 1,
+    OnlyBrelan = 2,
+    Trouble = 3,
+    OnlySuite = 4,
+    CouleurPur = 5,
+    OnlyDragonAndVent = 6,
+    OnlyExtremNumero = 7,
+    OnlyPaire = 8,
 }
