@@ -1,0 +1,247 @@
+[
+    {
+        "id": 1,
+        "name": "suite",
+        "open": 0,
+        "hidden": 0,
+        "multiplicator": 0,
+        "baseCombi": "suite",
+        "modificateur": []
+    },
+    {
+        "id": 2,
+        "name": "Paire",
+        "open": 0,
+        "hidden": 0,
+        "multiplicator": 0,
+        "baseCombi": "Paire",
+        "modificateur": []
+    },
+    {
+        "id": 3,
+        "name": "Paire de 1 ou de 9",
+        "open": 0,
+        "hidden": 0,
+        "multiplicator": 0,
+        "baseCombi": "Paire",
+        "modificateur": [
+            "ExtremNumero"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Paire de vents ou de dragons dominant",
+        "open": 2,
+        "hidden": 2,
+        "multiplicator": 0,
+        "baseCombi": "Paire",
+        "modificateur": [
+            "VentOuDragon",
+            "Dominant"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Paire de vents ou de dragons du joueur",
+        "open": 2,
+        "hidden": 2,
+        "multiplicator": 0,
+        "baseCombi": "Paire",
+        "modificateur": [
+            "VentOuDragon",
+            "Joueur"
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Paire de vents ou de dragons",
+        "open": 2,
+        "hidden": 2,
+        "multiplicator": 0,
+        "baseCombi": "Paire",
+        "modificateur": [
+            "VentOuDragon"
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Paire de vents ou de dragons du joueur dominant",
+        "open": 2,
+        "hidden": 2,
+        "multiplicator": 0,
+        "baseCombi": "Paire",
+        "modificateur": [
+            "VentOuDragon",
+            "Joueur",
+            "Dominant"
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Brelan",
+        "open": 2,
+        "hidden": 4,
+        "multiplicator": 0,
+        "baseCombi": "Brelan",
+        "modificateur": []
+    },
+    {
+        "id": 9,
+        "name": "Brelan de vents ou de dragons",
+        "open": 4,
+        "hidden": 8,
+        "multiplicator": 2,
+        "baseCombi": "Brelan",
+        "modificateur": [
+            "VentOuDragon"
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Brelan de 1 ou de 9",
+        "open": 4,
+        "hidden": 8,
+        "multiplicator": 0,
+        "baseCombi": "Brelan",
+        "modificateur": [
+            "ExtremNumero"
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Brelan de vents ou de dragons du joueur",
+        "open": 4,
+        "hidden": 8,
+        "multiplicator": 4,
+        "baseCombi": "Brelan",
+        "modificateur": [
+            "VentOuDragon",
+            "Joueur"
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Brelan de vents ou de dragons dominant",
+        "open": 4,
+        "hidden": 8,
+        "multiplicator": 4,
+        "baseCombi": "Brelan",
+        "modificateur": [
+            "VentOuDragon",
+            "Dominant"
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Brelan de vents ou de dragons du joueur dominant",
+        "open": 4,
+        "hidden": 8,
+        "multiplicator": 4,
+        "baseCombi": "Brelan",
+        "modificateur": [
+            "VentOuDragon",
+            "Joueur",
+            "Dominant"
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Carre",
+        "open": 8,
+        "hidden": 16,
+        "multiplicator": 2,
+        "baseCombi": "Carre",
+        "modificateur": []
+    },
+    {
+        "id": 15,
+        "name": "Carre de vents ou de dragons",
+        "open": 16,
+        "hidden": 32,
+        "multiplicator": 4,
+        "baseCombi": "Carre",
+        "modificateur": [
+            "VentOuDragon"
+        ]
+    },
+    {
+        "id": 16,
+        "name": "Carre de 1 ou de 9",
+        "open": 16,
+        "hidden": 32,
+        "multiplicator": 2,
+        "baseCombi": "Carre",
+        "modificateur": [
+            "ExtremNumero"
+        ]
+    },
+    {
+        "id": 17,
+        "name": "Carre de vents ou de dragons du joueur",
+        "open": 16,
+        "hidden": 32,
+        "multiplicator": 8,
+        "baseCombi": "Carre",
+        "modificateur": [
+            "VentOuDragon",
+            "Joueur"
+        ]
+    },
+    {
+        "id": 18,
+        "name": "Carre de vents ou de dragons dominant",
+        "open": 16,
+        "hidden": 32,
+        "multiplicator": 8,
+        "baseCombi": "Carre",
+        "modificateur": [
+            "VentOuDragon",
+            "Dominant"
+        ]
+    },
+    {
+        "id": 19,
+        "name": "Carre de vents ou de dragons du joueur dominant",
+        "open": 16,
+        "hidden": 32,
+        "multiplicator": 4,
+        "baseCombi": "Carre",
+        "modificateur": [
+            "VentOuDragon",
+            "Joueur",
+            "Dominant"
+        ]
+    },
+    {
+        "id": 20,
+        "name": "honneur ",
+        "open": 4,
+        "hidden": 0,
+        "multiplicator": 0,
+        "baseCombi": "honneur",
+        "modificateur": []
+    },
+    {
+        "id": 21,
+        "name": "honneur  du joueur",
+        "open": 4,
+        "hidden": 0,
+        "multiplicator": 2,
+        "baseCombi": "honneur",
+        "modificateur": [
+            "Joueur"
+        ]
+    },
+    {
+        "id": 22,
+        "name": "honneur Carre",
+        "open": 16,
+        "hidden": 0,
+        "multiplicator": 4,
+        "baseCombi": "honneur",
+        "modificateur": [
+            "Joueur",
+            "HonneurCarre"
+        ]
+    }
+]

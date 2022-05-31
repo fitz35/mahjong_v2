@@ -1,63 +1,36 @@
-import { CombiScoring, MahjongScoring } from "./interfacesCsv";
+import { CombiScoringRules, MahjongScoringRules } from "./interfacesCsv";
+import combiData from "../../data/combiScoring.json";
+import mahjongData from "../../data/mahjongScoring.json";
 
 /**
- * get the combi scoring in the csv file
- * @param callBack function to call with the data
+ * get the combi scoring in the json file
+ * @return the combi scoring
  */
-export function getCombiScoring(callBack : {(record : CombiScoring[])  : void}) : void {
-    fetch('/scoring_rule.csv').then(function (response) {
-        if(response.body != null){
-            let reader = response.body.getReader();
-            let decoder = new TextDecoder('utf-8');
-    
-            reader.read().then(function (result) {
-                const text : string = decoder.decode(result.value);
-
-                const rowArray : Array<string> = text.split("\n");
-                rowArray.shift();
-                callBack (
-                    rowArray.map((value : string) => {return value.split(";")}).map((value : string[]) : CombiScoring => {
-                        return {
-                            id : value[0] === "" ? 0 : parseInt(value[0]),
-                            name : value[1],
-                            open : value[2] === "" ? 0 : parseInt(value[2]),
-                            hidden : value[3] === "" ? 0 : parseInt(value[3]),
-                            multiplicator : value[4] === "" ? 0 : parseInt(value[4])
-                        }
-                    })
-                );
-            });
-        }        
-    });
+export function getCombiScoring() : CombiScoringRules[] {
+    return combiData.map(
+        (value: 
+            { id: number; 
+                name: string; 
+                open: number; 
+                hidden: number; 
+                multiplicator: number; 
+                baseCombi: string; 
+                modificateur: string[]; 
+            }) => {return value as CombiScoringRules}
+        );
 }
 
 /**
- * get the mahjong scoring in the csv file
- * @param callBack function to call with the data
+ * get the mahjong scoring in the json file
+ * @return the mahjong scoring
  */
- export function getMahjongScoring(callBack : {(record : MahjongScoring[])  : void}) : void {
-    fetch('/scoring_rule_mahjong.csv').then(function (response) {
-        if(response.body != null){
-            let reader = response.body.getReader();
-            let decoder = new TextDecoder('utf-8');
-    
-            reader.read().then(function (result) {
-                const text : string = decoder.decode(result.value);
-
-                const rowArray : Array<string> = text.split("\n");
-                rowArray.shift();
-                callBack (
-                    rowArray.map((value : string) => {return value.split(";")}).map((value : string[]) : MahjongScoring => {
-                        return {
-                            id : value[0] === "" ? 0 : parseInt(value[0]),
-                            name : value[1],
-                            open : value[2] === "" ? 0 : parseInt(value[2]),
-                            hidden : value[3] === "" ? 0 : parseInt(value[3]),
-                            multiplicator : value[4] === "" ? 0 : parseInt(value[4])
-                        }
-                    })
-                );
-            });
-        }        
-    });
+ export function getMahjongScoring() : MahjongScoringRules[] {
+    return mahjongData.map(
+        (value:
+            { id: number;
+                name: string;
+                open: number;
+                hidden: number;
+                multiplicator: number;
+            }) => {return value as MahjongScoringRules});
 }

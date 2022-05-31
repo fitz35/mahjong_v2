@@ -1,0 +1,79 @@
+[
+    {
+        "id": 1,
+        "name": "Mahjong normal",
+        "open": 20,
+        "hidden": 0,
+        "multiplicator": 0
+    },
+    {
+        "id": 2,
+        "name": "Mahjong avec que des brelans",
+        "open": 20,
+        "hidden": 0,
+        "multiplicator": 0
+    },
+    {
+        "id": 3,
+        "name": "Mahjong couleur 'trouble'",
+        "open": 0,
+        "hidden": 0,
+        "multiplicator": 2
+    },
+    {
+        "id": 4,
+        "name": "Mahjong avec que des suites",
+        "open": 20,
+        "hidden": 0,
+        "multiplicator": 0
+    },
+    {
+        "id": 5,
+        "name": "Mahjong couleur 'pur'",
+        "open": 0,
+        "hidden": 0,
+        "multiplicator": 8
+    },
+    {
+        "id": 6,
+        "name": "Mahjong que de Dragons ou que de Vents",
+        "open": 0,
+        "hidden": 0,
+        "multiplicator": 6
+    },
+    {
+        "id": 7,
+        "name": "Mahjong de 1 ou de 9",
+        "open": 0,
+        "hidden": 0,
+        "multiplicator": 6
+    },
+    {
+        "id": 8,
+        "name": "Mahjong avec que des paires",
+        "open": 3000,
+        "hidden": 0,
+        "multiplicator": 0
+    },
+    {
+        "id": 9,
+        "name": "Mahjong sec",
+        "open": 20,
+        "hidden": 0,
+        "multiplicator": 0
+    },
+    {
+        "id": 10,
+        "name": "Mahjong avec une tuile de la pioche",
+        "open": 2,
+        "hidden": 0,
+        "multiplicator": 0
+    },
+    {
+        "id": 11,
+        "name": "Mahjong avec la derniere tuile",
+        "open": 4,
+        "hidden": 0,
+        "multiplicator": 0
+    }
+]
