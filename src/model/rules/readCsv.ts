@@ -22,7 +22,7 @@ export function getCombiScoring(callBack : {(record : CombiScoring[])  : void}) 
                             name : value[1],
                             open : value[2] === "" ? 0 : parseInt(value[2]),
                             hidden : value[3] === "" ? 0 : parseInt(value[3]),
-                            multiplicator : value[4] === "" ? 1 : parseInt(value[4])
+                            multiplicator : value[4] === "" ? 0 : parseInt(value[4])
                         }
                     })
                 );
@@ -53,7 +53,7 @@ export function getCombiScoring(callBack : {(record : CombiScoring[])  : void}) 
                             name : value[1],
                             open : value[2] === "" ? 0 : parseInt(value[2]),
                             hidden : value[3] === "" ? 0 : parseInt(value[3]),
-                            multiplicator : value[4] === "" ? 1 : parseInt(value[4])
+                            multiplicator : value[4] === "" ? 0 : parseInt(value[4])
                         }
                     })
                 );

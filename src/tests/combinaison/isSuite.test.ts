@@ -1,6 +1,6 @@
 import {isSuite} from "../../model/pieces/Combinaison"
 import { Piece } from "../../model/pieces/Piece";
-import { BaseCombi, Famille } from "../../model/pieces/types";
+import { BaseCombi, Famille } from "../../model/pieces/piecesUtils";
 
 
 

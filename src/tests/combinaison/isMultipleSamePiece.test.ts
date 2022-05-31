@@ -1,6 +1,6 @@
 import {isMultipleSamePiece} from "../../model/pieces/Combinaison"
 import { Piece } from "../../model/pieces/Piece";
-import { BaseCombi, Famille, ModificateurCombi, NumeroVent } from "../../model/pieces/types";
+import { BaseCombi, Famille, ModificateurCombi, NumeroVent } from "../../model/pieces/piecesUtils";
 
 
 describe('Test the isMultipleSamePiece algorithme', () => {

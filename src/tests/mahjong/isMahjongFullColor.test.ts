@@ -1,12 +1,16 @@
 import { Combinaison } from "../../model/pieces/Combinaison";
 import {isMahjongFullColor} from "../../model/pieces/Joueur";
 import { Piece } from "../../model/pieces/Piece";
-import { BaseCombi, Famille, MahjongScoring, NumeroVent } from "../../model/pieces/types";
+import { BaseCombi, Famille, MahjongScoring, NumeroVent } from "../../model/pieces/piecesUtils";
 
 // test isMahjongFullColor algorithme
 describe('Test isMahjongFullColor algorithme', () => {
     const joueur : NumeroVent = NumeroVent.Est;
     const dominant : NumeroVent = NumeroVent.Ouest;
+    it("should not be a mahjong full color because there is no combinaison", () => {
+        const combinaisons : Combinaison[] = [];
+        expect(isMahjongFullColor(combinaisons, joueur, dominant)).toBe(undefined);
+    });
     it("Should say it is a pur color with 1 combi", ()=> {
         const toTest = [new Combinaison([new Piece("1C"), new Piece("1C"), new Piece("1C"), new Piece("1C")])];
         expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(MahjongScoring.CouleurPur);

@@ -1,11 +1,15 @@
 import { Combinaison } from "../../model/pieces/Combinaison";
 import {isMahjongTrouble} from "../../model/pieces/Joueur"
 import { Piece } from "../../model/pieces/Piece";
-import { BaseCombi, Famille, MahjongScoring, NumeroVent } from "../../model/pieces/types";
+import { BaseCombi, Famille, MahjongScoring, NumeroVent } from "../../model/pieces/piecesUtils";
 // test isMahjongTrouble algorithme
 describe("Test the isMahjongTrouble algorithme", () => {
     const joueur : NumeroVent = NumeroVent.Est;
     const dominant : NumeroVent = NumeroVent.Ouest;
+    it("should not be a mahjong trouble if the array is empty", () => {
+        const combinaisons : Combinaison[] = [];
+        expect(isMahjongTrouble(combinaisons, joueur, dominant)).toBe(undefined);
+    });
     it("should be a color trouble with one combi", () => {
         const toTest = [new Combinaison([new Piece("1",Famille.Bambou), new Piece("1",Famille.Bambou)])];
         expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(MahjongScoring.Trouble);

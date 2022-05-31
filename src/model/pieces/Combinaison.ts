@@ -1,6 +1,6 @@
 import { sort } from "../utils/sort";
 import { Piece } from "./Piece";
-import { BaseCombi, CombiAuth, convertHonneurNumberToVentNumber, Famille, isHonneurFamille, isSuiteFamille, ModificateurCombi, NumeroVent } from "./types";
+import { BaseCombi, CombiAuth, convertHonneurNumberToVentNumber, Famille, isHonneurFamille, isSuiteFamille, ModificateurCombi, NumeroVent } from "./piecesUtils";
 
 /**
  * compare 2 piece to sort it for isSuite function

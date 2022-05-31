@@ -1,7 +1,7 @@
 
 import { compareForSuiteSort } from "../../model/pieces/Combinaison";
 import { Piece } from "../../model/pieces/Piece";
-import { Famille } from "../../model/pieces/types";
+import { Famille } from "../../model/pieces/piecesUtils";
 import {sort} from "../../model/utils/sort"
 
 function compare(elt1 : number, elt2 : number) : number {
