@@ -1,5 +1,13 @@
-import { Combinaison } from "./Combinaison";
-import { BaseCombi, CombiAuth, Famille, isHonneurFamille, isSuiteFamille, MahjongScoring, ModificateurCombi, NumeroVent } from "./piecesUtils";
+import { Combinaison } from "../dataModel/Combinaison";
+import { 
+    BaseCombi, 
+    CombiCalculated, 
+    Famille, 
+    isHonneurFamille, 
+    isSuiteFamille, 
+    MahjongScoring, 
+    ModificateurCombi,
+    NumeroVent } from "../dataModel/dataUtils";
 
 /**
  * check if the array of combinaison can be a color "pur" or only dragonAndVant
@@ -8,16 +16,16 @@ import { BaseCombi, CombiAuth, Famille, isHonneurFamille, isSuiteFamille, Mahjon
  * @param dominantVent the dominant vent
  * @returns the mahjongScoring if it is a color "pur" or only dragonAndVant, undefined otherwise
  */
-export function isMahjongFullColor(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : MahjongScoring | undefined {
+ export function isMahjongFullColor(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : MahjongScoring | undefined {
     if(combinaisons.length !== 0){
-        const combi : CombiAuth | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
+        const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
             let familleRef : Famille = combi.famille;
             //check if all the combinaison are the same Family
             let isSameFamily : boolean = true;
 
             for(let i = 1 ; i < combinaisons.length ; i++){
-                const combi : CombiAuth | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
+                const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
                 if(combi === undefined){
                     isSameFamily = false;
                 }else{
@@ -49,12 +57,12 @@ export function isMahjongFullColor(combinaisons : Combinaison[], joueurVent : Nu
  */
 export function isMahjongTrouble(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : MahjongScoring | undefined {
     if(combinaisons.length !== 0){
-        const combi : CombiAuth | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
+        const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
             let refFamille : Famille | undefined = undefined;
             let trouble : boolean = true;
             for(let i = 0 ; i < combinaisons.length ; i++){
-                const combi : CombiAuth | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
+                const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
                 if(combi === undefined){
                     trouble = false;
                 }else{
@@ -86,13 +94,13 @@ export function isMahjongTrouble(combinaisons : Combinaison[], joueurVent : Nume
  */
 export function isMahjongPairBrelanSuite(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : MahjongScoring | undefined {
     if(combinaisons.length !== 0){
-        const combi : CombiAuth | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
+        const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
             let isPair : boolean = true;
             let isBrelan : boolean = true;
             let isSuite : boolean = true;
             for(let i = 0 ; i < combinaisons.length ; i++){
-                const combi : CombiAuth | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
+                const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
                 if(combi === undefined){
                     isPair = false;
                     isBrelan = false;
@@ -130,11 +138,11 @@ export function isMahjongPairBrelanSuite(combinaisons : Combinaison[], joueurVen
  */
 export function isMahjongOnly1or9(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : MahjongScoring | undefined {
     if(combinaisons.length !== 0){
-        const combi : CombiAuth | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
+        const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
             let isOnly : boolean = true;
             for(let i = 0 ; i < combinaisons.length ; i++){
-                const combi : CombiAuth | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
+                const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
                 if(combi === undefined){
                     isOnly = false;
                 }else{
@@ -185,24 +193,4 @@ export function getMahjongScoring(combinaisons : Combinaison[], joueurVent : Num
         return mahjongScoring;
     }
     
-}
-
-
-
-
-export class Joueur {
-    // take an array of combinaison, his vent, his name, an array of score for each manche
-    constructor(public combinaisons: Array<Combinaison>, public vent: NumeroVent, public name: string, public scores: Array<number>) {
-        this.combinaisons = combinaisons;
-        this.vent = vent;
-        this.name = name;
-        this.scores = scores;
-    }
-
-    /**
-     * get the mahjong scoring possible with the array of combinaison
-     */
-    getMahjongScoring(dominant: NumeroVent) : MahjongScoring[] {
-        return getMahjongScoring(this.combinaisons, this.vent, dominant);
-    }
 }

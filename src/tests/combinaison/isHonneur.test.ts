@@ -1,6 +1,6 @@
-import {isHonneur} from "../../model/pieces/Combinaison"
-import { Piece } from "../../model/pieces/Piece";
-import { BaseCombi, Famille, ModificateurCombi, NumeroVent } from "../../model/pieces/piecesUtils";
+import {isHonneur} from "../../model/scores/combinaisonDetect"
+import { Piece } from "../../model/dataModel/Piece";
+import { BaseCombi, Famille, ModificateurCombi, NumeroVent } from "../../model/dataModel/dataUtils";
 
 describe('Test the isHonneur algorithme', () => {
     const joueur : NumeroVent = NumeroVent.Nord;

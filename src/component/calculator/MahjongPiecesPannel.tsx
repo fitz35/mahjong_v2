@@ -1,7 +1,7 @@
 import { Card } from "antd";
 import { useState } from "react";
-import { Piece } from "../../model/pieces/Piece";
-import { Famille } from "../../model/pieces/piecesUtils";
+import { Piece } from "../../model/dataModel/Piece";
+import { Famille } from "../../model/dataModel/dataUtils";
 
 // start coord
 const x_init : number = 128;

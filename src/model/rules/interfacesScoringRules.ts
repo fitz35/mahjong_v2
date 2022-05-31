@@ -1,6 +1,6 @@
-import { BaseCombi, ModificateurCombi } from "../pieces/piecesUtils";
+import { BaseCombi, ModificateurCombi } from "../dataModel/dataUtils";
 
-export type CombiScoringRules = {
+export type CombiScoringRule = {
         id : number,
         name : string,
         open : number,
@@ -10,7 +10,7 @@ export type CombiScoringRules = {
         modificateur : Array<ModificateurCombi>,
 };
 
-export type MahjongScoringRules = {
+export type MahjongScoringRule = {
     id : number,
     name : string,
     open : number,

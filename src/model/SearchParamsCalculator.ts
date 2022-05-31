@@ -1,5 +1,5 @@
-import { Combinaison } from "./pieces/Combinaison";
-import { Piece } from "./pieces/Piece"
+import { Combinaison } from "./dataModel/Combinaison";
+import { Piece } from "./dataModel/Piece"
 
 export type SearchParamsMain = Combinaison;
 export type SearchParamsJoueur = {

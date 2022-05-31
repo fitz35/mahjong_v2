@@ -1,4 +1,4 @@
-import { checkCoherence, checkFamille, Famille } from "./piecesUtils";
+import { checkCoherence, checkFamille, Famille } from "./dataUtils";
 
 export class Piece {
     readonly numero : string;

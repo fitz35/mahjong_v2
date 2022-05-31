@@ -1,6 +1,6 @@
-import {isSuite} from "../../model/pieces/Combinaison"
-import { Piece } from "../../model/pieces/Piece";
-import { BaseCombi, Famille } from "../../model/pieces/piecesUtils";
+import {isSuite} from "../../model/scores/combinaisonDetect"
+import { Piece } from "../../model/dataModel/Piece";
+import { BaseCombi, Famille } from "../../model/dataModel/dataUtils";
 
 
 

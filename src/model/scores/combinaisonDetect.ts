@@ -1,6 +1,15 @@
+import { Piece } from "../dataModel/Piece";
+import { 
+    BaseCombi, 
+    CombiCalculated, 
+    convertHonneurNumberToVentNumber, 
+    Famille, 
+    isHonneurFamille, 
+    isSuiteFamille, 
+    ModificateurCombi, 
+    NumeroVent 
+} from "../dataModel/dataUtils";
 import { sort } from "../utils/sort";
-import { Piece } from "./Piece";
-import { BaseCombi, CombiAuth, convertHonneurNumberToVentNumber, Famille, isHonneurFamille, isSuiteFamille, ModificateurCombi, NumeroVent } from "./piecesUtils";
 
 /**
  * compare 2 piece to sort it for isSuite function
@@ -8,7 +17,7 @@ import { BaseCombi, CombiAuth, convertHonneurNumberToVentNumber, Famille, isHonn
  * @param piece1 
  * @param piece2 
  */
-export function compareForSuiteSort(piece1 : Piece, piece2 : Piece) : number {
+ export function compareForSuiteSort(piece1 : Piece, piece2 : Piece) : number {
     if(!isSuiteFamille(piece1.famille) && !isSuiteFamille(piece2.famille)){
         return 0; // no sortable
     }else if (!isSuiteFamille(piece1.famille) && isSuiteFamille(piece2.famille)){
@@ -56,7 +65,7 @@ function isNotSame(pieces : Piece[]) : boolean {
  * @param pieces 
  * @returns if the pieces are a suite. If 0 piece, false, if 1 false, if 2 false, if 3 test
  */
-export function isSuite(pieces : Piece[]) : CombiAuth | undefined{
+export function isSuite(pieces : Piece[]) : CombiCalculated | undefined{
     sort<Piece>(pieces, compareForSuiteSort);
     if(pieces.length >= 3){
         // cant be a suite if it isn't a same famille combinaison and a famille without suite
@@ -93,7 +102,7 @@ export function isSuite(pieces : Piece[]) : CombiAuth | undefined{
  * @param dominantVent the dominant wind
  * @returns 
  */
-export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiAuth | undefined {
+export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated | undefined {
     if((pieces.length === 4 || pieces.length === 3 || pieces.length === 2) && pieces[0].famille !== Famille.Fleurs && pieces[0].famille !== Famille.Saison){
         const familleRef : Famille = pieces[0].famille;
         const numeroRef : string = pieces[0].numero;
@@ -163,7 +172,7 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
 }
 
 // test if a combinaison is all honneur
-export function isHonneur(pieces : Piece[], joueur : NumeroVent) : CombiAuth | undefined {
+export function isHonneur(pieces : Piece[], joueur : NumeroVent) : CombiCalculated | undefined {
     if(pieces.length <= 4 && isSameFamille(pieces) && isNotSame(pieces) && isHonneurFamille(pieces[0].famille)){
         const modificateur : Set<ModificateurCombi> = new Set();
 
@@ -192,16 +201,16 @@ export function isHonneur(pieces : Piece[], joueur : NumeroVent) : CombiAuth | u
 }
 
 // test if an array of pieces is a combinaison and get the combinaison
-export function getCombinaison(pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiAuth | undefined {
-    const combiAuth : CombiAuth | undefined = isMultipleSamePiece(pieces, joueurVent, dominantVent);
+export function getCombinaison(pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated | undefined {
+    const combiAuth : CombiCalculated | undefined = isMultipleSamePiece(pieces, joueurVent, dominantVent);
     if(combiAuth !== undefined){
         return combiAuth;
     }else{
-        const combiAuth : CombiAuth | undefined = isSuite(pieces);
+        const combiAuth : CombiCalculated | undefined = isSuite(pieces);
         if(combiAuth !== undefined){
             return combiAuth;
         }else{
-            const combiAuth : CombiAuth | undefined = isHonneur(pieces, joueurVent);
+            const combiAuth : CombiCalculated | undefined = isHonneur(pieces, joueurVent);
             if(combiAuth !== undefined){
                 return combiAuth;
             }else{
@@ -209,51 +218,4 @@ export function getCombinaison(pieces : Piece[], joueurVent : NumeroVent, domina
             }
         }
     }
-}
-
-
-
-/**
- * 
- * @param pieces the pieces to tests
- * @return if the pieces are a valid combinaison
- */
-export function isCombiValid(pieces : Piece[], joueur : NumeroVent, dominantVent : NumeroVent) : boolean {
-    // if no piece, valid
-    if(pieces.length >= 1){
-        // if it is a combinaison, valid
-        if(getCombinaison(pieces, joueur, dominantVent) !== undefined){
-            return true;
-        }else{
-            return false;
-        }
-    }else{
-        return true;
-    }
-}
-
-/**
- * represente a combinaison of multiple piece, and some usefull function
- */
-export class Combinaison {
-    readonly pieces : Piece[];
-
-    /**
-     * sort the numero of the piece if it is numero
-     * @param pieces 
-     */
-    constructor(pieces : Piece[]){
-        this.pieces = pieces;
-        sort<Piece>(this.pieces, compareForSuiteSort);
-    }
-
-    public isValid = () : boolean => {
-        // joueur and dominant not important, so set to Est
-        return isCombiValid(this.pieces, NumeroVent.Est, NumeroVent.Est);
-    }
-
-    public getCombinaison = (joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiAuth | undefined => {
-        return getCombinaison(this.pieces, joueurVent, dominantVent);
-    }
-    
 }

@@ -1,4 +1,4 @@
-import { CombiScoringRules, MahjongScoringRules } from "./interfacesCsv";
+import { CombiScoringRule, MahjongScoringRule } from "./interfacesScoringRules";
 import combiData from "../../data/combiScoring.json";
 import mahjongData from "../../data/mahjongScoring.json";
 
@@ -6,7 +6,7 @@ import mahjongData from "../../data/mahjongScoring.json";
  * get the combi scoring in the json file
  * @return the combi scoring
  */
-export function getCombiScoring() : CombiScoringRules[] {
+export function getCombiScoringRules() : CombiScoringRule[] {
     return combiData.map(
         (value: 
             { id: number; 
@@ -16,7 +16,7 @@ export function getCombiScoring() : CombiScoringRules[] {
                 multiplicator: number; 
                 baseCombi: string; 
                 modificateur: string[]; 
-            }) => {return value as CombiScoringRules}
+            }) => {return value as CombiScoringRule}
         );
 }
 
@@ -24,7 +24,7 @@ export function getCombiScoring() : CombiScoringRules[] {
  * get the mahjong scoring in the json file
  * @return the mahjong scoring
  */
- export function getMahjongScoring() : MahjongScoringRules[] {
+ export function getMahjongScoringRules() : MahjongScoringRule[] {
     return mahjongData.map(
         (value:
             { id: number;
@@ -32,5 +32,5 @@ export function getCombiScoring() : CombiScoringRules[] {
                 open: number;
                 hidden: number;
                 multiplicator: number;
-            }) => {return value as MahjongScoringRules});
+            }) => {return value as MahjongScoringRule});
 }

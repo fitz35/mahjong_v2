@@ -1,7 +1,7 @@
-import { Combinaison } from "../../model/pieces/Combinaison";
-import { isMahjongOnly1or9 } from "../../model/pieces/Joueur";
-import { Piece } from "../../model/pieces/Piece";
-import { MahjongScoring, NumeroVent } from "../../model/pieces/piecesUtils";
+import { Combinaison } from "../../model/dataModel/Combinaison";
+import { isMahjongOnly1or9 } from "../../model/scores/mahjongDetect";
+import { Piece } from "../../model/dataModel/Piece";
+import { MahjongScoring, NumeroVent } from "../../model/dataModel/dataUtils";
 
 // test isMahjongOnly1or9 function
 describe(" Test the isMahjongOnly1or9 algo", () => {

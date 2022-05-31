@@ -4,7 +4,7 @@ import {
   EyeInvisibleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
-import { getCombiScoring, getMahjongScoring } from "../../model/rules/readCsv";
+import { getCombiScoringRules, getMahjongScoringRules } from "../../model/rules/readScoringRules";
 import { Table } from "antd";
 
 /**
@@ -13,7 +13,7 @@ import { Table } from "antd";
 export class CustomRules extends React.Component {
   
   render() {
-    console.log(getCombiScoring());
+    console.log(getCombiScoringRules());
     var combiComponent: ReactElement<any, any>;
     let columns = [
       {
@@ -43,7 +43,7 @@ export class CustomRules extends React.Component {
         pagination={false}
         title={() => "Points des combinaisons"}
         scroll={{ y: 240 }}
-        dataSource={getCombiScoring()}
+        dataSource={getCombiScoringRules()}
         columns={columns}
       />
     );
@@ -77,7 +77,7 @@ export class CustomRules extends React.Component {
         pagination={false}
         title={() => "Points des mahjong"}
         scroll={{ y: 240 }}
-        dataSource={getMahjongScoring()}
+        dataSource={getMahjongScoringRules()}
         columns={columns}
       />
     );

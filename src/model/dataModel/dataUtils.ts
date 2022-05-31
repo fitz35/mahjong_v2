@@ -114,7 +114,7 @@ export enum ModificateurCombi {
     HonneurCarre = "HonneurCarre",
 }
 
-export type CombiAuth = {
+export type CombiCalculated = {
     base : BaseCombi,
     modificateur : Set<ModificateurCombi>
     famille : Famille,

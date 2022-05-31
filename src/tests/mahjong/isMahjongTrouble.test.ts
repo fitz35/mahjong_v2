@@ -1,7 +1,7 @@
-import { Combinaison } from "../../model/pieces/Combinaison";
-import {isMahjongTrouble} from "../../model/pieces/Joueur"
-import { Piece } from "../../model/pieces/Piece";
-import { BaseCombi, Famille, MahjongScoring, NumeroVent } from "../../model/pieces/piecesUtils";
+import { Combinaison } from "../../model/dataModel/Combinaison";
+import {isMahjongTrouble} from "../../model/scores/mahjongDetect";
+import { Piece } from "../../model/dataModel/Piece";
+import { BaseCombi, Famille, MahjongScoring, NumeroVent } from "../../model/dataModel/dataUtils";
 // test isMahjongTrouble algorithme
 describe("Test the isMahjongTrouble algorithme", () => {
     const joueur : NumeroVent = NumeroVent.Est;

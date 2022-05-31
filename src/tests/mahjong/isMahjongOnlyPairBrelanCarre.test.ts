@@ -1,7 +1,7 @@
-import { Combinaison } from "../../model/pieces/Combinaison";
-import {isMahjongPairBrelanSuite} from "../../model/pieces/Joueur";
-import { Piece } from "../../model/pieces/Piece";
-import { MahjongScoring, NumeroVent } from "../../model/pieces/piecesUtils";
+import { Combinaison } from "../../model/dataModel/Combinaison";
+import {isMahjongPairBrelanSuite} from "../../model/scores/mahjongDetect";
+import { Piece } from "../../model/dataModel/Piece";
+import { MahjongScoring, NumeroVent } from "../../model/dataModel/dataUtils";
 
 // test the isMahjongOnlyPairBrelanCarre function
 describe(" Test the isMahjongOnlyPairBrelanCarre algo", () => {
