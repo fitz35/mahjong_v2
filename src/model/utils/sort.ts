@@ -7,7 +7,7 @@ export function sort<T>(toSort : T[], compaFunction : (elt1 : T, elt2 : T) => nu
     for(let actu = 0 ; actu < toSort.length - 1 ; actu ++){
         for(let cursor = actu + 1 ; cursor < toSort.length ; cursor++){
             if(compaFunction(toSort[actu], toSort[cursor]) > 0){
-                let temp = toSort[cursor];
+                const temp = toSort[cursor];
                 toSort[cursor] = toSort[actu];
                 toSort[actu] = temp;
             }

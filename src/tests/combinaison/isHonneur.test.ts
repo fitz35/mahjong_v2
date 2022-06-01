@@ -1,8 +1,8 @@
-import {isHonneur} from "../../model/scores/combinaisonDetect"
+import {isHonneur} from "../../model/scores/combinaisonDetect";
 import { Piece } from "../../model/dataModel/Piece";
 import { BaseCombi, Famille, ModificateurCombi, NumeroVent } from "../../model/dataModel/dataUtils";
 
-describe('Test the isHonneur algorithme', () => {
+describe("Test the isHonneur algorithme", () => {
     const joueur : NumeroVent = NumeroVent.Nord;
     it("should be a combi of fleur with one honneur", () => {
         const toTest : Piece[] = [new Piece("1",Famille.Fleurs)];

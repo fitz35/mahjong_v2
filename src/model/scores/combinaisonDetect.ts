@@ -17,7 +17,7 @@ import { sort } from "../utils/sort";
  * @param piece1 
  * @param piece2 
  */
- export function compareForSuiteSort(piece1 : Piece, piece2 : Piece) : number {
+export function compareForSuiteSort(piece1 : Piece, piece2 : Piece) : number {
     if(!isSuiteFamille(piece1.famille) && !isSuiteFamille(piece2.famille)){
         return 0; // no sortable
     }else if (!isSuiteFamille(piece1.famille) && isSuiteFamille(piece2.famille)){
@@ -45,7 +45,7 @@ function isSameFamille(pieces : Piece[]) : boolean {
     let sameFamille = true;
 
     for(let i = 1 ; i < pieces.length ; i ++){
-        sameFamille = sameFamille && familleRef === pieces[i].famille
+        sameFamille = sameFamille && familleRef === pieces[i].famille;
     }
     return sameFamille;
 }
@@ -71,7 +71,7 @@ export function isSuite(pieces : Piece[]) : CombiCalculated | undefined{
         // cant be a suite if it isn't a same famille combinaison and a famille without suite
         if(isSameFamille(pieces) && isSuiteFamille(pieces[0].famille)){
             let allFollow = true;
-            for(let i : number = 0; i < pieces.length - 1; i ++){
+            for(let i  = 0; i < pieces.length - 1; i ++){
                 allFollow = allFollow && (
                     Number(pieces[i].numero) === Number(pieces[i + 1].numero) - 1
                 );
@@ -110,23 +110,23 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
         let sameNumero = true;
 
         for(let i = 1 ; i < pieces.length ; i ++){
-            sameFamille = sameFamille && familleRef === pieces[i].famille
-            sameNumero = sameNumero && numeroRef === pieces[i].numero
+            sameFamille = sameFamille && familleRef === pieces[i].famille;
+            sameNumero = sameNumero && numeroRef === pieces[i].numero;
         }
 
         let baseCombi : BaseCombi;
         switch(pieces.length){
-            case 2:
-                baseCombi = BaseCombi.Paire;
-                break;
-            case 3:
-                baseCombi = BaseCombi.Brelan;
-                break;
-            case 4:
-                baseCombi = BaseCombi.Carre;
-                break;
-            default:
-                baseCombi = BaseCombi.Carre;
+        case 2:
+            baseCombi = BaseCombi.Paire;
+            break;
+        case 3:
+            baseCombi = BaseCombi.Brelan;
+            break;
+        case 4:
+            baseCombi = BaseCombi.Carre;
+            break;
+        default:
+            baseCombi = BaseCombi.Carre;
         }
 
 
@@ -146,7 +146,7 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
                     };
                 }
             }else{// can be joueur or dominant
-                let modificateur : Set<ModificateurCombi> = new Set();
+                const modificateur : Set<ModificateurCombi> = new Set();
                 if(familleRef === Famille.Vent || familleRef === Famille.Dragon){
                     modificateur.add(ModificateurCombi.VentOuDragon);
                 }

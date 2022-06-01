@@ -2,7 +2,7 @@
 import { compareForSuiteSort } from "../../model/scores/combinaisonDetect";
 import { Piece } from "../../model/dataModel/Piece";
 import { Famille } from "../../model/dataModel/dataUtils";
-import {sort} from "../../model/utils/sort"
+import {sort} from "../../model/utils/sort";
 
 function compare(elt1 : number, elt2 : number) : number {
     if(elt1 > elt2) return 1;
@@ -10,7 +10,7 @@ function compare(elt1 : number, elt2 : number) : number {
     else return -1;
 }
 
-describe('Test the sort algorithme with number', () => {
+describe("Test the sort algorithme with number", () => {
     it("should run without error on empty array", () =>{
         const toSort : number[] = [];
         sort<number>(toSort, compare);
@@ -44,7 +44,7 @@ describe('Test the sort algorithme with number', () => {
     });
 });
 
-describe('Test the sort algorithme with piece', () => {
+describe("Test the sort algorithme with piece", () => {
     it("should sort correctly 3 character element", () => {
         const toTest = [new Piece("1", Famille.Caractere), new Piece("3", Famille.Caractere), new Piece("2", Famille.Caractere)];
         sort<Piece>(toTest, compareForSuiteSort);

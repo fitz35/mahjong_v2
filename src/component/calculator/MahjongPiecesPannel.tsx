@@ -4,12 +4,12 @@ import { Piece } from "../../model/dataModel/Piece";
 import { Famille } from "../../model/dataModel/dataUtils";
 
 // start coord
-const x_init : number = 128;
-const y_init : number = 60;
-const width : number = 58;
-const height : number = 74;
-const espace_w : number = 1;
-const espace_h : number = 6; 
+const x_init  = 128;
+const y_init  = 60;
+const width  = 58;
+const height  = 74;
+const espace_w  = 1;
+const espace_h  = 6; 
 
 type TooltypeState = {
     x : number,
@@ -21,13 +21,13 @@ type TooltypeState = {
 function Tooltip (x : number, y : number, piece : Piece){
     const tooltipWidth = 250;
     let leftOffset = 0;
-	//on test si elle n'est pas sortie de l'ecran :
-	const largeur_fenetre = window.innerWidth;
+    //on test si elle n'est pas sortie de l'ecran :
+    const largeur_fenetre = window.innerWidth;
     if(tooltipWidth + width + x > largeur_fenetre){
-	    leftOffset = x - tooltipWidth - 20;
-	}else{
+        leftOffset = x - tooltipWidth - 20;
+    }else{
         leftOffset = x + width + 20;
-	}
+    }
                
     return	(
         <Card id="tooltip" size="small" title={piece.getFrDisplayName()} className="bg-green-100" style={{ top: y + 10, left : leftOffset }}>
@@ -47,11 +47,11 @@ function MahjongPieceArea(x : number, y : number, piece : Piece, setSelection : 
             coords={coord} 
             alt={piece.getFrDisplayName()} 
             title={piece.getFrDisplayName()} 
-            onMouseEnter={() => {setSelection({x : x, y : y, piece : piece})}}
-            onMouseLeave={() => {setSelection(undefined)}}
-            >
+            onMouseEnter={() => {setSelection({x : x, y : y, piece : piece});}}
+            onMouseLeave={() => {setSelection(undefined);}}
+        >
 
-            </area>
+        </area>
     );
 }
 /**
@@ -65,7 +65,7 @@ export function MahjongPiecesPannel() {
     let y = y_init;
 
     // generation of the map to manage the clique and the hover
-    let areaBuffer  : Array<JSX.Element> = [];
+    const areaBuffer  : Array<JSX.Element> = [];
 
     //3 bases famille
     const baseFamilles = [Famille.Caractere, Famille.Cercle, Famille.Bambou];
@@ -122,6 +122,6 @@ export function MahjongPiecesPannel() {
             {tooltip}
         </>
         
-    )
+    );
 
 }

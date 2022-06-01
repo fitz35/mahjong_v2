@@ -16,15 +16,15 @@ export function getCombiScoringRules() : CombiScoringRule[] {
                 multiplicator: number; 
                 baseCombi: string; 
                 modificateur: string[]; 
-            }) => {return value as CombiScoringRule}
-        );
+            }) => {return value as CombiScoringRule;}
+    );
 }
 
 /**
  * get the mahjong scoring in the json file
  * @return the mahjong scoring
  */
- export function getMahjongScoringRules() : MahjongScoringRule[] {
+export function getMahjongScoringRules() : MahjongScoringRule[] {
     return mahjongData.map(
         (value:
             { id: number;
@@ -32,5 +32,5 @@ export function getCombiScoringRules() : CombiScoringRule[] {
                 open: number;
                 hidden: number;
                 multiplicator: number;
-            }) => {return value as MahjongScoringRule});
+            }) => {return value as MahjongScoringRule;});
 }

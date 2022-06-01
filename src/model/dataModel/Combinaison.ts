@@ -41,10 +41,10 @@ export class Combinaison {
     public isValid = () : boolean => {
         // joueur and dominant not important, so set to Est
         return isCombiValid(this.pieces, NumeroVent.Est, NumeroVent.Est);
-    }
+    };
 
     public getCombinaison = (joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated | undefined => {
         return getCombinaison(this.pieces, joueurVent, dominantVent);
-    }
+    };
     
 }

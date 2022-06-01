@@ -1,7 +1,7 @@
-import {getCombinaison} from "../../model/scores/combinaisonDetect"
+import {getCombinaison} from "../../model/scores/combinaisonDetect";
 import { Piece } from "../../model/dataModel/Piece";
 import { BaseCombi, Famille, ModificateurCombi, NumeroVent } from "../../model/dataModel/dataUtils";
-describe('Test the isCombinaison algorithme', () => {
+describe("Test the isCombinaison algorithme", () => {
     const joueur : NumeroVent = NumeroVent.Est;
     const dominant : NumeroVent = NumeroVent.Ouest;
     it("should be a combi of Fleurs", () => {

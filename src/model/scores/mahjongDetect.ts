@@ -16,13 +16,13 @@ import {
  * @param dominantVent the dominant vent
  * @returns the mahjongScoring if it is a color "pur" or only dragonAndVant, undefined otherwise
  */
- export function isMahjongFullColor(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : MahjongScoring | undefined {
+export function isMahjongFullColor(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : MahjongScoring | undefined {
     if(combinaisons.length !== 0){
         const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
-            let familleRef : Famille = combi.famille;
+            const familleRef : Famille = combi.famille;
             //check if all the combinaison are the same Family
-            let isSameFamily : boolean = true;
+            let isSameFamily  = true;
 
             for(let i = 1 ; i < combinaisons.length ; i++){
                 const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
@@ -60,7 +60,7 @@ export function isMahjongTrouble(combinaisons : Combinaison[], joueurVent : Nume
         const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
             let refFamille : Famille | undefined = undefined;
-            let trouble : boolean = true;
+            let trouble  = true;
             for(let i = 0 ; i < combinaisons.length ; i++){
                 const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
                 if(combi === undefined){
@@ -96,9 +96,9 @@ export function isMahjongPairBrelanSuite(combinaisons : Combinaison[], joueurVen
     if(combinaisons.length !== 0){
         const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
-            let isPair : boolean = true;
-            let isBrelan : boolean = true;
-            let isSuite : boolean = true;
+            let isPair  = true;
+            let isBrelan  = true;
+            let isSuite  = true;
             for(let i = 0 ; i < combinaisons.length ; i++){
                 const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
                 if(combi === undefined){
@@ -140,7 +140,7 @@ export function isMahjongOnly1or9(combinaisons : Combinaison[], joueurVent : Num
     if(combinaisons.length !== 0){
         const combi : CombiCalculated | undefined = combinaisons[0].getCombinaison(joueurVent, dominant);
         if(combi !== undefined){
-            let isOnly : boolean = true;
+            let isOnly  = true;
             for(let i = 0 ; i < combinaisons.length ; i++){
                 const combi : CombiCalculated | undefined = combinaisons[i].getCombinaison(joueurVent, dominant);
                 if(combi === undefined){

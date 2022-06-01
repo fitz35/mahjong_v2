@@ -2,4 +2,4 @@ describe("CombiScore", () => {
 
 });
 
-export {}
+export {};

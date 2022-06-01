@@ -1,10 +1,10 @@
-import {isSuite} from "../../model/scores/combinaisonDetect"
+import {isSuite} from "../../model/scores/combinaisonDetect";
 import { Piece } from "../../model/dataModel/Piece";
 import { BaseCombi, Famille } from "../../model/dataModel/dataUtils";
 
 
 
-describe('Test the isSuite algorithme', () => {
+describe("Test the isSuite algorithme", () => {
     it("Should sort the array and say it is not a suite with 2 cercle", ()=> {
         const toTest = [new Piece("1", Famille.Cercle), new Piece("2", Famille.Cercle)];
         expect(isSuite(toTest)).toBe(undefined);

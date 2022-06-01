@@ -44,6 +44,7 @@ export function isHonneurFamille(famille : Famille) : boolean {
  * @returns 
  */
 export function checkFamille(famille : string) : boolean {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (Object as any).values(Famille).includes(famille);
 }
 
@@ -67,15 +68,16 @@ export function checkCoherence(numero : string, famille : Famille) : boolean{
     // 3 basics famille
     if(famille === Famille.Bambou || famille === Famille.Caractere || famille === Famille.Cercle){
         if(!isNaN(Number(numero))){
-            const numeroConv : number = Number(numero);
+            const numeroConv  = Number(numero);
             return numeroConv >= 1 && numeroConv <= 9;
-          } else{
-              return false;
-          }
+        } else{
+            return false;
+        }
          
     }
     // vent 
     else if(famille === Famille.Vent){
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (Object as any).values(NumeroVent).includes(numero);
     }
     // dragon
@@ -85,7 +87,7 @@ export function checkCoherence(numero : string, famille : Famille) : boolean{
     // saison and fleurs
     else if(famille === Famille.Fleurs || famille === Famille.Saison){
         if(!isNaN(Number(numero))){
-            const numeroConv : number = Number(numero);
+            const numeroConv  = Number(numero);
             return numeroConv >= 1 && numeroConv <= 4;
         } else{
             return false;

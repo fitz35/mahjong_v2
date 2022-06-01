@@ -8,7 +8,7 @@ import { getMahjongScoring } from "./mahjongDetect";
 /**
  * the combi score is the sum of the score of each combinaison
  */
- export type CombiScore = {
+export type CombiScore = {
     addition : number,
     multiplicateur : number
 }
@@ -49,6 +49,13 @@ function getMahjongScoringRulesFromId(id : number) : MahjongScoringRule | undefi
     return undefined;
 }
 
+/**
+ * calculate the score of combinaison
+ * @param combinaisons the array of combinaison
+ * @param joueurVent the vent of the player
+ * @param dominant the dominant vent
+ * @returns the base score for this combinaison
+ */
 export function calculateCombiScore(combinaisons : Combinaison[], joueurVent : NumeroVent, dominant : NumeroVent) : CombiScore {
     // get the association between the combinaison and the combi scoring rule
     const combiScoringRules : Map<Combinaison, CombiScoringRule> = new Map();
@@ -63,8 +70,8 @@ export function calculateCombiScore(combinaisons : Combinaison[], joueurVent : N
     }
 
     // calculate the score (aggregation of each combinaison)
-    let addition : number = 0;
-    let multiplicateur : number = 0;
+    let addition  = 0;
+    let multiplicateur  = 0;
     for(let i = 0 ; i < combinaisons.length ; i++){
         const combiScoringRule : CombiScoringRule | undefined = combiScoringRules.get(combinaisons[i]);
         if(combiScoringRule !== undefined){
