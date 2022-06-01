@@ -6,6 +6,7 @@ import {
 } from "@ant-design/icons";
 import { getCombiScoringRules, getMahjongScoringRules } from "../../model/rules/readScoringRules";
 import { Table } from "antd";
+import { MyLogger } from "../../model/utils/logger";
 
 /**
  * display the rulling
@@ -13,6 +14,8 @@ import { Table } from "antd";
 export class CustomRules extends React.Component {
   
     render() {
+        MyLogger.debug("combinaison rules : ", getCombiScoringRules());
+        MyLogger.debug("mahjong rule : ", getMahjongScoringRules());
         let columns = [
             {
                 title: "Nom",

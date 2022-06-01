@@ -1,121 +1,137 @@
 import { Piece } from "../dataModel/Piece";
-import { 
-    BaseCombi, 
-    CombiCalculated, 
-    convertHonneurNumberToVentNumber, 
-    Famille, 
-    isHonneurFamille, 
-    isSuiteFamille, 
-    ModificateurCombi, 
-    NumeroVent 
+import {
+    BaseCombi,
+    CombiCalculated,
+    convertHonneurNumberToVentNumber,
+    Famille,
+    isHonneurFamille,
+    isSuiteFamille,
+    ModificateurCombi,
+    NumeroVent,
 } from "../dataModel/dataUtils";
 import { sort } from "../utils/sort";
 
 /**
  * compare 2 piece to sort it for isSuite function
  * If no numero (dragon, vent), it is greater than the other
- * @param piece1 
- * @param piece2 
+ * @param piece1
+ * @param piece2
  */
-export function compareForSuiteSort(piece1 : Piece, piece2 : Piece) : number {
-    if(!isSuiteFamille(piece1.famille) && !isSuiteFamille(piece2.famille)){
+export function compareForSuiteSort(piece1: Piece, piece2: Piece): number {
+    if (!isSuiteFamille(piece1.famille) && !isSuiteFamille(piece2.famille)) {
         return 0; // no sortable
-    }else if (!isSuiteFamille(piece1.famille) && isSuiteFamille(piece2.famille)){
+    } else if (
+        !isSuiteFamille(piece1.famille) &&
+    isSuiteFamille(piece2.famille)
+    ) {
         return 1;
-    }else if (isSuiteFamille(piece1.famille) && !isSuiteFamille(piece2.famille)){
+    } else if (
+        isSuiteFamille(piece1.famille) &&
+    !isSuiteFamille(piece2.famille)
+    ) {
         return -1;
-    }else{
-        // compare the numero
-        if(Number(piece1.numero) > Number(piece2.numero))
-            return 1;
-        else if(Number(piece1.numero) === Number(piece2.numero))
-            return 0;
-        else
-            return -1;
+    } else {
+    // compare the numero
+        if (Number(piece1.numero) > Number(piece2.numero)) return 1;
+        else if (Number(piece1.numero) === Number(piece2.numero)) return 0;
+        else return -1;
     }
 }
 
 /**
  * test if all the pieces are the famille
  * @param pieces the pieces to tests
- * @returns 
+ * @returns if the pieces are empty, return true
  */
-function isSameFamille(pieces : Piece[]) : boolean {
-    const familleRef : Famille = pieces[0].famille;
-    let sameFamille = true;
+function isSameFamille(pieces: Piece[]): boolean {
+    if (pieces.length !== 0) {
+        const familleRef: Famille = pieces[0].famille;
+        let sameFamille = true;
 
-    for(let i = 1 ; i < pieces.length ; i ++){
-        sameFamille = sameFamille && familleRef === pieces[i].famille;
+        for (let i = 1; i < pieces.length; i++) {
+            sameFamille = sameFamille && familleRef === pieces[i].famille;
+        }
+        return sameFamille;
+    } else {
+        return true;
     }
-    return sameFamille;
 }
 
 //function to test if the piece in a array arent the same
-function isNotSame(pieces : Piece[]) : boolean {
-    let notSame = true; 
-    for(let i = 0 ; i < pieces.length ; i ++){
-        for(let j = i + 1 ; j < pieces.length ; j ++){
-            notSame = notSame && (pieces[i].numero !== pieces[j].numero || pieces[i].famille !== pieces[j].famille); 
+function isNotSame(pieces: Piece[]): boolean {
+    let notSame = true;
+    for (let i = 0; i < pieces.length; i++) {
+        for (let j = i + 1; j < pieces.length; j++) {
+            notSame =
+        notSame &&
+        (pieces[i].numero !== pieces[j].numero ||
+          pieces[i].famille !== pieces[j].famille);
         }
     }
     return notSame;
 }
 
 /**
- * @param pieces 
+ * @param pieces
  * @returns if the pieces are a suite. If 0 piece, false, if 1 false, if 2 false, if 3 test
  */
-export function isSuite(pieces : Piece[]) : CombiCalculated | undefined{
+export function isSuite(pieces: Piece[]): CombiCalculated | undefined {
     sort<Piece>(pieces, compareForSuiteSort);
-    if(pieces.length >= 3){
-        // cant be a suite if it isn't a same famille combinaison and a famille without suite
-        if(isSameFamille(pieces) && isSuiteFamille(pieces[0].famille)){
+    if (pieces.length >= 3) {
+    // cant be a suite if it isn't a same famille combinaison and a famille without suite
+        if (isSameFamille(pieces) && isSuiteFamille(pieces[0].famille)) {
             let allFollow = true;
-            for(let i  = 0; i < pieces.length - 1; i ++){
-                allFollow = allFollow && (
-                    Number(pieces[i].numero) === Number(pieces[i + 1].numero) - 1
-                );
+            for (let i = 0; i < pieces.length - 1; i++) {
+                allFollow =
+          allFollow &&
+          Number(pieces[i].numero) === Number(pieces[i + 1].numero) - 1;
             }
-            if(allFollow){
+            if (allFollow) {
                 return {
-                    base : BaseCombi.Suite,
-                    modificateur : new Set(),
-                    famille : pieces[0].famille,
+                    base: BaseCombi.Suite,
+                    modificateur: new Set(),
+                    famille: pieces[0].famille,
                 };
-            }else{
+            } else {
                 return undefined;
             }
-        }else{
+        } else {
             return undefined;
         }
-
-    }else{
+    } else {
         return undefined;
     }
 }
-
 
 /**
  * test if a combinaison is a carre, brelan or pair
  * @param pieces the pieces to test
  * @param joueurVent the joueur who hold the combi
  * @param dominantVent the dominant wind
- * @returns 
+ * @returns
  */
-export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated | undefined {
-    if((pieces.length === 4 || pieces.length === 3 || pieces.length === 2) && pieces[0].famille !== Famille.Fleurs && pieces[0].famille !== Famille.Saison){
-        const familleRef : Famille = pieces[0].famille;
-        const numeroRef : string = pieces[0].numero;
+export function isMultipleSamePiece(
+    pieces: Piece[],
+    joueurVent: NumeroVent,
+    dominantVent: NumeroVent
+): CombiCalculated | undefined {
+    if (
+        (pieces.length === 4 || pieces.length === 3 || pieces.length === 2) &&
+    pieces[0].famille !== Famille.Fleurs &&
+    pieces[0].famille !== Famille.Saison
+    ) {
+        const familleRef: Famille = pieces[0].famille;
+        const numeroRef: string = pieces[0].numero;
         let sameFamille = true;
         let sameNumero = true;
 
-        for(let i = 1 ; i < pieces.length ; i ++){
+        for (let i = 1; i < pieces.length; i++) {
             sameFamille = sameFamille && familleRef === pieces[i].famille;
             sameNumero = sameNumero && numeroRef === pieces[i].numero;
         }
 
-        let baseCombi : BaseCombi;
-        switch(pieces.length){
+        let baseCombi: BaseCombi;
+        switch (pieces.length) {
         case 2:
             baseCombi = BaseCombi.Paire;
             break;
@@ -129,91 +145,112 @@ export function isMultipleSamePiece (pieces : Piece[], joueurVent : NumeroVent, 
             baseCombi = BaseCombi.Carre;
         }
 
-
-        if(sameFamille && sameNumero){
-            if(isSuiteFamille(familleRef)){// can be a Extrem carre
-                if(numeroRef === "1" || numeroRef === "9"){
+        if (sameFamille && sameNumero) {
+            if (isSuiteFamille(familleRef)) {
+                // can be a Extrem carre
+                if (numeroRef === "1" || numeroRef === "9") {
                     return {
-                        base : baseCombi,
-                        modificateur : new Set([ModificateurCombi.ExtremNumero]),
-                        famille : familleRef
+                        base: baseCombi,
+                        modificateur: new Set([ModificateurCombi.ExtremNumero]),
+                        famille: familleRef,
                     };
-                }else{
+                } else {
                     return {
-                        base : baseCombi,
-                        modificateur : new Set(),
-                        famille : familleRef
+                        base: baseCombi,
+                        modificateur: new Set(),
+                        famille: familleRef,
                     };
                 }
-            }else{// can be joueur or dominant
-                const modificateur : Set<ModificateurCombi> = new Set();
-                if(familleRef === Famille.Vent || familleRef === Famille.Dragon){
+            } else {
+                // can be joueur or dominant
+                const modificateur: Set<ModificateurCombi> = new Set();
+                if (familleRef === Famille.Vent || familleRef === Famille.Dragon) {
                     modificateur.add(ModificateurCombi.VentOuDragon);
                 }
-                if(familleRef === Famille.Vent && numeroRef === joueurVent){
+                if (familleRef === Famille.Vent && numeroRef === joueurVent) {
                     modificateur.add(ModificateurCombi.Joueur);
                 }
-                if(familleRef === Famille.Vent && numeroRef === dominantVent){
+                if (familleRef === Famille.Vent && numeroRef === dominantVent) {
                     modificateur.add(ModificateurCombi.Dominant);
                 }
 
                 return {
-                    base : baseCombi,
-                    modificateur : modificateur,
-                    famille : familleRef
+                    base: baseCombi,
+                    modificateur: modificateur,
+                    famille: familleRef,
                 };
             }
-        }else{
+        } else {
             return undefined;
         }
-    }else{
+    } else {
         return undefined;
     }
 }
 
 // test if a combinaison is all honneur
-export function isHonneur(pieces : Piece[], joueur : NumeroVent) : CombiCalculated | undefined {
-    if(pieces.length <= 4 && isSameFamille(pieces) && isNotSame(pieces) && isHonneurFamille(pieces[0].famille)){
-        const modificateur : Set<ModificateurCombi> = new Set();
+export function isHonneur(
+    pieces: Piece[],
+    joueur: NumeroVent
+): CombiCalculated | undefined {
+    if (
+        pieces.length > 0 &&
+    pieces.length <= 4 &&
+    isSameFamille(pieces) &&
+    isNotSame(pieces) &&
+    isHonneurFamille(pieces[0].famille)
+    ) {
+        const modificateur: Set<ModificateurCombi> = new Set();
 
         // check the vent of the joueur
-        
-        for(let i = 0 ; i < pieces.length ; i ++){
-            if(convertHonneurNumberToVentNumber(pieces[i].numero) === joueur){
+
+        for (let i = 0; i < pieces.length; i++) {
+            if (convertHonneurNumberToVentNumber(pieces[i].numero) === joueur) {
                 modificateur.add(ModificateurCombi.Joueur);
             }
         }
-        
+
         // check if this is a carre
-        if(pieces.length === 4){
+        if (pieces.length === 4) {
             modificateur.add(ModificateurCombi.HonneurCarre);
         }
 
         return {
-            base : BaseCombi.Honneur,
-            modificateur : modificateur,
-            famille : pieces[0].famille,
-            number : pieces.length
+            base: BaseCombi.Honneur,
+            modificateur: modificateur,
+            famille: pieces[0].famille,
+            number: pieces.length,
         };
-    }else{
+    } else {
         return undefined;
     }
 }
 
 // test if an array of pieces is a combinaison and get the combinaison
-export function getCombinaison(pieces : Piece[], joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated | undefined {
-    const combiAuth : CombiCalculated | undefined = isMultipleSamePiece(pieces, joueurVent, dominantVent);
-    if(combiAuth !== undefined){
+export function getCombinaison(
+    pieces: Piece[],
+    joueurVent: NumeroVent,
+    dominantVent: NumeroVent
+): CombiCalculated | undefined {
+    const combiAuth: CombiCalculated | undefined = isMultipleSamePiece(
+        pieces,
+        joueurVent,
+        dominantVent
+    );
+    if (combiAuth !== undefined) {
         return combiAuth;
-    }else{
-        const combiAuth : CombiCalculated | undefined = isSuite(pieces);
-        if(combiAuth !== undefined){
+    } else {
+        const combiAuth: CombiCalculated | undefined = isSuite(pieces);
+        if (combiAuth !== undefined) {
             return combiAuth;
-        }else{
-            const combiAuth : CombiCalculated | undefined = isHonneur(pieces, joueurVent);
-            if(combiAuth !== undefined){
+        } else {
+            const combiAuth: CombiCalculated | undefined = isHonneur(
+                pieces,
+                joueurVent
+            );
+            if (combiAuth !== undefined) {
                 return combiAuth;
-            }else{
+            } else {
                 return undefined;
             }
         }
