@@ -43,7 +43,7 @@ export class Combinaison {
         return isCombiValid(this.pieces, NumeroVent.Est, NumeroVent.Est);
     };
 
-    public getCombinaison = (joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated | undefined => {
+    public getCombinaison = (joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated[] => {
         return getCombinaison(this.pieces, joueurVent, dominantVent);
     };
     

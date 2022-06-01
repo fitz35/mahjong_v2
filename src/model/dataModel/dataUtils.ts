@@ -119,8 +119,7 @@ export enum ModificateurCombi {
 export type CombiCalculated = {
     base : BaseCombi,
     modificateur : Set<ModificateurCombi>
-    famille : Famille,
-    number? : number // for the number of honneur if baseCombi is honneur
+    famille : Famille
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

@@ -192,7 +192,7 @@ export function isMultipleSamePiece(
 export function isHonneur(
     pieces: Piece[],
     joueur: NumeroVent
-): CombiCalculated | undefined {
+): CombiCalculated[]{
     if (
         pieces.length > 0 &&
     pieces.length <= 4 &&
@@ -200,28 +200,37 @@ export function isHonneur(
     isNotSame(pieces) &&
     isHonneurFamille(pieces[0].famille)
     ) {
-        const modificateur: Set<ModificateurCombi> = new Set();
-
-        // check if this is a carre
+        // if we have 4 pieces : it is a carre and a joueur honneur
         if (pieces.length === 4) {
-            modificateur.add(ModificateurCombi.HonneurCarre);
-        }
-        // check the vent of the joueur (if we havent a carre)
-        for (let i = 0; i < pieces.length; i++) {
-            if (convertHonneurNumberToVentNumber(pieces[i].numero) === joueur) {
-                modificateur.add(ModificateurCombi.Joueur);
+            return [{
+                base: BaseCombi.Honneur,
+                modificateur: new Set([ModificateurCombi.Joueur, ModificateurCombi.HonneurCarre]),
+                famille: pieces[0].famille,
+            }];
+        } else {
+            // for each piece we test if it is a joueur honneur and we genere a combi
+            let isJoueur = false;
+            const combiCalculated: CombiCalculated[] = [];
+            for (let i = 0; i < pieces.length; i++) {
+                if (convertHonneurNumberToVentNumber(pieces[i].numero) === joueur) {
+                    isJoueur = true;
+                }
+                combiCalculated.push({
+                    base: BaseCombi.Honneur,
+                    modificateur: new Set(),
+                    famille: pieces[i].famille
+                });
             }
-        }
-        
 
-        return {
-            base: BaseCombi.Honneur,
-            modificateur: modificateur,
-            famille: pieces[0].famille,
-            number: pieces.length,
-        };
+            // if it is a playeur we had a player honneur
+            if (isJoueur) {
+                combiCalculated[combiCalculated.length - 1].modificateur.add(ModificateurCombi.Joueur);
+            }
+           
+            return combiCalculated;
+        }
     } else {
-        return undefined;
+        return [];
     }
 }
 
@@ -230,28 +239,24 @@ export function getCombinaison(
     pieces: Piece[],
     joueurVent: NumeroVent,
     dominantVent: NumeroVent
-): CombiCalculated | undefined {
+): CombiCalculated[] {
     const combiAuth: CombiCalculated | undefined = isMultipleSamePiece(
         pieces,
         joueurVent,
         dominantVent
     );
     if (combiAuth !== undefined) {
-        return combiAuth;
+        return [combiAuth];
     } else {
         const combiAuth: CombiCalculated | undefined = isSuite(pieces);
         if (combiAuth !== undefined) {
-            return combiAuth;
+            return [combiAuth];
         } else {
-            const combiAuth: CombiCalculated | undefined = isHonneur(
+            const combiAuth: CombiCalculated[] = isHonneur(
                 pieces,
                 joueurVent
             );
-            if (combiAuth !== undefined) {
-                return combiAuth;
-            } else {
-                return undefined;
-            }
+            return combiAuth;
         }
     }
 }

@@ -23,23 +23,23 @@ export function isMahjongFullColor(
     dominant: NumeroVent
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
-        const combi: CombiCalculated | undefined =
+        const combi: CombiCalculated[] =
             combinaisons[0].getCombinaison(joueurVent, dominant);
-        if (combi !== undefined) {
-            const familleRef: Famille = combi.famille;
+        if (combi.length !== 0) {
+            const familleRef: Famille = combi[0].famille;
             //check if all the combinaison are the same Family
             let isSameFamily = true;
 
             for (let i = 1; i < combinaisons.length; i++) {
-                const combi: CombiCalculated | undefined = combinaisons[
+                const combi: CombiCalculated[] = combinaisons[
                     i
                 ].getCombinaison(joueurVent, dominant);
-                if (combi === undefined) {
+                if (combi.length === 0) {
                     isSameFamily = false;
                 } else {
                     if (
-                        combi.famille !== familleRef &&
-                        !isHonneurFamille(combi.famille)
+                        combi[0].famille !== familleRef &&
+                        !isHonneurFamille(combi[0].famille)
                     ) {
                         isSameFamily = false;
                     }
@@ -75,28 +75,28 @@ export function isMahjongTrouble(
     dominant: NumeroVent
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
-        const combi: CombiCalculated | undefined =
+        const combi: CombiCalculated[] =
             combinaisons[0].getCombinaison(joueurVent, dominant);
-        if (combi !== undefined) {
+        if (combi.length !== 0) {
             let refFamille: Famille | undefined = undefined;
             let trouble = true;
             for (let i = 0; i < combinaisons.length; i++) {
-                const combi: CombiCalculated | undefined = combinaisons[
+                const combi: CombiCalculated[] = combinaisons[
                     i
                 ].getCombinaison(joueurVent, dominant);
-                if (combi === undefined) {
+                if (combi.length === 0) {
                     trouble = false;
                 } else {
                     // don't take in consideration the honnor, the dragon and the vent
                     if (
-                        !isHonneurFamille(combi.famille) &&
-                        combi.famille !== Famille.Vent &&
-                        combi.famille !== Famille.Dragon
+                        !isHonneurFamille(combi[0].famille) &&
+                        combi[0].famille !== Famille.Vent &&
+                        combi[0].famille !== Famille.Dragon
                     ) {
                         if (refFamille === undefined) {
-                            refFamille = combi.famille;
+                            refFamille = combi[0].famille;
                         } else {
-                            if (combi.famille !== refFamille) {
+                            if (combi[0].famille !== refFamille) {
                                 trouble = false;
                             }
                         }
@@ -122,33 +122,33 @@ export function isMahjongPairBrelanSuite(
     dominant: NumeroVent
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
-        const combi: CombiCalculated | undefined =
+        const combi: CombiCalculated[] =
             combinaisons[0].getCombinaison(joueurVent, dominant);
-        if (combi !== undefined) {
+        if (combi.length !== 0) {
             let isPair = true;
             let isBrelan = true;
             let isSuite = true;
             for (let i = 0; i < combinaisons.length; i++) {
-                const combi: CombiCalculated | undefined = combinaisons[
+                const combi: CombiCalculated[] = combinaisons[
                     i
                 ].getCombinaison(joueurVent, dominant);
-                if (combi === undefined) {
+                if (combi.length === 0) {
                     isPair = false;
                     isBrelan = false;
                     isSuite = false;
                 } else {
                     // don't take in consideration the honnor
-                    if (!isHonneurFamille(combi.famille)) {
-                        if (combi.base !== BaseCombi.Paire) {
+                    if (!isHonneurFamille(combi[0].famille)) {
+                        if (combi[0].base !== BaseCombi.Paire) {
                             isPair = false;
                         }
                         if (
-                            combi.base !== BaseCombi.Brelan &&
-                            combi.base !== BaseCombi.Carre
+                            combi[0].base !== BaseCombi.Brelan &&
+                            combi[0].base !== BaseCombi.Carre
                         ) {
                             isBrelan = false;
                         }
-                        if (combi.base !== BaseCombi.Suite) {
+                        if (combi[0].base !== BaseCombi.Suite) {
                             isSuite = false;
                         }
                     }
@@ -175,21 +175,21 @@ export function isMahjongOnly1or9(
     dominant: NumeroVent
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
-        const combi: CombiCalculated | undefined =
+        const combi: CombiCalculated[] =
             combinaisons[0].getCombinaison(joueurVent, dominant);
-        if (combi !== undefined) {
+        if (combi.length !== 0) {
             let isOnly = true;
             for (let i = 0; i < combinaisons.length; i++) {
-                const combi: CombiCalculated | undefined = combinaisons[
+                const combi: CombiCalculated[] = combinaisons[
                     i
                 ].getCombinaison(joueurVent, dominant);
-                if (combi === undefined) {
+                if (combi.length === 0) {
                     isOnly = false;
                 } else {
                     // don't take in consideration the honnor
-                    if (!isHonneurFamille(combi.famille)) {
+                    if (!isHonneurFamille(combi[0].famille)) {
                         if (
-                            !combi.modificateur.has(
+                            !combi[0].modificateur.has(
                                 ModificateurCombi.ExtremNumero
                             )
                         ) {

@@ -131,4 +131,58 @@ describe("CombiScore", () => {
             )
         );
     });
+    it("should be a carre of dragon, a suite and a carre of honnor", () => {
+        const combi: Combinaison[] = [
+            new Combinaison([
+                new Piece("BD"),
+                new Piece("BD"),
+                new Piece("BD"),
+                new Piece("BD"),
+            ]),
+            new Combinaison([
+                new Piece("1R"),
+                new Piece("2R"),
+                new Piece("3R"),
+            ]),
+            new Combinaison([
+                new Piece("1F"),
+                new Piece("2F"),
+                new Piece("3F"),
+                new Piece("4F"),
+            ]),
+        ];
+        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+            getCombinaisonScoreWithNames(
+                ["honneur Carre", "Suite", "Carre de vents ou de dragons"],
+                [true, true, true]
+            )
+        );
+    });
+    it("should be a carre of dragon hidden, a suite and a carre of honnor", () => {
+        const combi: Combinaison[] = [
+            new Combinaison([
+                new Piece("BD"),
+                new Piece("BD"),
+                new Piece("BD"),
+                new Piece("BD"),
+            ], false),
+            new Combinaison([
+                new Piece("1R"),
+                new Piece("2R"),
+                new Piece("3R"),
+            ]),
+            new Combinaison([
+                new Piece("1F"),
+                new Piece("2F"),
+                new Piece("3F"),
+                new Piece("4F"),
+            ]),
+        ];
+        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+            getCombinaisonScoreWithNames(
+                ["honneur Carre", "Suite", "Carre de vents ou de dragons"],
+                [true, true, false]
+            )
+        );
+    });
 });

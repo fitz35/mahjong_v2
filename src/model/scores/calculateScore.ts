@@ -62,35 +62,42 @@ export function calculateCombiScore(
     dominant: NumeroVent
 ): CombiScore {
     // get the association between the combinaison and the combi scoring rule
-    const combiScoringRules: Map<Combinaison, CombiScoringRule> = new Map();
+    const combiScoringRules: Map<Combinaison, CombiScoringRule[]> = new Map();
     for (let i = 0; i < combinaisons.length; i++) {
-        const combi: CombiCalculated | undefined = combinaisons[
-            i
-        ].getCombinaison(joueurVent, dominant);
-        if (combi !== undefined) {
-            const combiScoringRule: CombiScoringRule | undefined =
-                getCombiScoringRulesFromCombinaison(combi);
-            if (combiScoringRule !== undefined) {
-                combiScoringRules.set(combinaisons[i], combiScoringRule);
+        const combi: CombiCalculated[] = combinaisons[i].getCombinaison(
+            joueurVent,
+            dominant
+        );
+        const combiScoringRulesActu: CombiScoringRule[] = [];
+        // for every combi calculated, we get the combi scoring rule
+        for (let j = 0; j < combi.length; j++) {
+            const combiScoringRuleActu: CombiScoringRule | undefined =
+                getCombiScoringRulesFromCombinaison(combi[j]);
+            if (combiScoringRuleActu !== undefined) {
+                combiScoringRulesActu.push(combiScoringRuleActu);
             }
         }
+        combiScoringRules.set(combinaisons[i], combiScoringRulesActu);
     }
 
     // calculate the score (aggregation of each combinaison)
     let addition = 0;
     let multiplicateur = 0;
     for (let i = 0; i < combinaisons.length; i++) {
-        const combiScoringRule: CombiScoringRule | undefined =
+        const combiScoringRule: CombiScoringRule[] | undefined =
             combiScoringRules.get(combinaisons[i]);
         if (combiScoringRule !== undefined) {
-            // difference beetween open and closed combinaison
-            if (combinaisons[i].visible) {
-                addition += combiScoringRule.open;
-            } else {
-                addition += combiScoringRule.hidden;
-            }
+            // for every combi scoring rule, we add the score
+            for (let j = 0; j < combiScoringRule.length; j++) {
+                // difference beetween open and closed combinaison
+                if (combinaisons[i].visible) {
+                    addition += combiScoringRule[j].open;
+                } else {
+                    addition += combiScoringRule[j].hidden;
+                }
 
-            multiplicateur += combiScoringRule.multiplicator;
+                multiplicateur += combiScoringRule[j].multiplicator;
+            }
         }
     }
 
