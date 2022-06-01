@@ -10,7 +10,7 @@ import {
 } from "../rules/interfacesScoringRules";
 import {
     getCombiScoringRules,
-    getMahjongScoringRules,
+    getMahjongScoringRulesFromId,
 } from "../rules/readScoringRules";
 import { compareSet } from "../utils/setUtils";
 import { getMahjongScoring } from "./mahjongDetect";
@@ -43,25 +43,6 @@ function getCombiScoringRulesFromCombinaison(
             )
         ) {
             return combiScoringRule;
-        }
-    }
-
-    return undefined;
-}
-/**
- * get the mahjong scoring rule with an id
- * @param id the id of the mahjong scoring rule
- * @returns the mahjong scoring rule
- */
-function getMahjongScoringRulesFromId(
-    id: number
-): MahjongScoringRule | undefined {
-    // get all combinaison rules
-    const mahjongScoringRules: MahjongScoringRule[] = getMahjongScoringRules();
-    for (let i = 0; i < mahjongScoringRules.length; i++) {
-        const mahjongScoringRule: MahjongScoringRule = mahjongScoringRules[i];
-        if (mahjongScoringRule.id === id) {
-            return mahjongScoringRule;
         }
     }
 

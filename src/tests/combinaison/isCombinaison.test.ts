@@ -21,6 +21,33 @@ describe("Test the isCombinaison algorithme", () => {
             number: 2,
         });
     });
+    it("should be a combi of Fleurs of the player", () => {
+        const toTest = [
+            new Piece("1", Famille.Fleurs),
+            new Piece("2", Famille.Fleurs),
+            new Piece("3", Famille.Fleurs),
+        ];
+        expect(getCombinaison(toTest, joueur, dominant)).toStrictEqual({
+            base: BaseCombi.Honneur,
+            modificateur: new Set([ModificateurCombi.Joueur]),
+            famille: Famille.Fleurs,
+            number: 3,
+        });
+    });
+    it("should be a carre of fleur", () => {
+        const toTest = [
+            new Piece("1", Famille.Fleurs),
+            new Piece("2", Famille.Fleurs),
+            new Piece("3", Famille.Fleurs),
+            new Piece("4", Famille.Fleurs),
+        ];
+        expect(getCombinaison(toTest, joueur, dominant)).toStrictEqual({
+            base: BaseCombi.Honneur,
+            modificateur: new Set([ModificateurCombi.Joueur, ModificateurCombi.HonneurCarre]),
+            famille: Famille.Fleurs,
+            number: 4,
+        });
+    });
     it("should be a combi of Saison", () => {
         const toTest = [
             new Piece("1", Famille.Saison),

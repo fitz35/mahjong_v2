@@ -202,18 +202,17 @@ export function isHonneur(
     ) {
         const modificateur: Set<ModificateurCombi> = new Set();
 
-        // check the vent of the joueur
-
+        // check if this is a carre
+        if (pieces.length === 4) {
+            modificateur.add(ModificateurCombi.HonneurCarre);
+        }
+        // check the vent of the joueur (if we havent a carre)
         for (let i = 0; i < pieces.length; i++) {
             if (convertHonneurNumberToVentNumber(pieces[i].numero) === joueur) {
                 modificateur.add(ModificateurCombi.Joueur);
             }
         }
-
-        // check if this is a carre
-        if (pieces.length === 4) {
-            modificateur.add(ModificateurCombi.HonneurCarre);
-        }
+        
 
         return {
             base: BaseCombi.Honneur,
