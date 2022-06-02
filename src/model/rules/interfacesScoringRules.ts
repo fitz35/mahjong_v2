@@ -14,6 +14,6 @@ export type MahjongScoringRule = {
     id : number,
     name : string,
     open : number,
-    hidden : number,
+    canBeIdentified : boolean,
     multiplicator : number
 };

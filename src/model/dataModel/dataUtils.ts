@@ -135,3 +135,4 @@ export enum MahjongScoring {
     OnlyExtremNumero = 7,
     OnlyPaire = 8,
 }
+

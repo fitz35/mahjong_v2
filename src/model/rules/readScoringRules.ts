@@ -27,10 +27,11 @@ export function getCombiScoringRules() : CombiScoringRule[] {
 export function getMahjongScoringRules() : MahjongScoringRule[] {
     return mahjongData.map(
         (value:
-            { id: number;
+            {
+                id: number;
                 name: string;
                 open: number;
-                hidden: number;
+                canBeIdentified: boolean;
                 multiplicator: number;
             }) => {return value as MahjongScoringRule;});
 }

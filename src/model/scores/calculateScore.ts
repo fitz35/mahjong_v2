@@ -108,16 +108,17 @@ export function calculateCombiScore(
 }
 
 /**
- * calculate the score of the player
- * @param combinaisons the combinaisons of the player
+ * get the mahjong scoring rules
+ * @param combinaisons the array of combinaison
  * @param joueurVent the vent of the player
  * @param dominant the dominant vent
+ * @returns the mahjong scoring rules
  */
-export function calculateScoring(
+function calculateMahjongScoringRules(
     combinaisons: Combinaison[],
     joueurVent: NumeroVent,
     dominant: NumeroVent
-): number {
+): MahjongScoringRule[] {
     // get the mahjong scoring of the combinaisons
     const mahjongScoring: MahjongScoring[] = getMahjongScoring(
         combinaisons,
@@ -133,6 +134,99 @@ export function calculateScoring(
             combiMahjongScoringRules.push(combiMahjongScoringRule);
         }
     }
+    return combiMahjongScoringRules;
+}
 
-    return 0;
+/**
+ * calculate the score
+ * @param combiScore the score of combinaison
+ * @param mahjongScoring the mahjong scoring rules 
+ * @returns the global score
+ */
+function calculate(combiScore: CombiScore[], mahjongScoring : MahjongScoringRule[]): number {
+    let add = 0;
+    let mult = 0;
+    for (let i = 0; i < combiScore.length; i++) {
+        add += combiScore[i].addition;
+        mult += combiScore[i].multiplicateur;
+    }
+    for(let i = 0; i < mahjongScoring.length; i++) {
+        add += mahjongScoring[i].open;
+        mult += mahjongScoring[i].multiplicator;
+    }
+
+    if(mult === 0) {
+        mult = 1;
+    }
+    
+    return add * mult;
+}
+
+
+function calculateBestMahjongScoring(
+    combiScore: CombiScore,
+    mahjongScoringRules: MahjongScoringRule[]
+): MahjongScoringRule | undefined {
+    if (mahjongScoringRules.length === 0) {
+        return undefined;
+    } else {
+        let bestMahjongScoring: MahjongScoringRule = mahjongScoringRules[0];
+        for (let i = 1; i < mahjongScoringRules.length; i++) {
+            const bestScore = calculate([combiScore], [bestMahjongScoring]);
+            const currentScore = calculate([combiScore], [mahjongScoringRules[i]]);
+
+            if (bestScore < currentScore) {
+                bestMahjongScoring = mahjongScoringRules[i];
+            }
+        }
+        return bestMahjongScoring;
+    }
+}
+
+/**
+ * calculate the score of the player
+ * @param combinaisons the combinaisons of the player
+ * @param joueurVent the vent of the player
+ * @param dominant the dominant vent
+ * @param mahjong if this player has mahjong
+ * @returns the score of the player
+ */
+export function calculateFlatScoring(
+    combinaisons: Combinaison[],
+    joueurVent: NumeroVent,
+    dominant: NumeroVent,
+    mahjong = false
+): number {
+    // get the combi score
+    const combiScore: CombiScore = calculateCombiScore(
+        combinaisons,
+        joueurVent,
+        dominant
+    );
+    // if this is the player who has mahjong, we add the mahjong score
+    if(mahjong) {
+        // get the mahjong scoring rules
+        const mahjongScoringRules: MahjongScoringRule[] = calculateMahjongScoringRules(
+            combinaisons,
+            joueurVent,
+            dominant
+        );
+        // get the best mahjong scoring rule
+        const bestMahjongScoringRule: MahjongScoringRule | undefined =
+            calculateBestMahjongScoring(combiScore, mahjongScoringRules);
+
+        // calculate the score
+        if(bestMahjongScoringRule !== undefined) {
+            const bestScore = calculate([combiScore], [bestMahjongScoringRule]);
+            if(bestScore > 3000) return 3000;
+            else return bestScore;
+            
+        } else {
+            return 0;
+        }
+    } else { // if this is not the player who has mahjong, we add only the combi score
+        const score = calculate([combiScore], []);
+        if(score > 3000) return 3000;
+        else return score;
+    }
 }
