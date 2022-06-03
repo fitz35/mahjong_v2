@@ -49,6 +49,16 @@ export function checkFamille(famille : string) : boolean {
 }
 
 /**
+ * check if the vent is a real vent
+ * @param vent the vent to check 
+ * @returns 
+ */
+export function checkNumeroVent(vent : string) : boolean {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (Object as any).values(NumeroVent).includes(vent);
+}
+
+/**
  * convert a honneur number to a vent number
  * @param numero the honneur number to convert
  * @returns the corresponding vent number
