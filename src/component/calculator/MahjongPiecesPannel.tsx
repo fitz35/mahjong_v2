@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Piece } from "../../model/dataModel/Piece";
 import { Famille } from "../../model/dataModel/dataUtils";
 
@@ -67,13 +67,19 @@ function MahjongPieceArea(
         ></area>
     );
 }
-/**
- * Make the mahjong image mapping to allow cliking and manage it
- * @returns
- */
-export function MahjongPiecesPannel() {
-    const [tooltipInfos, setTooltipInfo] = useState<TooltypeState>();
 
+/**
+ * generation of the area for the pieces
+ * @param imgWidth the actuel width of the image
+ * @param imgHeight the actuel height of the image
+ * @param setTooltipInfo the function to set the tooltip info
+ * @returns the area for the pieces
+ */
+function generationArea(
+    imgWidth: number,
+    imgHeight: number,
+    setTooltipInfo: React.Dispatch<React.SetStateAction<TooltypeState>>
+): JSX.Element[] {
     let x = x_init;
     let y = y_init;
 
@@ -150,14 +156,27 @@ export function MahjongPiecesPannel() {
         y += height + espace_h;
     }
 
+    return areaBuffer;
+}
+
+/**
+ * Make the mahjong image mapping to allow cliking and manage it
+ * @returns
+ */
+export function MahjongPiecesPannel() {
+    const [tooltipInfos, setTooltipInfo] = useState<TooltypeState>();
+    const ref = useRef(null);
+
     let tooltip: JSX.Element = <></>;
     if (tooltipInfos !== undefined) {
         tooltip = Tooltip(tooltipInfos.x, tooltipInfos.y, tooltipInfos.piece);
     }
 
+    const areaBuffer = generationArea(ref.current.offsetWidth , ref.current.height, setTooltipInfo);
+
     return (
         <>
-            <map id="map_pieces_majong" name="map_pieces_majong">
+            <map id="map_pieces_majong" name="map_pieces_majong" ref={ref}>
                 {areaBuffer}
             </map>
 
