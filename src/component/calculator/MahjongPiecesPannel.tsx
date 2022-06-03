@@ -1,15 +1,57 @@
 import { Card } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Piece } from "../../model/dataModel/Piece";
 import { Famille } from "../../model/dataModel/dataUtils";
+import { MyLogger } from "../../model/utils/logger";
 
-// start coord
-const x_init = 128;
-const y_init = 60;
-const width = 58;
-const height = 74;
-const espace_w = 1;
-const espace_h = 6;
+//////////////////////////////////////////////
+// info to build area
+
+type AreaData = {
+    imgWidth : number;
+    imgHeight : number;
+    x_init : number;
+    y_init : number;
+    width : number;
+    height : number;
+    espace_w : number;
+    espace_h : number;
+}
+
+const defaultAreaData : AreaData = {
+    imgWidth : 700,
+    imgHeight : 613,
+    x_init : 128,
+    y_init : 60,
+    width : 58,
+    height : 74,
+    espace_w : 1,
+    espace_h : 6
+};
+
+/**
+ * get the new area data with new height and width
+ * @param imgWidth the actuel width of the image
+ * @param imgHeight the actuel height of the image
+ * @returns the new area data
+ */
+function getNewAreaData(imgWidth : number, imgHeight : number) : AreaData {
+    const newAreaData : AreaData = {
+        imgWidth : imgWidth,
+        imgHeight : imgHeight,
+        x_init : Math.ceil(defaultAreaData.x_init * imgWidth / defaultAreaData.imgWidth),
+        y_init : Math.ceil(defaultAreaData.y_init * imgHeight / defaultAreaData.imgHeight),
+        width : Math.ceil(defaultAreaData.width * imgWidth / defaultAreaData.imgWidth),
+        height : Math.ceil(defaultAreaData.height * imgHeight / defaultAreaData.imgHeight),
+        espace_w : Math.ceil(defaultAreaData.espace_w * imgWidth / defaultAreaData.imgWidth),
+        espace_h : Math.ceil(defaultAreaData.espace_h * imgHeight / defaultAreaData.imgHeight)
+    };
+    return newAreaData;
+}
+
+/////////////////////////////////////////////////////////::
+// state
+
 
 type TooltypeState =
     | {
@@ -19,15 +61,22 @@ type TooltypeState =
       }
     | undefined;
 
-function Tooltip(x: number, y: number, piece: Piece) {
+type ImageState = {
+    areaData : AreaData;
+    areas : JSX.Element[];
+}
+
+////////////////////////////////////////
+
+function Tooltip(x: number, y: number, piece: Piece, areaData : AreaData) {
     const tooltipWidth = 250;
     let leftOffset = 0;
     //on test si elle n'est pas sortie de l'ecran :
     const largeur_fenetre = window.innerWidth;
-    if (tooltipWidth + width + x > largeur_fenetre) {
+    if (tooltipWidth + areaData.width + x > largeur_fenetre) {
         leftOffset = x - tooltipWidth - 20;
     } else {
-        leftOffset = x + width + 20;
+        leftOffset = x + areaData.width + 20;
     }
 
     return (
@@ -47,9 +96,10 @@ function MahjongPieceArea(
     x: number,
     y: number,
     piece: Piece,
+    areaData : AreaData,
     setSelection: React.Dispatch<React.SetStateAction<TooltypeState>>
 ): JSX.Element {
-    const coord = x + "," + y + "," + (x + width) + "," + (y + height);
+    const coord = x + "," + y + "," + (x + areaData.width) + "," + (y + areaData.height);
 
     return (
         <area
@@ -76,12 +126,11 @@ function MahjongPieceArea(
  * @returns the area for the pieces
  */
 function generationArea(
-    imgWidth: number,
-    imgHeight: number,
+    areaData : AreaData,
     setTooltipInfo: React.Dispatch<React.SetStateAction<TooltypeState>>
 ): JSX.Element[] {
-    let x = x_init;
-    let y = y_init;
+    let x = areaData.x_init;
+    let y = areaData.y_init;
 
     // generation of the map to manage the clique and the hover
     const areaBuffer: Array<JSX.Element> = [];
@@ -99,13 +148,14 @@ function generationArea(
                     x,
                     y,
                     new Piece(numero.toString(), baseFamilles[baseFamille]),
+                    areaData,
                     setTooltipInfo
                 )
             );
-            x += width + espace_w;
+            x += areaData.width + areaData.espace_w;
         }
-        x = x_init;
-        y += height + espace_h;
+        x = areaData.x_init;
+        y += areaData.height + areaData.espace_h;
     }
     // vent
     const ventNumeros = ["E", "S", "O", "N"];
@@ -115,14 +165,14 @@ function generationArea(
                 x,
                 y,
                 new Piece(ventNumeros[vent], Famille.Vent),
+                areaData,
                 setTooltipInfo
             )
         );
-        x += width + espace_w;
+        x += areaData.width + areaData.espace_w;
     }
-    x = x_init;
-    y += height + espace_h;
-    // dragon
+    x = areaData.x_init;
+    y += areaData.height + areaData.espace_h;
     const dragonNumero = ["R", "V", "B"];
     for (let dragon = 0; dragon < dragonNumero.length; dragon++) {
         areaBuffer.push(
@@ -130,13 +180,14 @@ function generationArea(
                 x,
                 y,
                 new Piece(dragonNumero[dragon], Famille.Dragon),
+                areaData,
                 setTooltipInfo
             )
         );
-        x += width + espace_w;
+        x += areaData.width + areaData.espace_w;
     }
-    x = x_init;
-    y += height + espace_h;
+    x = areaData.x_init;
+    y += areaData.height + areaData.espace_h;
 
     // fleurs and saisons
     const bonuss = [Famille.Fleurs, Famille.Saison];
@@ -147,17 +198,40 @@ function generationArea(
                     x,
                     y,
                     new Piece(numero.toString(), bonuss[bonus]),
+                    areaData,
                     setTooltipInfo
                 )
             );
-            x += width + espace_w;
+            x += areaData.width + areaData.espace_w;
         }
-        x = x_init;
-        y += height + espace_h;
+        x = areaData.x_init;
+        y += areaData.height + areaData.espace_h;
     }
 
     return areaBuffer;
 }
+
+function useRefDimension(
+    imgRef: React.RefObject<HTMLImageElement>, 
+    setTooltipInfo : React.Dispatch<React.SetStateAction<TooltypeState>>
+) : ImageState{
+    const [areaDataState, setAreaDataState] = useState<ImageState>({areaData : defaultAreaData, areas : []});
+
+    useEffect(() => {
+        if(imgRef.current !== null){
+            if(imgRef.current.offsetWidth !== areaDataState.areaData.imgWidth || 
+                imgRef.current.offsetHeight !== areaDataState.areaData.imgHeight){
+                // update the area in the state
+                const newAreaData = getNewAreaData(imgRef.current.offsetWidth, imgRef.current.offsetHeight);
+                MyLogger.debug("newAreaData : " , newAreaData);
+                setAreaDataState({areaData : newAreaData, areas : generationArea(newAreaData, setTooltipInfo)});
+            }
+        }
+    }, [areaDataState.areaData.imgHeight, areaDataState.areaData.imgWidth, imgRef, setTooltipInfo]);
+
+    return areaDataState;
+}
+
 
 /**
  * Make the mahjong image mapping to allow cliking and manage it
@@ -165,19 +239,18 @@ function generationArea(
  */
 export function MahjongPiecesPannel() {
     const [tooltipInfos, setTooltipInfo] = useState<TooltypeState>();
-    const ref = useRef(null);
+    const ref = useRef<HTMLImageElement>(null); // ref to the img (width and height)
+    const areaDataState = useRefDimension(ref, setTooltipInfo);
 
     let tooltip: JSX.Element = <></>;
     if (tooltipInfos !== undefined) {
-        tooltip = Tooltip(tooltipInfos.x, tooltipInfos.y, tooltipInfos.piece);
+        tooltip = Tooltip(tooltipInfos.x, tooltipInfos.y, tooltipInfos.piece, areaDataState.areaData);
     }
-
-    const areaBuffer = generationArea(ref.current.offsetWidth , ref.current.height, setTooltipInfo);
-
+    
     return (
         <>
-            <map id="map_pieces_majong" name="map_pieces_majong" ref={ref}>
-                {areaBuffer}
+            <map id="map_pieces_majong" name="map_pieces_majong">
+                {areaDataState.areas}
             </map>
 
             <img
@@ -187,6 +260,7 @@ export function MahjongPiecesPannel() {
                 useMap="#map_pieces_majong"
                 alt="pieces de mahjong"
                 src="/images/pieces_mahjong.jpg"
+                ref={ref}
             ></img>
             {tooltip}
         </>
