@@ -2,6 +2,7 @@
 @import '~antd/dist/antd.less'; // Import Ant Design styles by less entry
 
 @component-background: theme("colors.pageVeryLight");
+//-----------------------------table---------------------------------
 @table-header-bg: theme("colors.pageLight");
 @alt-color: #e61965;
 
@@ -9,6 +10,14 @@
     @apply bg-pageVeryDark text-white border-solid border-white border-2;
 }
 
+//-----------------------------collapse---------------------------------
+
+@collapse-header-bg: theme("colors.pageDark");
+@collapse-content-bg: theme("colors.pageBase");
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header{
+	@apply text-white;
+}
 
 //----------------------calculator----------------------------------
 

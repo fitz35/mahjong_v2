@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "./logo.png";
+import "reflect-metadata";
 //import './css/output.css';
 //import 'antd/dist/antd.css';
 import "./css/input.less";

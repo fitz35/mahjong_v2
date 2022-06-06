@@ -1,13 +1,15 @@
-import { Col, Row } from "antd";
+import { Col, Collapse, Row} from "antd";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
-import { defaultGameSearchParamsCalculator, GameSearchParamsCalculator } from "../../model/gameState/GameSearchParamsCalculator";
-import { MahjongPiecesPannel } from "./MahjongPiecesPannel";
+import { defaultGameSearchParamsCalculator, GameSearchParamsCalculator, getGameSearchParamsCalculatorKey } from "../../model/gameState/GameSearchParamsCalculator";
+import { MahjongPiecesPannel } from "./MahjongPiecesPanel";
 import { Mains } from "./Mains";
 import { convertUrlSearchParamsInGameParamsCalculator } from "./GameStateParams";
 import { GlobalCulatorState } from "../../model/gameState/GlobalCalculatorState";
 import { UserException } from "../../error/user/UserException";
+import { ParamPanel } from "./ParamPanel";
+const { Panel } = Collapse;
 
 interface CustomCalculatorProps {
     isInError? : UserException | undefined
@@ -30,7 +32,9 @@ export const CustomCalculator = ({isInError = undefined} : CustomCalculatorProps
         else if (searchParams.toString() != "") {
             const searchParamCalculate: GameSearchParamsCalculator | undefined =
                 convertUrlSearchParamsInGameParamsCalculator(searchParams);
-            setSearchParams("");
+            searchParams.delete(getGameSearchParamsCalculatorKey());
+
+            setSearchParams(searchParams);
             if(searchParamCalculate != undefined) {
                 setCalculatorState(new GlobalCulatorState(searchParamCalculate));
             }else{
@@ -50,18 +54,22 @@ export const CustomCalculator = ({isInError = undefined} : CustomCalculatorProps
 
     return (
         <>
-            <Row gutter={gutterPropper}>
-                <Col span={3} offset={6}>
-                </Col>
-            </Row>
-            <Row gutter={gutterPropper}>
-                <Col className="gutter-row" span={8}>
-                    {MahjongPiecesPannel()}
-                </Col>
-                <Col className="gutter-row" span={8}>
-                    {Mains()}
-                </Col>
-            </Row>
+            <Collapse defaultActiveKey={["mains"]}>
+                <Panel header="Paramètres" key={"param"}>
+                    {ParamPanel(calculatorState, setCalculatorState)}
+                </Panel>
+                <Panel header="Mains" key={"mains"}>
+                    <Row gutter={gutterPropper}>
+                        <Col className="gutter-row" span={12}>
+                            {MahjongPiecesPannel()}
+                        </Col>
+                        <Col className="gutter-row" span={12}>
+                            {Mains()}
+                        </Col>
+                    </Row>
+                </Panel>
+            </Collapse>
+            
         </>
     );
 };
