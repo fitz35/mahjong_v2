@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Piece } from "../../model/dataModel/Piece";
 import { Famille } from "../../model/dataModel/dataUtils";
 import { MyLogger } from "../../model/utils/logger";
@@ -211,22 +211,40 @@ function generationArea(
     return areaBuffer;
 }
 
+/**
+ * adapt the area to the image when resize
+ * @param imgRef the image ref
+ * @param setTooltipInfo the function to set the tooltip info
+ * @returns the new state
+ */
 function useRefDimension(
     imgRef: React.RefObject<HTMLImageElement>, 
     setTooltipInfo : React.Dispatch<React.SetStateAction<TooltypeState>>
 ) : ImageState{
-    const [areaDataState, setAreaDataState] = useState<ImageState>({areaData : defaultAreaData, areas : []});
+    const [areaDataState, setAreaDataState] = 
+        useState<ImageState>({areaData : defaultAreaData, areas : []});
+
+    
 
     useEffect(() => {
-        if(imgRef.current !== null){
-            if(imgRef.current.offsetWidth !== areaDataState.areaData.imgWidth || 
-                imgRef.current.offsetHeight !== areaDataState.areaData.imgHeight){
-                // update the area in the state
-                const newAreaData = getNewAreaData(imgRef.current.offsetWidth, imgRef.current.offsetHeight);
-                MyLogger.debug("newAreaData : " , newAreaData);
-                setAreaDataState({areaData : newAreaData, areas : generationArea(newAreaData, setTooltipInfo)});
+        function handleResize(){
+            if(imgRef.current !== null){
+                if(imgRef.current.offsetWidth !== areaDataState.areaData.imgWidth || 
+                    imgRef.current.offsetHeight !== areaDataState.areaData.imgHeight){
+                    // update the area in the state
+                    const newAreaData = getNewAreaData(imgRef.current.offsetWidth, imgRef.current.offsetHeight);
+                    MyLogger.debug("newAreaData : " , newAreaData);
+                    setAreaDataState({areaData : newAreaData, areas : generationArea(newAreaData, setTooltipInfo)});
+                }
             }
         }
+        handleResize(); // call it once to set the initial state
+
+        window.addEventListener("resize", handleResize);// update the area when the window is resized
+
+        return () => { // cleanup
+            window.removeEventListener("resize", handleResize);
+        };
     }, [areaDataState.areaData.imgHeight, areaDataState.areaData.imgWidth, imgRef, setTooltipInfo]);
 
     return areaDataState;
