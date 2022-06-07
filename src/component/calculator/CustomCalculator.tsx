@@ -1,8 +1,12 @@
-import { Col, Collapse, Row} from "antd";
+import { Col, Collapse, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
-import { defaultGameSearchParamsCalculator, GameSearchParamsCalculator, getGameSearchParamsCalculatorKey } from "../../model/gameState/GameSearchParamsCalculator";
+import {
+    defaultGameSearchParamsCalculator,
+    GameSearchParamsCalculator,
+    getGameSearchParamsCalculatorKey,
+} from "../../model/gameState/GameSearchParamsCalculator";
 import { MahjongPiecesPannel } from "./MahjongPiecesPanel";
 import { Mains } from "./Mains";
 import { convertUrlSearchParamsInGameParamsCalculator } from "./GameStateParams";
@@ -11,21 +15,25 @@ import { UserException } from "../../error/user/UserException";
 import { ParamPanel } from "./ParamPanel";
 const { Panel } = Collapse;
 
+const gutterPropper = { xs: 8, sm: 16, md: 24, lg: 32 };
+
 interface CustomCalculatorProps {
-    isInError? : UserException | undefined
+    isInError?: UserException | undefined;
 }
 /**
  * manage all the element at the screen for the calculator
  * @returns
  */
-export const CustomCalculator = ({isInError = undefined} : CustomCalculatorProps ) => {
-    const [calculatorState, setCalculatorState] = useState<
-        GlobalCulatorState
-    >(GlobalCulatorState.getDefault());
+export const CustomCalculator = ({
+    isInError = undefined,
+}: CustomCalculatorProps) => {
+    const [calculatorState, setCalculatorState] = useState<GlobalCulatorState>(
+        GlobalCulatorState.getDefault()
+    );
     const [searchParams, setSearchParams] = useSearchParams();
-    
+
     useEffect(() => {
-        if(isInError !== undefined) {
+        if (isInError !== undefined) {
             setCalculatorState(GlobalCulatorState.getDefault(isInError));
         }
         // charge the game with the parameters
@@ -35,41 +43,52 @@ export const CustomCalculator = ({isInError = undefined} : CustomCalculatorProps
             searchParams.delete(getGameSearchParamsCalculatorKey());
 
             setSearchParams(searchParams);
-            if(searchParamCalculate != undefined) {
-                setCalculatorState(new GlobalCulatorState(searchParamCalculate));
-            }else{
+            if (searchParamCalculate != undefined) {
+                setCalculatorState(
+                    new GlobalCulatorState(searchParamCalculate)
+                );
+            } else {
                 // charge default parameter and add error if the parameter is not valid
-                const defaultParams : GameSearchParamsCalculator = defaultGameSearchParamsCalculator;
-                setCalculatorState(new GlobalCulatorState(defaultParams, new InvalidSearchParamException()));
+                const defaultParams: GameSearchParamsCalculator =
+                    defaultGameSearchParamsCalculator;
+                setCalculatorState(
+                    new GlobalCulatorState(
+                        defaultParams,
+                        new InvalidSearchParamException()
+                    )
+                );
             }
         }
-    }, [isInError, searchParams, setSearchParams]);
+    }, [calculatorState, isInError, searchParams, setSearchParams]);
 
-    if(calculatorState.isError()){
+    if (calculatorState.isError()) {
         calculatorState.getError()?.openNotification();
-        setCalculatorState(GlobalCulatorState.copyWithoutError(calculatorState));
+        setCalculatorState(
+            GlobalCulatorState.copyWithoutError(calculatorState)
+        );
     }
-
-    const gutterPropper = { xs: 8, sm: 16, md: 24, lg: 32 };
 
     return (
         <>
             <Collapse defaultActiveKey={["mains"]}>
                 <Panel header="Paramètres" key={"param"}>
-                    {ParamPanel(calculatorState, setCalculatorState)}
+                    <ParamPanel
+                        calculatorState={calculatorState}
+                        gutter={gutterPropper}
+                        setCalculatorState={setCalculatorState}
+                    ></ParamPanel>
                 </Panel>
                 <Panel header="Mains" key={"mains"}>
                     <Row gutter={gutterPropper}>
                         <Col className="gutter-row" span={12}>
-                            {MahjongPiecesPannel()}
+                            <MahjongPiecesPannel></MahjongPiecesPannel>
                         </Col>
                         <Col className="gutter-row" span={12}>
-                            {Mains()}
+                            <Mains></Mains>
                         </Col>
                     </Row>
                 </Panel>
             </Collapse>
-            
         </>
     );
 };

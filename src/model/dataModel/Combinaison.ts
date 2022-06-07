@@ -2,7 +2,7 @@ import { compareForSuiteSort, getCombinaison } from "../scores/combinaisonDetect
 import { sort } from "../utils/sort";
 import { Piece } from "./Piece";
 import { CombiCalculated, NumeroVent } from "./dataUtils";
-import { Type } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 
 
 /**
@@ -28,6 +28,7 @@ export function isCombiValid(pieces : Piece[], joueur : NumeroVent, dominantVent
  * represente a combinaison of multiple piece, and some usefull function
  */
 export class Combinaison {
+    @Expose()
     @Type(() => Piece)
     readonly pieces : Piece[];
 

@@ -6,7 +6,6 @@ import {
     SearchParamsJoueur
 } from "../../model/gameState/GameSearchParamsCalculator";
 import { getJoueurGenerator } from "../../model/utils/joueursUtils";
-import { MyLogger } from "../../model/utils/logger";
 
 ////////////////////////////////////////////////////////////////////
 // check param fonction
@@ -34,7 +33,6 @@ function checkVentCoherence(
                 ventArray.indexOf(player.vent),
                 1
             );
-            MyLogger.debug("vent : " + typeof player.vent);
             if (toRemove.length === 0) {
                 // if the vent is already used, we set the invalid vent flag to true and we stop the loop
                 invalidVent = true;
@@ -90,18 +88,15 @@ export function convertUrlSearchParamsInGameParamsCalculator(
     if (jsonString !== null) {
         // try to parse the json string
         try {
-            MyLogger.debug("parse : ", JSON.parse(jsonString));
             const gameParamsCalculator: GameSearchParamsCalculator =
                 plainToInstance(GameSearchParamsCalculator, JSON.parse(jsonString) as unknown, {
                     excludeExtraneousValues: true,
                 });
-            MyLogger.debug("test2 : ", gameParamsCalculator);
             // if the param is invalid, we set the default value and recharge the url
             if (
                 !checkVentCoherence(gameParamsCalculator) ||
                 !checkPointsCoherence(gameParamsCalculator)
             ) {
-                MyLogger.debug("test3 : ", checkVentCoherence(gameParamsCalculator));
                 return undefined;
             } else {
                 return gameParamsCalculator;

@@ -1,15 +1,22 @@
 import { Combinaison } from "../dataModel/Combinaison";
-import {instanceToPlain, plainToInstance, Transform, Type } from "class-transformer";
+import {Expose, instanceToPlain, plainToInstance, Transform, Type } from "class-transformer";
 
 import { NumeroVent } from "../dataModel/dataUtils";
 
 export class SearchParamsJoueur {
+    @Expose()
     @Type(() => Combinaison)
         main: Combinaison[];
+
+    @Expose()
     @Transform(({ value }) => {return value as NumeroVent;}, { toClassOnly: true })
         vent: NumeroVent;
-    name: string;
-    points: number[]; // cumulated
+
+    @Expose()
+        name: string;
+        
+    @Expose()
+        points: number[]; // cumulated
 
     constructor(
         main: Combinaison[],
@@ -28,19 +35,25 @@ export class SearchParamsJoueur {
  * all necessary to restore game state
  */
 export class GameSearchParamsCalculator {
+    @Expose()
     @Type(() => SearchParamsJoueur)
         joueur1: SearchParamsJoueur;
+    @Expose()
     @Type(() => SearchParamsJoueur)
         joueur2: SearchParamsJoueur;
+    @Expose()
     @Type(() => SearchParamsJoueur)
         joueur3: SearchParamsJoueur;
+    @Expose()
     @Type(() => SearchParamsJoueur)
         joueur4: SearchParamsJoueur;
+    @Expose()
     @Transform(({ value }) => {
-        return value as string;
+        return value as NumeroVent;
     })
         dominantVent: NumeroVent;
-    isDefault: boolean;
+    @Expose()
+        isDefault: boolean;
 
     constructor(
         joueur1: SearchParamsJoueur,

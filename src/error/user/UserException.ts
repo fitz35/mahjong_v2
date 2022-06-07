@@ -5,7 +5,7 @@ export abstract class UserException extends CustomException {
     constructor(title : string, message: string) {
         super(title, message);
         this.name = this.constructor.name;
-        Error.captureStackTrace(this, this.constructor);
+        //Error.captureStackTrace(this, this.constructor);
     }
 
     /**

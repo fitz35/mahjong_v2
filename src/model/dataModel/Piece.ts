@@ -1,8 +1,9 @@
-import { Transform } from "class-transformer";
+import { Expose, Transform } from "class-transformer";
 import { checkCoherence, checkFamille, Famille } from "./dataUtils";
 
 export class Piece {
     readonly numero : string;
+    @Expose()
     @Transform(({ value }) => {
         return value as Famille;
     })
@@ -51,9 +52,7 @@ export class Piece {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // display
 
-
-
-    public getFrDisplayName = () : string => {
+    public getFamilleDisplay = () : string => {
         const convertFamilleToFr = new Map<Famille, string>([
             [Famille.Caractere, "Charactère"],
             [Famille.Bambou, "Bambou"],
@@ -64,14 +63,21 @@ export class Piece {
             [Famille.Saison, "Saison"]
         ]);
 
-        const familleName = convertFamilleToFr.get(this.famille);
+        const famille = convertFamilleToFr.get(this.famille);
+        if(famille !== undefined){
+            return famille;
+        }else{
+            throw new Error("Famille " + this.famille + " doesn't exist.");
+        }
+    };
 
+    public getNumeroDisplay = () : string => {
         if(this.famille === Famille.Bambou || 
             this.famille === Famille.Caractere || 
             this.famille === Famille.Cercle || 
             this.famille === Famille.Fleurs || 
             this.famille === Famille.Saison){
-            return this.numero + " de " + familleName;
+            return this.numero + " de";
         }
         else if(this.famille === Famille.Vent){
             let numeroDisplay = "";
@@ -94,7 +100,7 @@ export class Piece {
             default:
                 numeroDisplay = "inconnu";
             }
-            return familleName + " " + (voyelle ? "de l'" : "du ") + numeroDisplay;
+            return (voyelle ? "de l'" : "du ") + numeroDisplay;
         }
 
         else if(this.famille === Famille.Dragon){
@@ -112,11 +118,23 @@ export class Piece {
             default:
                 numeroDisplay = "inconnu";
             }
-            return familleName + " " + numeroDisplay;
+            return numeroDisplay;
         }
 
         return "inconu";
-        
+    };
+
+    public getFrDisplayName = () : string => {
+        if(this.famille === Famille.Bambou || 
+            this.famille === Famille.Caractere || 
+            this.famille === Famille.Cercle || 
+            this.famille === Famille.Fleurs || 
+            this.famille === Famille.Saison){
+            return this.getNumeroDisplay() + " " + this.getFamilleDisplay();
+        }
+        else {
+            return this.getFamilleDisplay() + " " + this.getNumeroDisplay();
+        }
     };
 
 }
