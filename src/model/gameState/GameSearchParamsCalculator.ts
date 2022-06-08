@@ -37,21 +37,21 @@ export class SearchParamsJoueur {
 export class GameSearchParamsCalculator {
     @Expose()
     @Type(() => SearchParamsJoueur)
-        joueur1: SearchParamsJoueur;
+    readonly joueur1: SearchParamsJoueur;
     @Expose()
     @Type(() => SearchParamsJoueur)
-        joueur2: SearchParamsJoueur;
+    readonly joueur2: SearchParamsJoueur;
     @Expose()
     @Type(() => SearchParamsJoueur)
-        joueur3: SearchParamsJoueur;
+    readonly joueur3: SearchParamsJoueur;
     @Expose()
     @Type(() => SearchParamsJoueur)
-        joueur4: SearchParamsJoueur;
+    readonly joueur4: SearchParamsJoueur;
     @Expose()
     @Transform(({ value }) => {
         return value as NumeroVent;
     })
-        dominantVent: NumeroVent;
+    readonly dominantVent: NumeroVent;
     @Expose()
         isDefault: boolean;
 
@@ -69,6 +69,102 @@ export class GameSearchParamsCalculator {
         this.joueur4 = joueur4;
         this.dominantVent = dominantVent;
         this.isDefault = isDefault;
+    }
+
+    /**
+     * set the player 1
+     * @param joueur1 
+     * @returns the new game state
+     */
+    setJoueur1(joueur1: SearchParamsJoueur) : GameSearchParamsCalculator {
+        return new GameSearchParamsCalculator(
+            joueur1, 
+            this.joueur2, 
+            this.joueur3, 
+            this.joueur4, 
+            this.dominantVent, 
+            false
+        );
+    }
+
+    /**
+     * set the player 2
+     * @param joueur2 
+     * @returns the new game state
+     */
+    setJoueur2(joueur2: SearchParamsJoueur) : GameSearchParamsCalculator {
+        return new GameSearchParamsCalculator(
+            this.joueur1, 
+            joueur2, 
+            this.joueur3, 
+            this.joueur4, 
+            this.dominantVent, 
+            false
+        );
+    }
+
+    /**
+     * set the player 3
+     * @param joueur3
+     * @returns the new game state
+     */
+    setJoueur3(joueur3: SearchParamsJoueur) : GameSearchParamsCalculator {
+        return new GameSearchParamsCalculator(
+            this.joueur1, 
+            this.joueur2, 
+            joueur3, 
+            this.joueur4, 
+            this.dominantVent, 
+            false
+        );
+    }
+
+    /**
+     * set the player 4
+     * @param joueur4
+     * @returns the new game state
+     */
+    setJoueur4(joueur4: SearchParamsJoueur) : GameSearchParamsCalculator {
+        return new GameSearchParamsCalculator(
+            this.joueur1, 
+            this.joueur2, 
+            this.joueur3, 
+            joueur4, 
+            this.dominantVent, 
+            false
+        );
+    }
+
+    // set the player with indices 0, 1, 2, 3
+    setJoueur(index: number, joueur: SearchParamsJoueur) : GameSearchParamsCalculator {
+        switch (index) {    
+            case 0:
+                return this.setJoueur1(joueur);
+            case 1:
+                return this.setJoueur2(joueur);
+            case 2:
+                return this.setJoueur3(joueur);
+            case 3:
+                return this.setJoueur4(joueur);
+            default:
+                throw new Error("index must be between 0 and 3");
+        }
+    }
+
+    /**
+     * set the dominant vent
+     * @param dominantVent 
+     * @returns the new game state
+     */
+    setDominantVent(dominantVent: NumeroVent) : GameSearchParamsCalculator {
+        return new GameSearchParamsCalculator(
+            this.joueur1, 
+            this.joueur2, 
+            this.joueur3, 
+            this.joueur4, 
+            dominantVent, 
+            false
+        );
     }
 }
 

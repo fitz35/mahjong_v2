@@ -16,7 +16,7 @@ import { getJoueurGenerator } from "../../model/utils/joueursUtils";
  * @param ventOfPlayer the vent of the player
  * @returns if the vent is valid
  */
-function checkVentCoherence(
+export function checkVentCoherence(
     gameParamsCalculator : GameSearchParamsCalculator
 ): boolean {
     let invalidVent = false;
@@ -27,7 +27,7 @@ function checkVentCoherence(
         NumeroVent.Nord,
     ];
     const players = getJoueurGenerator<SearchParamsJoueur, GameSearchParamsCalculator>(gameParamsCalculator);
-    for (const player of players) {
+    for (const [player,] of players) {
         if (player !== undefined) {
             const toRemove: NumeroVent[] = ventArray.splice(
                 ventArray.indexOf(player.vent),
@@ -57,7 +57,7 @@ function checkPointsCoherence(
     let invalidPoint = false;
     let pointsRef : number | undefined = undefined;
     const players = getJoueurGenerator<SearchParamsJoueur, GameSearchParamsCalculator>(gameParamsCalculator);
-    for (const player of players) {
+    for (const [player, ] of players) {
         if (player !== undefined) {
             if (pointsRef === undefined) {
                 pointsRef = player.points.length;

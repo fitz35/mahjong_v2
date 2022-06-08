@@ -17,6 +17,12 @@ export class GlobalCulatorState {
         this.error = error;
     }
 
+
+    // set a new game state and return a new calculator state
+    public setGameState(gameState: GameSearchParamsCalculator): GlobalCulatorState {
+        return new GlobalCulatorState(gameState);
+    }
+
     //////////////////////////////////////////////////////
     // get default
     //////////////////////////////////////////////////////

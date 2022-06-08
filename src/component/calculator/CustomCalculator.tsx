@@ -12,7 +12,7 @@ import { Mains } from "./Mains";
 import { convertUrlSearchParamsInGameParamsCalculator } from "./GameStateParams";
 import { GlobalCulatorState } from "../../model/gameState/GlobalCalculatorState";
 import { UserException } from "../../error/user/UserException";
-import { ParamPanel } from "./ParamPanel";
+import { ParamPanel } from "./paramPanel/ParamPanel";
 const { Panel } = Collapse;
 
 const gutterPropper = { xs: 8, sm: 16, md: 24, lg: 32 };
@@ -74,7 +74,6 @@ export const CustomCalculator = ({
                 <Panel header="Paramètres" key={"param"}>
                     <ParamPanel
                         calculatorState={calculatorState}
-                        gutter={gutterPropper}
                         setCalculatorState={setCalculatorState}
                     ></ParamPanel>
                 </Panel>
