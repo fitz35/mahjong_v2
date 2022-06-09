@@ -5,18 +5,19 @@ import { NumeroVent } from "../../../model/dataModel/dataUtils";
 import {
     GameSearchParamsCalculator,
     SearchParamsJoueur,
-} from "../../../model/gameState/GameSearchParamsCalculator";
-import { GlobalCulatorState } from "../../../model/gameState/GlobalCalculatorState";
+} from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
+import {
+    UtilitiesActualType,
+    UtilitiesHistoryType,
+} from "../../../model/gameStateCalculator/useCalculatorHistoricState";
 import { getJoueurGenerator } from "../../../model/utils/joueursUtils";
 import { MyLogger } from "../../../model/utils/logger";
 import { JoueurCard } from "./JoueurCard";
 import { SavePanel } from "./SavePanel";
 
 interface ParamPanelProps {
-    calculatorState: GlobalCulatorState;
-    setCalculatorState: React.Dispatch<
-        React.SetStateAction<GlobalCulatorState>
-    >;
+    utilitiesActu: UtilitiesActualType;
+    utilitiesHistory: UtilitiesHistoryType;
 }
 
 /**
@@ -38,8 +39,8 @@ interface formData {
  * @returns
  */
 export function ParamPanel({
-    calculatorState,
-    setCalculatorState,
+    utilitiesActu,
+    utilitiesHistory,
 }: ParamPanelProps) {
     const [form] = Form.useForm();
     const [canBeModify, setCanBeModify] = useState(false);
@@ -47,6 +48,40 @@ export function ParamPanel({
     const onFinish = (values: formData) => {
         MyLogger.debug("values : ", values);
         message.success("Modification des joueurs effectuée");
+        // get the old joueur
+        const oldJoueur1 = utilitiesActu.getLastState().gameState.joueur1;
+        const oldJoueur2 = utilitiesActu.getLastState().gameState.joueur2;
+        const oldJoueur3 = utilitiesActu.getLastState().gameState.joueur3;
+        const oldJoueur4 = utilitiesActu.getLastState().gameState.joueur4;
+
+        // update the calculator
+        utilitiesActu.modifyJoueur(
+            new SearchParamsJoueur(
+                oldJoueur1.main,
+                values.vent0,
+                values.name0,
+                oldJoueur1.points
+            ),
+            new SearchParamsJoueur(
+                oldJoueur2.main,
+                values.vent1,
+                values.name1,
+                oldJoueur2.points
+            ),
+            new SearchParamsJoueur(
+                oldJoueur3.main,
+                values.vent2,
+                values.name2,
+                oldJoueur3.points
+            ),
+            new SearchParamsJoueur(
+                oldJoueur4.main,
+                values.vent3,
+                values.name3,
+                oldJoueur4.points
+            )
+        );
+
         setCanBeModify(false);
     };
 
@@ -108,7 +143,7 @@ export function ParamPanel({
     const iterator = getJoueurGenerator<
         SearchParamsJoueur,
         GameSearchParamsCalculator
-    >(calculatorState.gameState);
+    >(utilitiesActu.getLastState().gameState);
     for (const [joueur, i] of iterator) {
         if (joueur !== undefined) {
             cardGeneration.push(
@@ -163,7 +198,7 @@ export function ParamPanel({
                 <Space size={[8, 16]} wrap>
                     {cardGeneration}
 
-                    <SavePanel calculatorState={calculatorState}></SavePanel>
+                    <SavePanel utilitiesActu={utilitiesActu}></SavePanel>
                 </Space>
             </Form>
         </>

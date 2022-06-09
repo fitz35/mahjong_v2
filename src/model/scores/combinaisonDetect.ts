@@ -132,17 +132,17 @@ export function isMultipleSamePiece(
 
         let baseCombi: BaseCombi;
         switch (pieces.length) {
-        case 2:
-            baseCombi = BaseCombi.Paire;
-            break;
-        case 3:
-            baseCombi = BaseCombi.Brelan;
-            break;
-        case 4:
-            baseCombi = BaseCombi.Carre;
-            break;
-        default:
-            baseCombi = BaseCombi.Carre;
+            case 2:
+                baseCombi = BaseCombi.Paire;
+                break;
+            case 3:
+                baseCombi = BaseCombi.Brelan;
+                break;
+            case 4:
+                baseCombi = BaseCombi.Carre;
+                break;
+            default:
+                baseCombi = BaseCombi.Carre;
         }
 
         if (sameFamille && sameNumero) {

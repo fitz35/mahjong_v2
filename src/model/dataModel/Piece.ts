@@ -83,22 +83,22 @@ export class Piece {
             let numeroDisplay = "";
             let voyelle = false;
             switch(this.numero){
-            case "O" :
-                numeroDisplay = "Ouest";
-                voyelle = true;
-                break;
-            case "E":
-                numeroDisplay = "Est";
-                voyelle = true;
-                break; 
-            case "S" :
-                numeroDisplay = "Sud";
-                break;
-            case "N":
-                numeroDisplay = "Nord";
-                break; 
-            default:
-                numeroDisplay = "inconnu";
+                case "O" :
+                    numeroDisplay = "Ouest";
+                    voyelle = true;
+                    break;
+                case "E":
+                    numeroDisplay = "Est";
+                    voyelle = true;
+                    break; 
+                case "S" :
+                    numeroDisplay = "Sud";
+                    break;
+                case "N":
+                    numeroDisplay = "Nord";
+                    break; 
+                default:
+                    numeroDisplay = "inconnu";
             }
             return (voyelle ? "de l'" : "du ") + numeroDisplay;
         }
@@ -106,17 +106,17 @@ export class Piece {
         else if(this.famille === Famille.Dragon){
             let numeroDisplay = "";
             switch(this.numero){
-            case "R" :
-                numeroDisplay = "Rouge";
-                break;
-            case "V":
-                numeroDisplay = "Vert";
-                break; 
-            case "B" :
-                numeroDisplay = "Blanc";
-                break;
-            default:
-                numeroDisplay = "inconnu";
+                case "R" :
+                    numeroDisplay = "Rouge";
+                    break;
+                case "V":
+                    numeroDisplay = "Vert";
+                    break; 
+                case "B" :
+                    numeroDisplay = "Blanc";
+                    break;
+                default:
+                    numeroDisplay = "inconnu";
             }
             return numeroDisplay;
         }

@@ -1,18 +1,19 @@
 import { Col, Collapse, Row } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
 import {
     defaultGameSearchParamsCalculator,
     GameSearchParamsCalculator,
     getGameSearchParamsCalculatorKey,
-} from "../../model/gameState/GameSearchParamsCalculator";
+} from "../../model/gameStateCalculator/GameSearchParamsCalculator";
 import { MahjongPiecesPannel } from "./MahjongPiecesPanel";
 import { Mains } from "./Mains";
 import { convertUrlSearchParamsInGameParamsCalculator } from "./GameStateParams";
-import { GlobalCulatorState } from "../../model/gameState/GlobalCalculatorState";
+import { GlobalCulatorState } from "../../model/gameStateCalculator/GlobalCalculatorState";
 import { UserException } from "../../error/user/UserException";
 import { ParamPanel } from "./paramPanel/ParamPanel";
+import { useCalculatorHistoricState } from "../../model/gameStateCalculator/useCalculatorHistoricState";
 const { Panel } = Collapse;
 
 const gutterPropper = { xs: 8, sm: 16, md: 24, lg: 32 };
@@ -27,14 +28,14 @@ interface CustomCalculatorProps {
 export const CustomCalculator = ({
     isInError = undefined,
 }: CustomCalculatorProps) => {
-    const [calculatorState, setCalculatorState] = useState<GlobalCulatorState>(
-        GlobalCulatorState.getDefault()
-    );
+    const [utilitiesActu, utilitiesHisto] = useCalculatorHistoricState();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
         if (isInError !== undefined) {
-            setCalculatorState(GlobalCulatorState.getDefault(isInError));
+            utilitiesHisto.addHistoricState(
+                GlobalCulatorState.getDefault(isInError)
+            );
         }
         // charge the game with the parameters
         else if (searchParams.toString() != "") {
@@ -44,14 +45,14 @@ export const CustomCalculator = ({
 
             setSearchParams(searchParams);
             if (searchParamCalculate != undefined) {
-                setCalculatorState(
+                utilitiesHisto.addHistoricState(
                     new GlobalCulatorState(searchParamCalculate)
                 );
             } else {
                 // charge default parameter and add error if the parameter is not valid
                 const defaultParams: GameSearchParamsCalculator =
                     defaultGameSearchParamsCalculator;
-                setCalculatorState(
+                utilitiesHisto.addHistoricState(
                     new GlobalCulatorState(
                         defaultParams,
                         new InvalidSearchParamException()
@@ -59,13 +60,11 @@ export const CustomCalculator = ({
                 );
             }
         }
-    }, [calculatorState, isInError, searchParams, setSearchParams]);
+    }, [isInError, searchParams, setSearchParams, utilitiesHisto]);
 
-    if (calculatorState.isError()) {
-        calculatorState.getError()?.openNotification();
-        setCalculatorState(
-            GlobalCulatorState.copyWithoutError(calculatorState)
-        );
+    if (utilitiesActu.getLastState().isError()) {
+        utilitiesActu.getLastState().getError()?.openNotification();
+        utilitiesActu.removeError();
     }
 
     return (
@@ -73,8 +72,8 @@ export const CustomCalculator = ({
             <Collapse defaultActiveKey={["mains"]}>
                 <Panel header="Paramètres" key={"param"}>
                     <ParamPanel
-                        calculatorState={calculatorState}
-                        setCalculatorState={setCalculatorState}
+                        utilitiesActu={utilitiesActu}
+                        utilitiesHistory={utilitiesHisto}
                     ></ParamPanel>
                 </Panel>
                 <Panel header="Mains" key={"mains"}>

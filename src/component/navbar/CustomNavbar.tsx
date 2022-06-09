@@ -12,16 +12,16 @@ export function CustomNavbar() {
     let td3 = "w-40";
 
     switch (location.pathname) {
-    case "/":
-        td1 += " bg-pageVeryDark";
-        break;
-    case "/regles":
-        td2 += " bg-pageVeryDark";
-        break;
-    case "/jouer":
-        td3 += " bg-pageVeryDark";
-        break;
-    default:
+        case "/":
+            td1 += " bg-pageVeryDark";
+            break;
+        case "/regles":
+            td2 += " bg-pageVeryDark";
+            break;
+        case "/jouer":
+            td3 += " bg-pageVeryDark";
+            break;
+        default:
     }
 
     return (

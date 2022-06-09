@@ -1,7 +1,7 @@
 import { Card, Form, Input, Select } from "antd";
 import { Famille, NumeroVent } from "../../../model/dataModel/dataUtils";
 import { Piece } from "../../../model/dataModel/Piece";
-import { SearchParamsJoueur } from "../../../model/gameState/GameSearchParamsCalculator";
+import { SearchParamsJoueur } from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
 
 /**
  * get the vent translation in french

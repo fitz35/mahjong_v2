@@ -1,13 +1,13 @@
 import { CopyOutlined } from "@ant-design/icons";
 import { Button, message, Tooltip } from "antd";
-import { transformSearchParamsCalculatorToString } from "../../../model/gameState/GameSearchParamsCalculator";
-import { GlobalCulatorState } from "../../../model/gameState/GlobalCalculatorState";
+import { transformSearchParamsCalculatorToString } from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
+import { UtilitiesActualType } from "../../../model/gameStateCalculator/useCalculatorHistoricState";
 
 interface SavePanelProps {
-    calculatorState: GlobalCulatorState;
+    utilitiesActu: UtilitiesActualType;
 }
 
-export function SavePanel({ calculatorState }: SavePanelProps) {
+export function SavePanel({ utilitiesActu }: SavePanelProps) {
     return (
         <Tooltip title="Copie dans le presse-papier l'url à réutiliser.">
             <Button
@@ -17,7 +17,7 @@ export function SavePanel({ calculatorState }: SavePanelProps) {
                         window.location.href +
                             "?" +
                             transformSearchParamsCalculatorToString(
-                                calculatorState.gameState
+                                utilitiesActu.getLastState().gameState
                             )
                     );
                     message.success("Copié dans le presse-papier");

@@ -4,7 +4,7 @@ import {
     GameSearchParamsCalculator,
     getGameSearchParamsCalculatorKey,
     SearchParamsJoueur
-} from "../../model/gameState/GameSearchParamsCalculator";
+} from "../../model/gameStateCalculator/GameSearchParamsCalculator";
 import { getJoueurGenerator } from "../../model/utils/joueursUtils";
 
 ////////////////////////////////////////////////////////////////////
