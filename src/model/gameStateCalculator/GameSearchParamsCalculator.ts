@@ -151,6 +151,23 @@ export class GameSearchParamsCalculator {
         }
     }
 
+    // set all the joueurs
+    setJoueurs(
+        joueur1 : SearchParamsJoueur, 
+        joueur2 : SearchParamsJoueur, 
+        joueur3 : SearchParamsJoueur, 
+        joueur4 : SearchParamsJoueur
+    ) : GameSearchParamsCalculator {
+        return new GameSearchParamsCalculator(
+            joueur1, 
+            joueur2, 
+            joueur3, 
+            joueur4, 
+            this.dominantVent, 
+            false
+        );
+    }
+
     /**
      * set the dominant vent
      * @param dominantVent 

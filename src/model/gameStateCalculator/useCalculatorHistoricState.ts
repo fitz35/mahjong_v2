@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { NumeroVent } from "../dataModel/dataUtils";
 import { MyLogger } from "../utils/logger";
-import { SearchParamsJoueur } from "./GameSearchParamsCalculator";
+import { GameSearchParamsCalculator, SearchParamsJoueur } from "./GameSearchParamsCalculator";
 import { GlobalCulatorState } from "./GlobalCalculatorState";
 
 export interface UtilitiesHistoryType {
@@ -38,11 +39,12 @@ export interface UtilitiesActualType {
      * @param joueur3 the new joueur 3
      * @param joueur4 the new joueur 4
      */
-    modifyJoueur : (
+    modifyActuParams : (
         joueur1 : SearchParamsJoueur, 
         joueur2 : SearchParamsJoueur, 
         joueur3 : SearchParamsJoueur, 
-        joueur4 : SearchParamsJoueur
+        joueur4 : SearchParamsJoueur,
+        dominant : NumeroVent
     ) => void;
 
     /**
@@ -70,11 +72,11 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
     ///////////////////////////////////////////////////////////////////////:
 
     const addHistoricState = (newState: GlobalCulatorState) => {
-        setHistoricState([newState, ...historicState]);
+        setHistoricState([...historicState, newState]);
     };
 
     const removeHistoricState = () => {
-        setHistoricState(historicState.slice(0, historicState.length - 1));
+        setHistoricState(historicState.slice(0, historicState.length - 2));
     };
 
     const getHistoricLength = () => {
@@ -109,24 +111,24 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         setHistoricState(newHistoricState);
     };
 
-    const modifyJoueur = (
+    const modifyActuParams = (
         joueur1 : SearchParamsJoueur, 
         joueur2 : SearchParamsJoueur, 
         joueur3 : SearchParamsJoueur, 
-        joueur4 : SearchParamsJoueur
+        joueur4 : SearchParamsJoueur,
+        dominant : NumeroVent
     ) => {
         let newState = GlobalCulatorState.copyWithoutError(getLastState());
-        newState = newState.setGameState(newState.gameState.setJoueur1(joueur1));
-        newState = newState.setGameState(newState.gameState.setJoueur2(joueur2));
-        newState = newState.setGameState(newState.gameState.setJoueur3(joueur3));
-        newState = newState.setGameState(newState.gameState.setJoueur4(joueur4));
+        newState = newState.setGameState(
+            new GameSearchParamsCalculator(joueur1, joueur2, joueur3, joueur4, dominant, false)
+        );
         const newHistoricState = [...historicState];
         newHistoricState[historicState.length - 1] = newState;
         setHistoricState(newHistoricState);
     };
 
     const utilitiesActual : UtilitiesActualType = {
-        modifyJoueur,
+        modifyActuParams,
         getLastState,
         removeError
     };

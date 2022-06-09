@@ -1,38 +1,7 @@
 import { Card, Form, Input, Select } from "antd";
-import { Famille, NumeroVent } from "../../../model/dataModel/dataUtils";
-import { Piece } from "../../../model/dataModel/Piece";
+import { NumeroVent } from "../../../model/dataModel/dataUtils";
 import { SearchParamsJoueur } from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
-
-/**
- * get the vent translation in french
- * @param vent the vent
- * @returns the vent translation in french
- */
-function getFrVentName(vent: NumeroVent): string {
-    return new Piece(vent as string, Famille.Vent).getNumeroDisplay();
-}
-
-/**
- * get the vent options minus the current vent
- * @returns the vent options
- */
-function getSelectOptions(): JSX.Element[] {
-    const options: JSX.Element[] = [];
-    const vents: NumeroVent[] = [
-        NumeroVent.Nord,
-        NumeroVent.Sud,
-        NumeroVent.Est,
-        NumeroVent.Ouest,
-    ];
-    for (let i = 0; i < vents.length; i++) {
-        options.push(
-            <Select.Option value={vents[i] as string}>
-                {getFrVentName(vents[i])}
-            </Select.Option>
-        );
-    }
-    return options;
-}
+import { getSelectOptionsForVents } from "./ParamPanel";
 
 /**
  * get the props for the joueur card
@@ -73,7 +42,7 @@ export function JoueurCard({
                         <Input disabled={!canBeModify} />
                     </Form.Item>
                 }
-                style={{ width: 300 }}
+                style={{ width: 300, height: 200 }}
             >
                 <Form.Item
                     name={"vent" + number}
@@ -99,7 +68,7 @@ export function JoueurCard({
                         style={{ width: "100%" }}
                         placeholder="Choisir un vent"
                     >
-                        {getSelectOptions()}
+                        {getSelectOptionsForVents()}
                     </Select>
                 </Form.Item>
             </Card>

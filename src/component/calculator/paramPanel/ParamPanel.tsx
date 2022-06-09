@@ -1,7 +1,14 @@
-import { CheckOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Col, Form, message, Row, Space } from "antd";
+import {
+    ArrowRightOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    EditOutlined,
+    RedoOutlined,
+} from "@ant-design/icons";
+import { Button, Card, Col, Form, message, Row, Select, Space } from "antd";
 import { useState } from "react";
-import { NumeroVent } from "../../../model/dataModel/dataUtils";
+import { Famille, NumeroVent } from "../../../model/dataModel/dataUtils";
+import { Piece } from "../../../model/dataModel/Piece";
 import {
     GameSearchParamsCalculator,
     SearchParamsJoueur,
@@ -14,6 +21,40 @@ import { getJoueurGenerator } from "../../../model/utils/joueursUtils";
 import { MyLogger } from "../../../model/utils/logger";
 import { JoueurCard } from "./JoueurCard";
 import { SavePanel } from "./SavePanel";
+
+/**
+ * get the vent translation in french
+ * @param vent the vent
+ * @returns the vent translation in french
+ */
+function getFrVentName(vent: NumeroVent): string {
+    return new Piece(vent as string, Famille.Vent).getNumeroDisplay();
+}
+
+/**
+ * get the vent options minus the current vent
+ * @returns the vent options
+ */
+export function getSelectOptionsForVents(): JSX.Element[] {
+    const options: JSX.Element[] = [];
+    const vents: NumeroVent[] = [
+        NumeroVent.Nord,
+        NumeroVent.Sud,
+        NumeroVent.Est,
+        NumeroVent.Ouest,
+    ];
+    for (let i = 0; i < vents.length; i++) {
+        options.push(
+            <Select.Option
+                key={"selectOptionVent" + i}
+                value={vents[i] as string}
+            >
+                {getFrVentName(vents[i])}
+            </Select.Option>
+        );
+    }
+    return options;
+}
 
 interface ParamPanelProps {
     utilitiesActu: UtilitiesActualType;
@@ -32,16 +73,15 @@ interface formData {
     vent2: NumeroVent;
     name3: string;
     vent3: NumeroVent;
+
+    ventDominant: NumeroVent;
 }
 
 /**
  * display the different parameters of the calculator
  * @returns
  */
-export function ParamPanel({
-    utilitiesActu,
-    utilitiesHistory,
-}: ParamPanelProps) {
+export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
     const [form] = Form.useForm();
     const [canBeModify, setCanBeModify] = useState(false);
 
@@ -55,7 +95,7 @@ export function ParamPanel({
         const oldJoueur4 = utilitiesActu.getLastState().gameState.joueur4;
 
         // update the calculator
-        utilitiesActu.modifyJoueur(
+        utilitiesActu.modifyActuParams(
             new SearchParamsJoueur(
                 oldJoueur1.main,
                 values.vent0,
@@ -79,7 +119,8 @@ export function ParamPanel({
                 values.vent3,
                 values.name3,
                 oldJoueur4.points
-            )
+            ),
+            values.ventDominant
         );
 
         setCanBeModify(false);
@@ -138,6 +179,72 @@ export function ParamPanel({
         return joueursError[indexPlayer];
     };
 
+    /**
+     * decal the vent
+     */
+    const onDecalageVent = () => {
+        const vent1: NumeroVent = form.getFieldValue("vent0");
+        const vent2: NumeroVent = form.getFieldValue("vent1");
+        const vent3: NumeroVent = form.getFieldValue("vent2");
+        const vent4: NumeroVent = form.getFieldValue("vent3");
+        form.setFields([
+            {
+                name: "vent0",
+                value: vent4,
+            },
+            {
+                name: "vent1",
+                value: vent1,
+            },
+            {
+                name: "vent2",
+                value: vent2,
+            },
+            {
+                name: "vent3",
+                value: vent3,
+            },
+        ]);
+    };
+
+    const onRandomVent = () => {
+        const vents: NumeroVent[] = [
+            NumeroVent.Nord,
+            NumeroVent.Sud,
+            NumeroVent.Est,
+            NumeroVent.Ouest,
+        ];
+        const randomDominant: NumeroVent = vents[Math.floor(Math.random() * 4)];
+        const randomVents: NumeroVent[] = new Array(4);
+        for (let i = 0; i < 4; i++) {
+            const indexRandom = Math.floor(Math.random() * vents.length);
+            randomVents[i] = vents[indexRandom];
+            vents.splice(indexRandom, 1);
+        }
+        form.setFields([
+            {
+                name: "vent0",
+                value: randomVents[0],
+            },
+            {
+                name: "vent1",
+                value: randomVents[1],
+            },
+            {
+                name: "vent2",
+                value: randomVents[2],
+            },
+            {
+                name: "vent3",
+                value: randomVents[3],
+            },
+            {
+                name: "ventDominant",
+                value: randomDominant,
+            },
+        ]);
+    };
+
     // generation of the card for every player
     const cardGeneration = [];
     const iterator = getJoueurGenerator<
@@ -148,6 +255,7 @@ export function ParamPanel({
         if (joueur !== undefined) {
             cardGeneration.push(
                 <JoueurCard
+                    key={"joueurCard" + i}
                     onChangeVent={checkManualyVent}
                     canBeModify={canBeModify}
                     joueur={joueur}
@@ -161,8 +269,8 @@ export function ParamPanel({
         <>
             <Form
                 name="basic"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
+                labelCol={{ span: 11 }}
+                wrapperCol={{ span: 13 }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -194,11 +302,54 @@ export function ParamPanel({
                             Valider !
                         </Button>
                     </Col>
+                    <Col span={8} offset={12}>
+                        <SavePanel utilitiesActu={utilitiesActu}></SavePanel>
+                    </Col>
                 </Row>
                 <Space size={[8, 16]} wrap>
                     {cardGeneration}
-
-                    <SavePanel utilitiesActu={utilitiesActu}></SavePanel>
+                    <Card
+                        key="generalAndDominant"
+                        title="Général"
+                        style={{ width: 300, height: 200 }}
+                    >
+                        <Form.Item
+                            name={"ventDominant"}
+                            label="Vent dominant"
+                            initialValue={
+                                utilitiesActu.getLastState().gameState
+                                    .dominantVent
+                            }
+                            rules={[{ required: true }]}
+                        >
+                            <Select
+                                disabled={!canBeModify}
+                                placeholder="Vent dominant"
+                            >
+                                {getSelectOptionsForVents()}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button
+                                type="primary"
+                                disabled={!canBeModify}
+                                icon={<ArrowRightOutlined />}
+                                onClick={onDecalageVent}
+                                style={{ width: 150, marginBottom: 5 }}
+                            >
+                                Décaler les vents
+                            </Button>
+                            <Button
+                                type="primary"
+                                disabled={!canBeModify}
+                                icon={<RedoOutlined />}
+                                onClick={onRandomVent}
+                                style={{ width: 150 }}
+                            >
+                                Vents aléatoires
+                            </Button>
+                        </Form.Item>
+                    </Card>
                 </Space>
             </Form>
         </>

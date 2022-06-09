@@ -14,6 +14,7 @@ import { GlobalCulatorState } from "../../model/gameStateCalculator/GlobalCalcul
 import { UserException } from "../../error/user/UserException";
 import { ParamPanel } from "./paramPanel/ParamPanel";
 import { useCalculatorHistoricState } from "../../model/gameStateCalculator/useCalculatorHistoricState";
+import { MyLogger } from "../../model/utils/logger";
 const { Panel } = Collapse;
 
 const gutterPropper = { xs: 8, sm: 16, md: 24, lg: 32 };
@@ -33,12 +34,14 @@ export const CustomCalculator = ({
 
     useEffect(() => {
         if (isInError !== undefined) {
+            /// if we have an error, we reset the calculator
             utilitiesHisto.addHistoricState(
                 GlobalCulatorState.getDefault(isInError)
             );
         }
-        // charge the game with the parameters
-        else if (searchParams.toString() != "") {
+        // else, we charge the game with the parameters
+        else if (searchParams.has(getGameSearchParamsCalculatorKey())) {
+            MyLogger.debug("test");
             const searchParamCalculate: GameSearchParamsCalculator | undefined =
                 convertUrlSearchParamsInGameParamsCalculator(searchParams);
             searchParams.delete(getGameSearchParamsCalculatorKey());
