@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { isHonneur } from "../../model/scores/combinaisonDetect";
 import { Piece } from "../../model/dataModel/Piece";
 import {

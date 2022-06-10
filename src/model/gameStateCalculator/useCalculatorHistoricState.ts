@@ -1,8 +1,19 @@
 import { useState } from "react";
+import { Combinaison } from "../dataModel/Combinaison";
 import { NumeroVent } from "../dataModel/dataUtils";
+import { Piece } from "../dataModel/Piece";
 import { MyLogger } from "../utils/logger";
 import { GameSearchParamsCalculator, SearchParamsJoueur } from "./GameSearchParamsCalculator";
 import { GlobalCulatorState } from "./GlobalCalculatorState";
+
+
+/**
+ * represente a combi to be selected
+ */
+export interface CombiSelected {
+    playerIndex: number;
+    combiIndex: number;
+}
 
 export interface UtilitiesHistoryType {
     /**
@@ -46,6 +57,33 @@ export interface UtilitiesActualType {
         joueur4 : SearchParamsJoueur,
         dominant : NumeroVent
     ) => void;
+    
+    /**
+     * add a combinaison to a joueur
+     * @param combinaison the combinaison to add
+     * @param joueurIndex the joueur to add the combinaison to
+     */
+    addCombinaison : (combinaison : Combinaison, joueurIndex : number) => void;
+
+    /**
+     * remove a combinaison from a joueur
+     * @param combi the combi to remove (combinaisonIndex the combinaison index to remove, joueurIndex the joueur to remove the combinaison from)
+     */
+    removeCombinaison : (combi : CombiSelected) => void;
+
+    /**
+     * add a piece to a combi and a joueur
+     * @param piece the piece to add
+     * @param combi the combi to add the piece to (joueurIndex and combiIndex)
+     */
+    addPieceInCombinaison : (piece : Piece, combi : CombiSelected) => void;
+
+    /**
+     * remove a piece from a combi and a joueur
+     * @param pieceIndex the index of the piece to remove
+     * @param combi the combi to remove the piece from (joueurIndex and combiIndex)
+     */
+    removePieceInCombinaison : (pieceIndex : number, combi : CombiSelected) => void;
 
     /**
      * 
@@ -99,16 +137,27 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
     // manageActuelState method
     ///////////////////////////////////////////////////////////////////////:
 
+    // private 
+
+    const modifyLastState = (newState : GlobalCulatorState) => {
+        const newHistoricState = [...historicState];
+        newHistoricState[historicState.length - 1] = newState;
+
+        setHistoricState(newHistoricState);
+    };
+
+
+    // public
+
+
+
     const getLastState = () => {
         return historicState[historicState.length - 1];
     };
 
     const removeError = () => {
         const newState = GlobalCulatorState.copyWithoutError(getLastState());
-        const newHistoricState = [...historicState];
-        newHistoricState[historicState.length - 1] = newState;
-
-        setHistoricState(newHistoricState);
+        modifyLastState(newState);
     };
 
     const modifyActuParams = (
@@ -122,15 +171,55 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         newState = newState.setGameState(
             new GameSearchParamsCalculator(joueur1, joueur2, joueur3, joueur4, dominant, false)
         );
-        const newHistoricState = [...historicState];
-        newHistoricState[historicState.length - 1] = newState;
-        setHistoricState(newHistoricState);
+        modifyLastState(newState);
     };
+
+    const addCombinaison = (combinaison : Combinaison, joueurIndex : number) => {
+        const oldState = getLastState();
+        let newState = GlobalCulatorState.copyWithoutError(oldState);
+        newState = newState.setGameState(
+            oldState.gameState.addCombinaison(joueurIndex, combinaison)
+        );
+        modifyLastState(newState);
+    };
+
+    const removeCombinaison = (combi : CombiSelected) => {
+        //MyLogger.debug("removeCombinaison : ", combi.playerIndex, combi.combiIndex);
+        const oldState = getLastState();
+        let newState = GlobalCulatorState.copyWithoutError(oldState);
+        newState = newState.setGameState(
+            oldState.gameState.removeCombinaison(combi.playerIndex, combi.combiIndex)
+        );
+        modifyLastState(newState);
+    };
+
+    const addPieceInCombinaison = (piece : Piece, combi : CombiSelected) => {
+        const oldState = getLastState();
+        let newState = GlobalCulatorState.copyWithoutError(oldState);
+        newState = newState.setGameState(
+            oldState.gameState.addPiece(combi, piece)
+        );
+        modifyLastState(newState);
+    };
+
+    const removePieceInCombinaison = (pieceIndex : number, combi : CombiSelected) => {
+        const oldState = getLastState();
+        let newState = GlobalCulatorState.copyWithoutError(oldState);
+        newState = newState.setGameState(
+            oldState.gameState.removePiece(pieceIndex, combi)
+        );
+        modifyLastState(newState);
+    };
+
 
     const utilitiesActual : UtilitiesActualType = {
         modifyActuParams,
         getLastState,
-        removeError
+        removeError,
+        addCombinaison,
+        removeCombinaison,
+        addPieceInCombinaison,
+        removePieceInCombinaison
     };
 
     return [utilitiesActual, utilitiesHistory];

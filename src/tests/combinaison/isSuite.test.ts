@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { isSuite } from "../../model/scores/combinaisonDetect";
 import { Piece } from "../../model/dataModel/Piece";
 import { BaseCombi, Famille } from "../../model/dataModel/dataUtils";

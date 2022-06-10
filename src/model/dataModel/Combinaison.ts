@@ -2,8 +2,14 @@ import { compareForSuiteSort, getCombinaison } from "../scores/combinaisonDetect
 import { sort } from "../utils/sort";
 import { Piece } from "./Piece";
 import { CombiCalculated, NumeroVent } from "./dataUtils";
-import { Expose, Type } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 
+
+export enum CombinaisonExposeType {
+    VISIBLE = "visible",
+    HIDDEN = "hidden",
+    HONNOR = "honnor"
+}
 
 /**
  * 
@@ -32,12 +38,17 @@ export class Combinaison {
     @Type(() => Piece)
     readonly pieces : Piece[];
 
+    @Expose()
+    @Transform(({ value }) => {return value as CombinaisonExposeType;}, { toClassOnly: true })
+    public readonly exposeType;
+
     /**
      * sort the numero of the piece if it is numero
      * @param pieces 
      */
-    constructor(pieces : Piece[], public readonly visible : boolean = true) {
+    constructor(pieces : Piece[], exposeType : CombinaisonExposeType = CombinaisonExposeType.VISIBLE) {
         this.pieces = pieces;
+        this.exposeType = exposeType;
         sort<Piece>(this.pieces, compareForSuiteSort);
     }
 

@@ -1,4 +1,5 @@
-import { Combinaison } from "../../model/dataModel/Combinaison";
+import "reflect-metadata";
+import { Combinaison, CombinaisonExposeType } from "../../model/dataModel/Combinaison";
 import { NumeroVent } from "../../model/dataModel/dataUtils";
 import { Joueur } from "../../model/dataModel/Joueur";
 import { Manche } from "../../model/dataModel/Manche";
@@ -129,7 +130,7 @@ describe("test the redistribution", () => {
                     new Piece("2R"),
                     new Piece("2R"),
                     new Piece("2R"),
-                ], false),
+                ], CombinaisonExposeType.HIDDEN),
                 new Combinaison([
                     new Piece("2F")
                 ]),

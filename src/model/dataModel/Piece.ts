@@ -137,4 +137,7 @@ export class Piece {
         }
     };
 
+    public getImageUrl = () : string => {
+        return "/images/indiv/" + this.getCode() + ".png";
+    };
 }

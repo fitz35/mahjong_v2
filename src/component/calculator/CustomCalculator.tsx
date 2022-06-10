@@ -1,4 +1,4 @@
-import { Col, Collapse, Row } from "antd";
+import { Collapse } from "antd";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
@@ -7,8 +7,7 @@ import {
     GameSearchParamsCalculator,
     getGameSearchParamsCalculatorKey,
 } from "../../model/gameStateCalculator/GameSearchParamsCalculator";
-import { MahjongPiecesPannel } from "./MahjongPiecesPanel";
-import { Mains } from "./Mains";
+import { MainsPanel } from "./mainPanel/MainsPanel";
 import { convertUrlSearchParamsInGameParamsCalculator } from "./GameStateParams";
 import { GlobalCulatorState } from "../../model/gameStateCalculator/GlobalCalculatorState";
 import { UserException } from "../../error/user/UserException";
@@ -16,8 +15,6 @@ import { ParamPanel } from "./paramPanel/ParamPanel";
 import { useCalculatorHistoricState } from "../../model/gameStateCalculator/useCalculatorHistoricState";
 import { MyLogger } from "../../model/utils/logger";
 const { Panel } = Collapse;
-
-const gutterPropper = { xs: 8, sm: 16, md: 24, lg: 32 };
 
 interface CustomCalculatorProps {
     isInError?: UserException | undefined;
@@ -80,14 +77,10 @@ export const CustomCalculator = ({
                     ></ParamPanel>
                 </Panel>
                 <Panel header="Mains" key={"mains"}>
-                    <Row gutter={gutterPropper}>
-                        <Col className="gutter-row" span={12}>
-                            <MahjongPiecesPannel></MahjongPiecesPannel>
-                        </Col>
-                        <Col className="gutter-row" span={12}>
-                            <Mains></Mains>
-                        </Col>
-                    </Row>
+                    <MainsPanel
+                        utilitiesActu={utilitiesActu}
+                        utilitiesHistory={utilitiesHisto}
+                    ></MainsPanel>
                 </Panel>
             </Collapse>
         </>

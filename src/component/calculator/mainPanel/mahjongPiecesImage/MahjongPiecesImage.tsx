@@ -1,13 +1,19 @@
-import { Card } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { Piece } from "../../model/dataModel/Piece";
-import { Famille } from "../../model/dataModel/dataUtils";
-import { MyLogger } from "../../model/utils/logger";
+import { Piece } from "../../../../model/dataModel/Piece";
+import { Famille } from "../../../../model/dataModel/dataUtils";
+import { MyLogger } from "../../../../model/utils/logger";
+import {
+    CombiSelected,
+    UtilitiesActualType,
+} from "../../../../model/gameStateCalculator/useCalculatorHistoricState";
+import { MahjongPieceArea } from "./MahjongPieceArea";
+import { Tooltip } from "./Tooltype";
+import { message } from "antd";
 
 //////////////////////////////////////////////
 // info to build area
 
-type AreaData = {
+export type AreaData = {
     imgWidth: number;
     imgHeight: number;
     x_init: number;
@@ -64,7 +70,7 @@ function getNewAreaData(imgWidth: number, imgHeight: number): AreaData {
 /////////////////////////////////////////////////////////::
 // state
 
-type TooltypeState =
+export type TooltypeState =
     | {
           x: number;
           y: number;
@@ -74,61 +80,9 @@ type TooltypeState =
 
 type ImageState = {
     areaData: AreaData;
-    areas: JSX.Element[];
 };
 
 ////////////////////////////////////////
-
-function Tooltip(x: number, y: number, piece: Piece, areaData: AreaData) {
-    const tooltipWidth = 250;
-    let leftOffset = 0;
-    //on test si elle n'est pas sortie de l'ecran :
-    const largeur_fenetre = window.innerWidth;
-    if (tooltipWidth + areaData.width + x > largeur_fenetre) {
-        leftOffset = x - tooltipWidth - 20;
-    } else {
-        leftOffset = x + areaData.width + 20;
-    }
-
-    return (
-        <Card
-            id="tooltip"
-            size="small"
-            title={piece.getFrDisplayName()}
-            className="bg-green-100"
-            style={{ top: y + 10, left: leftOffset }}
-        >
-            <span>test</span>
-        </Card>
-    );
-}
-
-function MahjongPieceArea(
-    x: number,
-    y: number,
-    piece: Piece,
-    areaData: AreaData,
-    setSelection: React.Dispatch<React.SetStateAction<TooltypeState>>
-): JSX.Element {
-    const coord =
-        x + "," + y + "," + (x + areaData.width) + "," + (y + areaData.height);
-
-    return (
-        <area
-            key={"area_" + piece.getFrDisplayName()}
-            shape="rect"
-            coords={coord}
-            alt={piece.getFrDisplayName()}
-            title={piece.getFrDisplayName()}
-            onMouseEnter={() => {
-                setSelection({ x: x, y: y, piece: piece });
-            }}
-            onMouseLeave={() => {
-                setSelection(undefined);
-            }}
-        ></area>
-    );
-}
 
 /**
  * generation of the area for the pieces
@@ -139,13 +93,36 @@ function MahjongPieceArea(
  */
 function generationArea(
     areaData: AreaData,
+    utilitiesActu: UtilitiesActualType,
+    combiSelected: CombiSelected | undefined,
     setTooltipInfo: React.Dispatch<React.SetStateAction<TooltypeState>>
 ): JSX.Element[] {
-    let x = areaData.x_init;
-    let y = areaData.y_init;
+    let xCursor = areaData.x_init;
+    let yCursor = areaData.y_init;
 
     // generation of the map to manage the clique and the hover
     const areaBuffer: Array<JSX.Element> = [];
+
+    const onMouseEnter = (x_in: number, y_in: number, piece: Piece) => {
+        setTooltipInfo({
+            x: x_in,
+            y: y_in,
+            piece: piece,
+        });
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onMouseLeave = (x_in: number, y_in: number, piece: Piece) => {
+        setTooltipInfo(undefined);
+    };
+
+    const onAreaClick = (x_in: number, y_in: number, piece: Piece) => {
+        if (combiSelected) {
+            utilitiesActu.addPieceInCombinaison(piece, combiSelected);
+        } else {
+            message.error("Veuillez selectionner une combinaison");
+        }
+    };
 
     //3 bases famille
     const baseFamilles = [Famille.Caractere, Famille.Cercle, Famille.Bambou];
@@ -156,93 +133,109 @@ function generationArea(
     ) {
         for (let numero = 1; numero <= 9; numero++) {
             areaBuffer.push(
-                MahjongPieceArea(
-                    x,
-                    y,
-                    new Piece(numero.toString(), baseFamilles[baseFamille]),
-                    areaData,
-                    setTooltipInfo
-                )
+                <MahjongPieceArea
+                    key={`${baseFamilles[baseFamille]}${numero}`}
+                    x={xCursor}
+                    y={yCursor}
+                    piece={
+                        new Piece(numero.toString(), baseFamilles[baseFamille])
+                    }
+                    areaData={areaData}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    onClick={onAreaClick}
+                ></MahjongPieceArea>
             );
-            x += areaData.width + areaData.espace_w;
+            xCursor += areaData.width + areaData.espace_w;
         }
-        x = areaData.x_init;
-        y += areaData.height + areaData.espace_h;
+        xCursor = areaData.x_init;
+        yCursor += areaData.height + areaData.espace_h;
     }
     // vent
     const ventNumeros = ["E", "S", "O", "N"];
     for (let vent = 0; vent < ventNumeros.length; vent++) {
         areaBuffer.push(
-            MahjongPieceArea(
-                x,
-                y,
-                new Piece(ventNumeros[vent], Famille.Vent),
-                areaData,
-                setTooltipInfo
-            )
+            <MahjongPieceArea
+                key={`vent${vent}`}
+                x={xCursor}
+                y={yCursor}
+                piece={new Piece(ventNumeros[vent], Famille.Vent)}
+                areaData={areaData}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onAreaClick}
+            ></MahjongPieceArea>
         );
-        x += areaData.width + areaData.espace_w;
+        xCursor += areaData.width + areaData.espace_w;
     }
-    x = areaData.x_init;
-    y += areaData.height + areaData.espace_h;
+    xCursor = areaData.x_init;
+    yCursor += areaData.height + areaData.espace_h;
     const dragonNumero = ["R", "V", "B"];
     for (let dragon = 0; dragon < dragonNumero.length; dragon++) {
         areaBuffer.push(
-            MahjongPieceArea(
-                x,
-                y,
-                new Piece(dragonNumero[dragon], Famille.Dragon),
-                areaData,
-                setTooltipInfo
-            )
+            <MahjongPieceArea
+                key={`dragon${dragon}`}
+                x={xCursor}
+                y={yCursor}
+                piece={new Piece(dragonNumero[dragon], Famille.Dragon)}
+                areaData={areaData}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onAreaClick}
+            ></MahjongPieceArea>
         );
-        x += areaData.width + areaData.espace_w;
+        xCursor += areaData.width + areaData.espace_w;
     }
-    x = areaData.x_init;
-    y += areaData.height + areaData.espace_h;
+    xCursor = areaData.x_init;
+    yCursor += areaData.height + areaData.espace_h;
 
     // fleurs and saisons
     const bonuss = [Famille.Fleurs, Famille.Saison];
     for (let bonus = 0; bonus < bonuss.length; bonus++) {
         for (let numero = 1; numero <= 4; numero++) {
             areaBuffer.push(
-                MahjongPieceArea(
-                    x,
-                    y,
-                    new Piece(numero.toString(), bonuss[bonus]),
-                    areaData,
-                    setTooltipInfo
-                )
+                <MahjongPieceArea
+                    key={`${bonuss[bonus]}${numero}`}
+                    x={xCursor}
+                    y={yCursor}
+                    piece={new Piece(numero.toString(), bonuss[bonus])}
+                    areaData={areaData}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    onClick={onAreaClick}
+                ></MahjongPieceArea>
             );
-            x += areaData.width + areaData.espace_w;
+            xCursor += areaData.width + areaData.espace_w;
         }
-        x = areaData.x_init;
-        y += areaData.height + areaData.espace_h;
+        xCursor = areaData.x_init;
+        yCursor += areaData.height + areaData.espace_h;
     }
 
     return areaBuffer;
 }
 
 /**
- * adapt the area to the image when resize
+ * adapt the area data to the image when resize
  * @param imgRef the image ref
+ * @param utilitiesActu the utilities to access calculator data
+ * @param combiSelected the combi selected
  * @param setTooltipInfo the function to set the tooltip info
  * @returns the new state
  */
 function useRefDimension(
     imgRef: React.RefObject<HTMLImageElement>,
+    utilitiesActu: UtilitiesActualType,
+    combiSelected: CombiSelected | undefined,
     setTooltipInfo: React.Dispatch<React.SetStateAction<TooltypeState>>
 ): ImageState {
     const [areaDataState, setAreaDataState] = useState<ImageState>({
         areaData: defaultAreaData,
-        areas: [],
     });
 
     useEffect(() => {
         function handleResize() {
             if (imgRef.current !== null) {
                 if (
-                    areaDataState.areas.length === 0 || // if we havnt any area
                     imgRef.current.offsetWidth !==
                         areaDataState.areaData.imgWidth ||
                     imgRef.current.offsetHeight !==
@@ -256,7 +249,6 @@ function useRefDimension(
                     MyLogger.debug("newAreaData : ", newAreaData);
                     setAreaDataState({
                         areaData: newAreaData,
-                        areas: generationArea(newAreaData, setTooltipInfo),
                     });
                 }
             }
@@ -272,37 +264,60 @@ function useRefDimension(
     }, [
         areaDataState.areaData.imgHeight,
         areaDataState.areaData.imgWidth,
-        areaDataState.areas.length,
+        combiSelected,
         imgRef,
         setTooltipInfo,
+        utilitiesActu,
     ]);
 
     return areaDataState;
+}
+
+interface MahjongPieceAreaProps {
+    utilitiesActu: UtilitiesActualType;
+    combiSelected: CombiSelected | undefined;
 }
 
 /**
  * Make the mahjong image mapping to allow cliking and manage it
  * @returns
  */
-export function MahjongPiecesPannel() {
+export function MahjongPiecesImage({
+    utilitiesActu,
+    combiSelected,
+}: MahjongPieceAreaProps) {
     const [tooltipInfos, setTooltipInfo] = useState<TooltypeState>();
     const ref = useRef<HTMLImageElement>(null); // ref to the img (width and height)
-    const areaDataState = useRefDimension(ref, setTooltipInfo);
+    const areaDataState = useRefDimension(
+        ref,
+        utilitiesActu,
+        combiSelected,
+        setTooltipInfo
+    );
 
     let tooltip: JSX.Element = <></>;
     if (tooltipInfos !== undefined) {
-        tooltip = Tooltip(
-            tooltipInfos.x,
-            tooltipInfos.y,
-            tooltipInfos.piece,
-            areaDataState.areaData
+        tooltip = (
+            <Tooltip
+                x={tooltipInfos.x}
+                y={tooltipInfos.y}
+                piece={tooltipInfos.piece}
+                areaData={areaDataState.areaData}
+            ></Tooltip>
         );
     }
+
+    const areas = generationArea(
+        areaDataState.areaData,
+        utilitiesActu,
+        combiSelected,
+        setTooltipInfo
+    );
 
     return (
         <>
             <map id="map_pieces_majong" name="map_pieces_majong">
-                {areaDataState.areas}
+                {areas}
             </map>
 
             <img

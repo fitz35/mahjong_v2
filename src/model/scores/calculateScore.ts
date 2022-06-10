@@ -1,4 +1,4 @@
-import { Combinaison } from "../dataModel/Combinaison";
+import { Combinaison, CombinaisonExposeType } from "../dataModel/Combinaison";
 import {
     CombiCalculated,
     MahjongScoring,
@@ -90,7 +90,10 @@ export function calculateCombiScore(
             // for every combi scoring rule, we add the score
             for (let j = 0; j < combiScoringRule.length; j++) {
                 // difference beetween open and closed combinaison
-                if (combinaisons[i].visible) {
+                if (
+                    combinaisons[i].exposeType === CombinaisonExposeType.VISIBLE || 
+                    combinaisons[i].exposeType === CombinaisonExposeType.HONNOR
+                ) {
                     addition += combiScoringRule[j].open;
                 } else {
                     addition += combiScoringRule[j].hidden;

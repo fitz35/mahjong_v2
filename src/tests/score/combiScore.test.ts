@@ -1,8 +1,9 @@
+import "reflect-metadata";
 import {
     calculateCombiScore,
     CombiScore,
 } from "../../../src/model/scores/calculateScore";
-import { Combinaison } from "../../model/dataModel/Combinaison";
+import { Combinaison, CombinaisonExposeType } from "../../model/dataModel/Combinaison";
 import { NumeroVent } from "../../model/dataModel/dataUtils";
 import { Piece } from "../../model/dataModel/Piece";
 import { CombiScoringRule } from "../../model/rules/interfacesScoringRules";
@@ -165,7 +166,7 @@ describe("CombiScore", () => {
                 new Piece("BD"),
                 new Piece("BD"),
                 new Piece("BD"),
-            ], false),
+            ], CombinaisonExposeType.HIDDEN),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("2R"),

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Combinaison } from "../../model/dataModel/Combinaison";
 import { isMahjongFullColor } from "../../model/scores/mahjongDetect";
 import { Piece } from "../../model/dataModel/Piece";
