@@ -1,13 +1,13 @@
 import { Card, Form, Input, Select } from "antd";
 import { NumeroVent } from "../../../model/dataModel/dataUtils";
-import { SearchParamsJoueur } from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
+import { JoueurCalculatorState } from "../../../model/gameStateCalculator/MancheCalculatorState";
 import { getSelectOptionsForVents } from "./ParamPanel";
 
 /**
  * get the props for the joueur card
  */
 interface JoueurCardProps {
-    joueur: SearchParamsJoueur;
+    joueur: JoueurCalculatorState;
     canBeModify: boolean;
     number: number;
     /**

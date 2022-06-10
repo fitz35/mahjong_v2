@@ -8,7 +8,7 @@ import {
     Combinaison,
     CombinaisonExposeType,
 } from "../../../model/dataModel/Combinaison";
-import { SearchParamsJoueur } from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
+import { JoueurCalculatorState } from "../../../model/gameStateCalculator/MancheCalculatorState";
 import {
     CombiSelected,
     UtilitiesActualType,
@@ -30,7 +30,7 @@ interface PlayerTabProps {
     >;
 
     joueurIndex: number;
-    joueur: SearchParamsJoueur;
+    joueur: JoueurCalculatorState;
     utilitiesActu: UtilitiesActualType;
 }
 

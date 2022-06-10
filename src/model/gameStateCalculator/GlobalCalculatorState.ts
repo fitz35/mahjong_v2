@@ -1,8 +1,7 @@
 import { UserException } from "../../error/user/UserException";
 import {
-    defaultGameSearchParamsCalculator,
-    GameSearchParamsCalculator
-} from "./GameSearchParamsCalculator";
+    MancheCalculatorState
+} from "./MancheCalculatorState";
 
 /**
  * calculator state
@@ -11,7 +10,7 @@ export class GlobalCulatorState {
     private error: UserException | undefined;
 
     constructor(
-        public readonly gameState: GameSearchParamsCalculator,
+        public readonly gameState: MancheCalculatorState,
         error: UserException | undefined = undefined
     ) {
         this.error = error;
@@ -19,7 +18,7 @@ export class GlobalCulatorState {
 
 
     // set a new game state and return a new calculator state
-    public setGameState(gameState: GameSearchParamsCalculator): GlobalCulatorState {
+    public setGameState(gameState: MancheCalculatorState): GlobalCulatorState {
         return new GlobalCulatorState(gameState);
     }
 

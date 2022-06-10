@@ -1,0 +1,94 @@
+{
+    "joueur1": {
+        "main": [
+            {
+                "pieces": [
+                    {
+                        "numero": "1",
+                        "famille": "C",
+                        "getCode": "1C",
+                        "getFamilleDisplay": "Charactère",
+                        "getNumeroDisplay": "1 de",
+                        "getFrDisplayName": "1 de Charactère",
+                        "getImageUrl": "/images/indiv/1C.png"
+                    },
+                    {
+                        "numero": "1",
+                        "famille": "C",
+                        "getCode": "1C",
+                        "getFamilleDisplay": "Charactère",
+                        "getNumeroDisplay": "1 de",
+                        "getFrDisplayName": "1 de Charactère",
+                        "getImageUrl": "/images/indiv/1C.png"
+                    },
+                    {
+                        "numero": "1",
+                        "famille": "C",
+                        "getCode": "1C",
+                        "getFamilleDisplay": "Charactère",
+                        "getNumeroDisplay": "1 de",
+                        "getFrDisplayName": "1 de Charactère",
+                        "getImageUrl": "/images/indiv/1C.png"
+                    }
+                ],
+                "exposeType": "visible",
+                "isValid": true,
+                "getCombinaison": [
+                    {
+                        "base": "Brelan",
+                        "modificateur": ["ExtremNumero"],
+                        "famille": "C"
+                    }
+                ]
+            },
+            {
+                "pieces": [
+                    {
+                        "numero": "9",
+                        "famille": "R",
+                        "getCode": "9R",
+                        "getFamilleDisplay": "Cercle",
+                        "getNumeroDisplay": "9 de",
+                        "getFrDisplayName": "9 de Cercle",
+                        "getImageUrl": "/images/indiv/9R.png"
+                    },
+                    {
+                        "numero": "9",
+                        "famille": "R",
+                        "getCode": "9R",
+                        "getFamilleDisplay": "Cercle",
+                        "getNumeroDisplay": "9 de",
+                        "getFrDisplayName": "9 de Cercle",
+                        "getImageUrl": "/images/indiv/9R.png"
+                    },
+                    {
+                        "numero": "9",
+                        "famille": "R",
+                        "getCode": "9R",
+                        "getFamilleDisplay": "Cercle",
+                        "getNumeroDisplay": "9 de",
+                        "getFrDisplayName": "9 de Cercle",
+                        "getImageUrl": "/images/indiv/9R.png"
+                    }
+                ],
+                "exposeType": "visible",
+                "isValid": true,
+                "getCombinaison": [
+                    {
+                        "base": "Brelan",
+                        "modificateur": ["ExtremNumero"],
+                        "famille": "R"
+                    }
+                ]
+            }
+        ],
+        "vent": "E",
+        "name": "Joueur 1",
+        "points": []
+    },
+    "joueur2": { "main": [], "vent": "S", "name": "Joueur 2", "points": [] },
+    "joueur3": { "main": [], "vent": "O", "name": "Joueur 3", "points": [] },
+    "joueur4": { "main": [], "vent": "N", "name": "Joueur 4", "points": [] },
+    "dominantVent": "E",
+    "isDefault": false
+}

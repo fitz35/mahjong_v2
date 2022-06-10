@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Combinaison } from "../dataModel/Combinaison";
 import { NumeroVent } from "../dataModel/dataUtils";
 import { Piece } from "../dataModel/Piece";
-import { MyLogger } from "../utils/logger";
-import { GameSearchParamsCalculator, SearchParamsJoueur } from "./GameSearchParamsCalculator";
+import { MancheCalculatorState, JoueurCalculatorState } from "./MancheCalculatorState";
 import { GlobalCulatorState } from "./GlobalCalculatorState";
 
 
@@ -51,10 +50,10 @@ export interface UtilitiesActualType {
      * @param joueur4 the new joueur 4
      */
     modifyActuParams : (
-        joueur1 : SearchParamsJoueur, 
-        joueur2 : SearchParamsJoueur, 
-        joueur3 : SearchParamsJoueur, 
-        joueur4 : SearchParamsJoueur,
+        joueur1 : JoueurCalculatorState, 
+        joueur2 : JoueurCalculatorState, 
+        joueur3 : JoueurCalculatorState, 
+        joueur4 : JoueurCalculatorState,
         dominant : NumeroVent
     ) => void;
     
@@ -103,7 +102,6 @@ export interface UtilitiesActualType {
  */
 export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHistoryType] {
     const [historicState, setHistoricState] = useState<GlobalCulatorState[]>([GlobalCulatorState.getDefault()]);
-    MyLogger.debug("historicState : ", historicState);
 
     ///////////////////////////////////////////////////////////////////////:
     // history method
@@ -161,15 +159,15 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
     };
 
     const modifyActuParams = (
-        joueur1 : SearchParamsJoueur, 
-        joueur2 : SearchParamsJoueur, 
-        joueur3 : SearchParamsJoueur, 
-        joueur4 : SearchParamsJoueur,
+        joueur1 : JoueurCalculatorState, 
+        joueur2 : JoueurCalculatorState, 
+        joueur3 : JoueurCalculatorState, 
+        joueur4 : JoueurCalculatorState,
         dominant : NumeroVent
     ) => {
         let newState = GlobalCulatorState.copyWithoutError(getLastState());
         newState = newState.setGameState(
-            new GameSearchParamsCalculator(joueur1, joueur2, joueur3, joueur4, dominant, false)
+            new MancheCalculatorState(joueur1, joueur2, joueur3, joueur4, dominant, false)
         );
         modifyLastState(newState);
     };

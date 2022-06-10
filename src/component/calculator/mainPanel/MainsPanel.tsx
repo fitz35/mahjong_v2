@@ -1,9 +1,9 @@
 import { Col, Row, Tabs } from "antd";
 import { useState } from "react";
 import {
-    GameSearchParamsCalculator,
-    SearchParamsJoueur,
-} from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
+    MancheCalculatorState,
+    JoueurCalculatorState,
+} from "../../../model/gameStateCalculator/MancheCalculatorState";
 import {
     CombiSelected,
     UtilitiesActualType,
@@ -29,8 +29,8 @@ export function MainsPanel({ utilitiesActu }: MainsPanelProps) {
     // generation of the panel for every joueur
     const panes: JSX.Element[] = [];
     const joueurGen = getJoueurGenerator<
-        SearchParamsJoueur,
-        GameSearchParamsCalculator
+        JoueurCalculatorState,
+        MancheCalculatorState
     >(utilitiesActu.getLastState().gameState);
     for (const [joueur, i] of joueurGen) {
         panes.push(

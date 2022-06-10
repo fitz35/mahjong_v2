@@ -10,9 +10,9 @@ import { useState } from "react";
 import { Famille, NumeroVent } from "../../../model/dataModel/dataUtils";
 import { Piece } from "../../../model/dataModel/Piece";
 import {
-    GameSearchParamsCalculator,
-    SearchParamsJoueur,
-} from "../../../model/gameStateCalculator/GameSearchParamsCalculator";
+    MancheCalculatorState,
+    JoueurCalculatorState,
+} from "../../../model/gameStateCalculator/MancheCalculatorState";
 import {
     UtilitiesActualType,
     UtilitiesHistoryType,
@@ -96,25 +96,25 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
 
         // update the calculator
         utilitiesActu.modifyActuParams(
-            new SearchParamsJoueur(
+            new JoueurCalculatorState(
                 oldJoueur1.main,
                 values.vent0,
                 values.name0,
                 oldJoueur1.points
             ),
-            new SearchParamsJoueur(
+            new JoueurCalculatorState(
                 oldJoueur2.main,
                 values.vent1,
                 values.name1,
                 oldJoueur2.points
             ),
-            new SearchParamsJoueur(
+            new JoueurCalculatorState(
                 oldJoueur3.main,
                 values.vent2,
                 values.name2,
                 oldJoueur3.points
             ),
-            new SearchParamsJoueur(
+            new JoueurCalculatorState(
                 oldJoueur4.main,
                 values.vent3,
                 values.name3,
@@ -248,8 +248,8 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
     // generation of the card for every player
     const cardGeneration = [];
     const iterator = getJoueurGenerator<
-        SearchParamsJoueur,
-        GameSearchParamsCalculator
+        JoueurCalculatorState,
+        MancheCalculatorState
     >(utilitiesActu.getLastState().gameState);
     for (const [joueur, i] of iterator) {
         if (joueur !== undefined) {

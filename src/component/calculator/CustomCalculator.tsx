@@ -3,10 +3,9 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
 import {
-    defaultGameSearchParamsCalculator,
-    GameSearchParamsCalculator,
+    MancheCalculatorState,
     getGameSearchParamsCalculatorKey,
-} from "../../model/gameStateCalculator/GameSearchParamsCalculator";
+} from "../../model/gameStateCalculator/MancheCalculatorState";
 import { MainsPanel } from "./mainPanel/MainsPanel";
 import { convertUrlSearchParamsInGameParamsCalculator } from "./GameStateParams";
 import { GlobalCulatorState } from "../../model/gameStateCalculator/GlobalCalculatorState";
@@ -39,7 +38,7 @@ export const CustomCalculator = ({
         // else, we charge the game with the parameters
         else if (searchParams.has(getGameSearchParamsCalculatorKey())) {
             MyLogger.debug("test");
-            const searchParamCalculate: GameSearchParamsCalculator | undefined =
+            const searchParamCalculate: MancheCalculatorState | undefined =
                 convertUrlSearchParamsInGameParamsCalculator(searchParams);
             searchParams.delete(getGameSearchParamsCalculatorKey());
 
@@ -50,8 +49,7 @@ export const CustomCalculator = ({
                 );
             } else {
                 // charge default parameter and add error if the parameter is not valid
-                const defaultParams: GameSearchParamsCalculator =
-                    defaultGameSearchParamsCalculator;
+                const defaultParams: MancheCalculatorState = JSON.parse("");
                 utilitiesHisto.addHistoricState(
                     new GlobalCulatorState(
                         defaultParams,

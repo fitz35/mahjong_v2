@@ -1,24 +1,17 @@
 import { Combinaison } from "../dataModel/Combinaison";
-import {Expose, instanceToPlain, plainToInstance, Transform, Type } from "class-transformer";
 
 import { NumeroVent } from "../dataModel/dataUtils";
 import { CombiSelected } from "./useCalculatorHistoricState";
 import { Piece } from "../dataModel/Piece";
 
-export class SearchParamsJoueur {
-    @Expose()
-    @Type(() => Combinaison)
-        main: Combinaison[];
+export class JoueurCalculatorState {
+    main: Combinaison[];
 
-    @Expose()
-    @Transform(({ value }) => {return value as NumeroVent;}, { toClassOnly: true })
-        vent: NumeroVent;
+    vent: NumeroVent;
 
-    @Expose()
-        name: string;
+    name: string;
         
-    @Expose()
-        points: number[]; // cumulated
+    points: number[]; // cumulated
 
     constructor(
         main: Combinaison[],
@@ -36,32 +29,19 @@ export class SearchParamsJoueur {
 /**
  * all necessary to restore game state
  */
-export class GameSearchParamsCalculator {
-    @Expose()
-    @Type(() => SearchParamsJoueur)
-    readonly joueur1: SearchParamsJoueur;
-    @Expose()
-    @Type(() => SearchParamsJoueur)
-    readonly joueur2: SearchParamsJoueur;
-    @Expose()
-    @Type(() => SearchParamsJoueur)
-    readonly joueur3: SearchParamsJoueur;
-    @Expose()
-    @Type(() => SearchParamsJoueur)
-    readonly joueur4: SearchParamsJoueur;
-    @Expose()
-    @Transform(({ value }) => {
-        return value as NumeroVent;
-    })
+export class MancheCalculatorState {
+    readonly joueur1: JoueurCalculatorState;
+    readonly joueur2: JoueurCalculatorState;
+    readonly joueur3: JoueurCalculatorState;
+    readonly joueur4: JoueurCalculatorState;
     readonly dominantVent: NumeroVent;
-    @Expose()
-        isDefault: boolean;
+    isDefault: boolean;
 
     constructor(
-        joueur1: SearchParamsJoueur,
-        joueur2: SearchParamsJoueur,
-        joueur3: SearchParamsJoueur,
-        joueur4: SearchParamsJoueur,
+        joueur1: JoueurCalculatorState,
+        joueur2: JoueurCalculatorState,
+        joueur3: JoueurCalculatorState,
+        joueur4: JoueurCalculatorState,
         dominantVent: NumeroVent,
         isDefault: boolean
     ) {
@@ -78,8 +58,8 @@ export class GameSearchParamsCalculator {
      * @param joueur1 
      * @returns the new game state
      */
-    setJoueur1(joueur1: SearchParamsJoueur) : GameSearchParamsCalculator {
-        return new GameSearchParamsCalculator(
+    setJoueur1(joueur1: JoueurCalculatorState) : MancheCalculatorState {
+        return new MancheCalculatorState(
             joueur1, 
             this.joueur2, 
             this.joueur3, 
@@ -94,8 +74,8 @@ export class GameSearchParamsCalculator {
      * @param joueur2 
      * @returns the new game state
      */
-    setJoueur2(joueur2: SearchParamsJoueur) : GameSearchParamsCalculator {
-        return new GameSearchParamsCalculator(
+    setJoueur2(joueur2: JoueurCalculatorState) : MancheCalculatorState {
+        return new MancheCalculatorState(
             this.joueur1, 
             joueur2, 
             this.joueur3, 
@@ -110,8 +90,8 @@ export class GameSearchParamsCalculator {
      * @param joueur3
      * @returns the new game state
      */
-    setJoueur3(joueur3: SearchParamsJoueur) : GameSearchParamsCalculator {
-        return new GameSearchParamsCalculator(
+    setJoueur3(joueur3: JoueurCalculatorState) : MancheCalculatorState {
+        return new MancheCalculatorState(
             this.joueur1, 
             this.joueur2, 
             joueur3, 
@@ -126,8 +106,8 @@ export class GameSearchParamsCalculator {
      * @param joueur4
      * @returns the new game state
      */
-    setJoueur4(joueur4: SearchParamsJoueur) : GameSearchParamsCalculator {
-        return new GameSearchParamsCalculator(
+    setJoueur4(joueur4: JoueurCalculatorState) : MancheCalculatorState {
+        return new MancheCalculatorState(
             this.joueur1, 
             this.joueur2, 
             this.joueur3, 
@@ -138,7 +118,7 @@ export class GameSearchParamsCalculator {
     }
 
     // set the player with indices 0, 1, 2, 3
-    setJoueur(index: number, joueur: SearchParamsJoueur) : GameSearchParamsCalculator {
+    setJoueur(index: number, joueur: JoueurCalculatorState) : MancheCalculatorState {
         switch (index) {    
             case 0:
                 return this.setJoueur1(joueur);
@@ -155,12 +135,12 @@ export class GameSearchParamsCalculator {
 
     // set all the joueurs
     setJoueurs(
-        joueur1 : SearchParamsJoueur, 
-        joueur2 : SearchParamsJoueur, 
-        joueur3 : SearchParamsJoueur, 
-        joueur4 : SearchParamsJoueur
-    ) : GameSearchParamsCalculator {
-        return new GameSearchParamsCalculator(
+        joueur1 : JoueurCalculatorState, 
+        joueur2 : JoueurCalculatorState, 
+        joueur3 : JoueurCalculatorState, 
+        joueur4 : JoueurCalculatorState
+    ) : MancheCalculatorState {
+        return new MancheCalculatorState(
             joueur1, 
             joueur2, 
             joueur3, 
@@ -175,8 +155,8 @@ export class GameSearchParamsCalculator {
      * @param dominantVent 
      * @returns the new game state
      */
-    setDominantVent(dominantVent: NumeroVent) : GameSearchParamsCalculator {
-        return new GameSearchParamsCalculator(
+    setDominantVent(dominantVent: NumeroVent) : MancheCalculatorState {
+        return new MancheCalculatorState(
             this.joueur1, 
             this.joueur2, 
             this.joueur3, 
@@ -192,11 +172,11 @@ export class GameSearchParamsCalculator {
      * @param combinaison the combinaison to add
      * @returns the new game state
      */
-    addCombinaison(index: number, combinaison: Combinaison) : GameSearchParamsCalculator {
+    addCombinaison(index: number, combinaison: Combinaison) : MancheCalculatorState {
         switch (index) {    
             case 0:
                 return this.setJoueur1(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         [...this.joueur1.main, combinaison], 
                         this.joueur1.vent, 
                         this.joueur1.name, 
@@ -205,7 +185,7 @@ export class GameSearchParamsCalculator {
                 );
             case 1:
                 return this.setJoueur2(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         [...this.joueur2.main, combinaison], 
                         this.joueur2.vent, 
                         this.joueur2.name, 
@@ -214,7 +194,7 @@ export class GameSearchParamsCalculator {
                 );
             case 2:
                 return this.setJoueur3(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         [...this.joueur3.main, combinaison], 
                         this.joueur3.vent, 
                         this.joueur3.name, 
@@ -223,7 +203,7 @@ export class GameSearchParamsCalculator {
                 );
             case 3:
                 return this.setJoueur4(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         [...this.joueur4.main, combinaison], 
                         this.joueur4.vent, 
                         this.joueur4.name, 
@@ -241,11 +221,11 @@ export class GameSearchParamsCalculator {
      * @param combinaisonIndex the index of the combinaison to remove
      * @returns the new game state
      */
-    removeCombinaison(index: number, combinaisonIndex: number) : GameSearchParamsCalculator {
+    removeCombinaison(index: number, combinaisonIndex: number) : MancheCalculatorState {
         switch (index) {    
             case 0:
                 return this.setJoueur1(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur1.main.filter((_, i) => i !== combinaisonIndex), 
                         this.joueur1.vent, 
                         this.joueur1.name, 
@@ -254,7 +234,7 @@ export class GameSearchParamsCalculator {
                 );
             case 1:
                 return this.setJoueur2(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur2.main.filter((_, i) => i !== combinaisonIndex),
                         this.joueur2.vent,
                         this.joueur2.name,
@@ -263,7 +243,7 @@ export class GameSearchParamsCalculator {
                 );
             case 2:
                 return this.setJoueur3(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur3.main.filter((_, i) => i !== combinaisonIndex),
                         this.joueur3.vent,
                         this.joueur3.name,
@@ -272,7 +252,7 @@ export class GameSearchParamsCalculator {
                 );
             case 3:
                 return this.setJoueur4(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur4.main.filter((_, i) => i !== combinaisonIndex),
                         this.joueur4.vent,
                         this.joueur4.name,
@@ -290,11 +270,11 @@ export class GameSearchParamsCalculator {
      * @param piece the piece to add
      * @returns the new game state
      */
-    addPiece(combiSelected: CombiSelected, piece: Piece) : GameSearchParamsCalculator {
+    addPiece(combiSelected: CombiSelected, piece: Piece) : MancheCalculatorState {
         switch(combiSelected.playerIndex){
             case 0:
                 return this.setJoueur1(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur1.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -311,7 +291,7 @@ export class GameSearchParamsCalculator {
                 );
             case 1:
                 return this.setJoueur2(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur2.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -328,7 +308,7 @@ export class GameSearchParamsCalculator {
                 );
             case 2:
                 return this.setJoueur3(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur3.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -345,7 +325,7 @@ export class GameSearchParamsCalculator {
                 );
             case 3:
                 return this.setJoueur4(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur4.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -372,11 +352,11 @@ export class GameSearchParamsCalculator {
      * @param combiSelected the combinaison index and the player index
      * @returns the new game state
      */
-    removePiece(pieceIndex : number, combiSelected: CombiSelected) : GameSearchParamsCalculator {
+    removePiece(pieceIndex : number, combiSelected: CombiSelected) : MancheCalculatorState {
         switch(combiSelected.playerIndex){
             case 0:
                 return this.setJoueur1(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur1.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -393,7 +373,7 @@ export class GameSearchParamsCalculator {
                 );
             case 1:
                 return this.setJoueur2(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur2.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -410,7 +390,7 @@ export class GameSearchParamsCalculator {
                 );
             case 2:
                 return this.setJoueur3(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur3.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -427,7 +407,7 @@ export class GameSearchParamsCalculator {
                 );
             case 3:
                 return this.setJoueur4(
-                    new SearchParamsJoueur(
+                    new JoueurCalculatorState(
                         this.joueur4.main.map((combinaison, i) => {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
@@ -449,7 +429,7 @@ export class GameSearchParamsCalculator {
     }
 }
 
-export const defaultGameSearchParamsCalculator: GameSearchParamsCalculator =
+/*export const defaultGameSearchParamsCalculator: GameSearchParamsCalculator =
     plainToInstance(GameSearchParamsCalculator, {
         joueur1: {
             main: [],
@@ -477,7 +457,7 @@ export const defaultGameSearchParamsCalculator: GameSearchParamsCalculator =
         },
         dominantVent: NumeroVent.Est,
         isDefault: true,
-    });
+    });*/
 
 ////////////////////////////////////////////////////////////
 // param of the url
@@ -492,11 +472,12 @@ export function getGameSearchParamsCalculatorKey(): string {
  * @returns the representative string of the search params calculator
  */
 export function transformSearchParamsCalculatorToString(
-    searchParamsCalculator: GameSearchParamsCalculator
+    searchParamsCalculator: MancheCalculatorState
 ): string {
-    return (
+    /*return (
         getGameSearchParamsCalculatorKey() +
         "=" +
         JSON.stringify(instanceToPlain(searchParamsCalculator))
-    );
+    );*/
+    return "";
 }

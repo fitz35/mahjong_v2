@@ -1,11 +1,11 @@
-import { plainToInstance } from "class-transformer";
 import { NumeroVent } from "../../model/dataModel/dataUtils";
 import {
-    GameSearchParamsCalculator,
+    MancheCalculatorState,
     getGameSearchParamsCalculatorKey,
-    SearchParamsJoueur
-} from "../../model/gameStateCalculator/GameSearchParamsCalculator";
+    JoueurCalculatorState
+} from "../../model/gameStateCalculator/MancheCalculatorState";
 import { getJoueurGenerator } from "../../model/utils/joueursUtils";
+import { MyLogger } from "../../model/utils/logger";
 
 ////////////////////////////////////////////////////////////////////
 // check param fonction
@@ -17,7 +17,7 @@ import { getJoueurGenerator } from "../../model/utils/joueursUtils";
  * @returns if the vent is valid
  */
 export function checkVentCoherence(
-    gameParamsCalculator : GameSearchParamsCalculator
+    gameParamsCalculator : MancheCalculatorState
 ): boolean {
     let invalidVent = false;
     const ventArray: NumeroVent[] = [
@@ -26,7 +26,7 @@ export function checkVentCoherence(
         NumeroVent.Ouest,
         NumeroVent.Nord,
     ];
-    const players = getJoueurGenerator<SearchParamsJoueur, GameSearchParamsCalculator>(gameParamsCalculator);
+    const players = getJoueurGenerator<JoueurCalculatorState, MancheCalculatorState>(gameParamsCalculator);
     for (const [player,] of players) {
         if (player !== undefined) {
             const toRemove: NumeroVent[] = ventArray.splice(
@@ -52,11 +52,11 @@ export function checkVentCoherence(
  * @returns the point of the player if the point is valid else undefined
  */
 function checkPointsCoherence(
-    gameParamsCalculator : GameSearchParamsCalculator
+    gameParamsCalculator : MancheCalculatorState
 ): boolean {
     let invalidPoint = false;
     let pointsRef : number | undefined = undefined;
-    const players = getJoueurGenerator<SearchParamsJoueur, GameSearchParamsCalculator>(gameParamsCalculator);
+    const players = getJoueurGenerator<JoueurCalculatorState, MancheCalculatorState>(gameParamsCalculator);
     for (const [player, ] of players) {
         if (player !== undefined) {
             if (pointsRef === undefined) {
@@ -82,16 +82,14 @@ function checkPointsCoherence(
 
 export function convertUrlSearchParamsInGameParamsCalculator(
     searchParams: URLSearchParams
-): GameSearchParamsCalculator | undefined {
+): MancheCalculatorState | undefined {
     const jsonString = searchParams.get(getGameSearchParamsCalculatorKey());
     // get the json string
     if (jsonString !== null) {
         // try to parse the json string
         try {
-            const gameParamsCalculator: GameSearchParamsCalculator =
-                plainToInstance(GameSearchParamsCalculator, JSON.parse(jsonString) as unknown, {
-                    excludeExtraneousValues: true,
-                });
+            const gameParamsCalculator: MancheCalculatorState = JSON.parse(jsonString);
+            MyLogger.debug(`convertUrlSearchParamsInGameParamsCalculator: ${JSON.stringify(gameParamsCalculator)}`);
             // if the param is invalid, we set the default value and recharge the url
             if (
                 !checkVentCoherence(gameParamsCalculator) ||
@@ -102,6 +100,7 @@ export function convertUrlSearchParamsInGameParamsCalculator(
                 return gameParamsCalculator;
             }
         } catch (e) {
+            MyLogger.debug("test", e);
             return undefined;
         }
     } else {

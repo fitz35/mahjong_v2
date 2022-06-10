@@ -1,12 +1,7 @@
-import { Expose, Transform } from "class-transformer";
 import { checkCoherence, checkFamille, Famille } from "./dataUtils";
 
 export class Piece {
     readonly numero : string;
-    @Expose()
-    @Transform(({ value }) => {
-        return value as Famille;
-    })
     readonly famille : Famille;
     /**
      * build a piece and check his coherence with only his code, or his numero + his family
