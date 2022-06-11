@@ -1,6 +1,5 @@
 import { CopyOutlined } from "@ant-design/icons";
 import { Button, message, Tooltip } from "antd";
-import { transformSearchParamsCalculatorToString } from "../../../model/gameStateCalculator/MancheCalculatorState";
 import { UtilitiesActualType } from "../../../model/gameStateCalculator/useCalculatorHistoricState";
 
 interface SavePanelProps {

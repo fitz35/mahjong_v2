@@ -94,6 +94,11 @@ export interface UtilitiesActualType {
      * remove the error on the actual game state
      */
     removeError : () => void;
+
+    /**
+     * get the las state as a string to be the url
+     */
+    getLastAsSearchParams : () => string;
 }
 
 /**
@@ -207,6 +212,10 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
             oldState.gameState.removePiece(pieceIndex, combi)
         );
         modifyLastState(newState);
+    };
+
+    const getLastAsSearchParams = () => {
+        return getLastState().getAsSearchParams();
     };
 
 

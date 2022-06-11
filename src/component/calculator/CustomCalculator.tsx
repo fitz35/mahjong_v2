@@ -4,15 +4,13 @@ import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
 import {
     MancheCalculatorState,
-    getGameSearchParamsCalculatorKey,
 } from "../../model/gameStateCalculator/MancheCalculatorState";
 import { MainsPanel } from "./mainPanel/MainsPanel";
-import { convertUrlSearchParamsInGameParamsCalculator } from "./GameStateParams";
+import { convertUrlSearchParamsInGameParamsCalculator, getGameSearchParamsCalculatorKey } from "./GameStateSearchParamsUtilities";
 import { GlobalCulatorState } from "../../model/gameStateCalculator/GlobalCalculatorState";
 import { UserException } from "../../error/user/UserException";
 import { ParamPanel } from "./paramPanel/ParamPanel";
 import { useCalculatorHistoricState } from "../../model/gameStateCalculator/useCalculatorHistoricState";
-import { MyLogger } from "../../model/utils/logger";
 const { Panel } = Collapse;
 
 interface CustomCalculatorProps {
@@ -37,26 +35,27 @@ export const CustomCalculator = ({
         }
         // else, we charge the game with the parameters
         else if (searchParams.has(getGameSearchParamsCalculatorKey())) {
-            MyLogger.debug("test");
-            const searchParamCalculate: MancheCalculatorState | undefined =
-                convertUrlSearchParamsInGameParamsCalculator(searchParams);
-            searchParams.delete(getGameSearchParamsCalculatorKey());
+            let isSubscribed = true;
 
-            setSearchParams(searchParams);
-            if (searchParamCalculate != undefined) {
-                utilitiesHisto.addHistoricState(
-                    new GlobalCulatorState(searchParamCalculate)
+            const fetchData = async () => {
+                const data : MancheCalculatorState | undefined = await convertUrlSearchParamsInGameParamsCalculator(
+                    searchParams
                 );
-            } else {
-                // charge default parameter and add error if the parameter is not valid
-                const defaultParams: MancheCalculatorState = JSON.parse("");
-                utilitiesHisto.addHistoricState(
-                    new GlobalCulatorState(
-                        defaultParams,
-                        new InvalidSearchParamException()
-                    )
-                );
-            }
+                if (isSubscribed) {
+                    if (data !== undefined) {
+                        utilitiesHisto.addHistoricState(new GlobalCulatorState(data));
+                    }
+                    else {
+                        utilitiesHisto.addHistoricState(
+                            GlobalCulatorState.getDefault(new InvalidSearchParamException())
+                        );
+                    }
+                }
+            };
+            fetchData();
+            return () => {
+                isSubscribed = false;
+            };
         }
     }, [isInError, searchParams, setSearchParams, utilitiesHisto]);
 

@@ -1,5 +1,6 @@
 import { UserException } from "../../error/user/UserException";
 import {
+    mancheCalculatorInitialState,
     MancheCalculatorState
 } from "./MancheCalculatorState";
 
@@ -33,7 +34,7 @@ export class GlobalCulatorState {
     public static getDefault(
         error: UserException | undefined = undefined
     ): GlobalCulatorState {
-        return new GlobalCulatorState(defaultGameSearchParamsCalculator, error);
+        return new GlobalCulatorState(mancheCalculatorInitialState, error);
     }
 
     /**

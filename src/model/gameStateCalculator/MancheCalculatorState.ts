@@ -429,55 +429,32 @@ export class MancheCalculatorState {
     }
 }
 
-/*export const defaultGameSearchParamsCalculator: GameSearchParamsCalculator =
-    plainToInstance(GameSearchParamsCalculator, {
-        joueur1: {
-            main: [],
-            vent: NumeroVent.Est,
-            points: [],
-            name: "Joueur 1",
-        },
-        joueur2: {
-            main: [],
-            vent: NumeroVent.Sud,
-            points: [],
-            name: "Joueur 2",
-        },
-        joueur3: {
-            main: [],
-            vent: NumeroVent.Ouest,
-            points: [],
-            name: "Joueur 3",
-        },
-        joueur4: {
-            main: [],
-            vent: NumeroVent.Nord,
-            points: [],
-            name: "Joueur 4",
-        },
-        dominantVent: NumeroVent.Est,
-        isDefault: true,
-    });*/
 
-////////////////////////////////////////////////////////////
-// param of the url
-
-export function getGameSearchParamsCalculatorKey(): string {
-    return "calculatorState";
-}
-
-/**
- *
- * @param searchParamsCalculator the search params calculator
- * @returns the representative string of the search params calculator
- */
-export function transformSearchParamsCalculatorToString(
-    searchParamsCalculator: MancheCalculatorState
-): string {
-    /*return (
-        getGameSearchParamsCalculatorKey() +
-        "=" +
-        JSON.stringify(instanceToPlain(searchParamsCalculator))
-    );*/
-    return "";
-}
+export const mancheCalculatorInitialState = new MancheCalculatorState(
+    new JoueurCalculatorState(
+        [],
+        NumeroVent.Est,
+        "Joueur 1",
+        []
+    ),
+    new JoueurCalculatorState(
+        [],
+        NumeroVent.Sud,
+        "Joueur 2",
+        []
+    ),
+    new JoueurCalculatorState(
+        [],
+        NumeroVent.Ouest,
+        "Joueur 3",
+        []
+    ),
+    new JoueurCalculatorState(
+        [],
+        NumeroVent.Nord,
+        "Joueur 4",
+        []
+    ),
+    NumeroVent.Est,
+    true
+);
