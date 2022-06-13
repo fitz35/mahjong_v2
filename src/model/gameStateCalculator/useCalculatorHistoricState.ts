@@ -4,6 +4,7 @@ import { NumeroVent } from "../dataModel/dataUtils";
 import { Piece } from "../dataModel/Piece";
 import { MancheCalculatorState, JoueurCalculatorState } from "./MancheCalculatorState";
 import { GlobalCulatorState } from "./GlobalCalculatorState";
+import { convertHistoricAsSearchParams } from "./GameStateSearchParamsUtilities";
 
 
 /**
@@ -15,6 +16,12 @@ export interface CombiSelected {
 }
 
 export interface UtilitiesHistoryType {
+
+    /**
+     * replace the current historic with the given one
+     */
+    replaceHistoricState : (newState: GlobalCulatorState[]) => void;
+
     /**
      * add a new game state to the historic
      * @param newState the new game state
@@ -37,6 +44,11 @@ export interface UtilitiesHistoryType {
      * @returns the game state at the index
      */
     getHistoricState: (index: number) => GlobalCulatorState;
+
+    /**
+     * get the state as a string to be the url
+     */
+     getAsSearchParams : () => string;
     
 }
 
@@ -94,11 +106,6 @@ export interface UtilitiesActualType {
      * remove the error on the actual game state
      */
     removeError : () => void;
-
-    /**
-     * get the las state as a string to be the url
-     */
-    getLastAsSearchParams : () => string;
 }
 
 /**
@@ -111,6 +118,10 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
     ///////////////////////////////////////////////////////////////////////:
     // history method
     ///////////////////////////////////////////////////////////////////////:
+
+    const replaceHistoricState = (newState: GlobalCulatorState[]) => {
+        setHistoricState(newState);
+    };
 
     const addHistoricState = (newState: GlobalCulatorState) => {
         setHistoricState([...historicState, newState]);
@@ -128,12 +139,19 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         return historicState[index];
     };
 
+    const getAsSearchParams = () => {
+        return convertHistoricAsSearchParams(historicState);
+    };
+
+
 
     const utilitiesHistory : UtilitiesHistoryType = {
+        replaceHistoricState,
         addHistoricState,
         removeHistoricState,
         getHistoricLength,
         getHistoricState,
+        getAsSearchParams
     };
 
     ///////////////////////////////////////////////////////////////////////:
@@ -213,11 +231,6 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         );
         modifyLastState(newState);
     };
-
-    const getLastAsSearchParams = () => {
-        return getLastState().getAsSearchParams();
-    };
-
 
     const utilitiesActual : UtilitiesActualType = {
         modifyActuParams,

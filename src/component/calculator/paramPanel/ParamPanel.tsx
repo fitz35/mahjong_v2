@@ -81,7 +81,10 @@ interface formData {
  * display the different parameters of the calculator
  * @returns
  */
-export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
+export function ParamPanel({
+    utilitiesActu,
+    utilitiesHistory,
+}: ParamPanelProps) {
     const [form] = Form.useForm();
     const [canBeModify, setCanBeModify] = useState(false);
 
@@ -303,7 +306,9 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
                         </Button>
                     </Col>
                     <Col span={8} offset={12}>
-                        <SavePanel utilitiesActu={utilitiesActu}></SavePanel>
+                        <SavePanel
+                            utilitiesHisto={utilitiesHistory}
+                        ></SavePanel>
                     </Col>
                 </Row>
                 <Space size={[8, 16]} wrap>
