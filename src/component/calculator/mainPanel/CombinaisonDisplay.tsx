@@ -19,6 +19,7 @@ interface CombinaisonDisplayProps {
     joueurIndex: number;
     combinaisonIndex: number;
     combinaison: Combinaison;
+
     onCombiRemove: (combi: CombiSelected) => void;
     onPieceClick: (pieceIndex: number, combi: CombiSelected) => void;
 }
@@ -37,9 +38,9 @@ export function CombinaisonDisplay({
     onPieceClick,
 }: CombinaisonDisplayProps) {
     return (
-        <Row gutter={10} className={isSelected ? "combinaison-selected" : ""}>
+        <Row className={isSelected ? "combinaison-selected" : ""}>
             <Col
-                span={9}
+                span={23}
                 onClick={() => {
                     setCombiSelected({
                         combiIndex: combinaisonIndex,
@@ -48,7 +49,7 @@ export function CombinaisonDisplay({
                 }}
             >
                 <List
-                    grid={{ gutter: 16, column: 4 }}
+                    grid={{ gutter: 16, column: 16 }}
                     dataSource={combinaison.pieces}
                     renderItem={(item: Piece, pieceIndex: number) => (
                         <List.Item>

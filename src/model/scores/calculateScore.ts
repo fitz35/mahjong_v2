@@ -57,17 +57,12 @@ function getCombiScoringRulesFromCombinaison(
  * @returns the base score for this combinaison
  */
 export function calculateCombiScore(
-    combinaisons: Combinaison[],
-    joueurVent: NumeroVent,
-    dominant: NumeroVent
+    combinaisons: Combinaison[]
 ): CombiScore {
     // get the association between the combinaison and the combi scoring rule
     const combiScoringRules: Map<Combinaison, CombiScoringRule[]> = new Map();
     for (let i = 0; i < combinaisons.length; i++) {
-        const combi: CombiCalculated[] = combinaisons[i].getCombinaison(
-            joueurVent,
-            dominant
-        );
+        const combi: CombiCalculated[] = combinaisons[i].combiCalculated;
         const combiScoringRulesActu: CombiScoringRule[] = [];
         // for every combi calculated, we get the combi scoring rule
         for (let j = 0; j < combi.length; j++) {
@@ -118,15 +113,11 @@ export function calculateCombiScore(
  * @returns the mahjong scoring rules
  */
 function calculateMahjongScoringRules(
-    combinaisons: Combinaison[],
-    joueurVent: NumeroVent,
-    dominant: NumeroVent
+    combinaisons: Combinaison[]
 ): MahjongScoringRule[] {
     // get the mahjong scoring of the combinaisons
     const mahjongScoring: MahjongScoring[] = getMahjongScoring(
-        combinaisons,
-        joueurVent,
-        dominant
+        combinaisons
     );
     // get the mahjong scoring rule of the combinaisons
     const combiMahjongScoringRules: MahjongScoringRule[] = [];
@@ -202,17 +193,13 @@ export function calculateFlatScoring(
 ): number {
     // get the combi score
     const combiScore: CombiScore = calculateCombiScore(
-        combinaisons,
-        joueurVent,
-        dominant
+        combinaisons
     );
     // if this is the player who has mahjong, we add the mahjong score
     if(mahjong) {
         // get the mahjong scoring rules
         const mahjongScoringRules: MahjongScoringRule[] = calculateMahjongScoringRules(
-            combinaisons,
-            joueurVent,
-            dominant
+            combinaisons
         );
         // get the best mahjong scoring rule
         const bestMahjongScoringRule: MahjongScoringRule | undefined =

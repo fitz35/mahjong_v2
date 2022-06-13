@@ -279,6 +279,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     [...combinaison.pieces, piece],
+                                    this.joueur1.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }
@@ -296,6 +298,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     [...combinaison.pieces, piece],
+                                    this.joueur2.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }
@@ -313,6 +317,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     [...combinaison.pieces, piece],
+                                    this.joueur3.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }
@@ -330,6 +336,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     [...combinaison.pieces, piece],
+                                    this.joueur4.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }
@@ -361,6 +369,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     combinaison.pieces.filter((_, i_filter) => i_filter !== pieceIndex),
+                                    this.joueur1.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }
@@ -378,6 +388,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     combinaison.pieces.filter((_, i_filter) => i_filter !== pieceIndex),
+                                    this.joueur2.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }
@@ -395,6 +407,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     combinaison.pieces.filter((_, i_filter) => i_filter !== pieceIndex),
+                                    this.joueur3.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }
@@ -412,6 +426,8 @@ export class MancheCalculatorState {
                             if(i === combiSelected.combiIndex){
                                 return new Combinaison(
                                     combinaison.pieces.filter((_, i_filter) => i_filter !== pieceIndex),
+                                    this.joueur4.vent,
+                                    this.dominantVent,
                                     combinaison.exposeType,
                                 );
                             }

@@ -10,7 +10,7 @@ describe(" Test the isMahjongOnly1or9 algo", () => {
     const dominant: NumeroVent = NumeroVent.Ouest;
     it("should return undefined if the array is empty", () => {
         const combinaisons: Combinaison[] = [];
-        expect(isMahjongOnly1or9(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongOnly1or9(combinaisons)).toBe(
             undefined
         );
     });
@@ -20,9 +20,9 @@ describe(" Test the isMahjongOnly1or9 algo", () => {
                 new Piece("1R"),
                 new Piece("1R"),
                 new Piece("1R"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongOnly1or9(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongOnly1or9(combinaisons)).toBe(
             MahjongScoring.OnlyExtremNumero
         );
     });
@@ -33,15 +33,15 @@ describe(" Test the isMahjongOnly1or9 algo", () => {
                 new Piece("1R"),
                 new Piece("1R"),
                 new Piece("1R"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongOnly1or9(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongOnly1or9(combinaisons)).toBe(
             MahjongScoring.OnlyExtremNumero
         );
     });
@@ -52,20 +52,20 @@ describe(" Test the isMahjongOnly1or9 algo", () => {
                 new Piece("1R"),
                 new Piece("1R"),
                 new Piece("1R"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongOnly1or9(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongOnly1or9(combinaisons)).toBe(
             MahjongScoring.OnlyExtremNumero
         );
     });
@@ -76,25 +76,25 @@ describe(" Test the isMahjongOnly1or9 algo", () => {
                 new Piece("1R"),
                 new Piece("1R"),
                 new Piece("1R"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1F"),
                 new Piece("2F"),
                 new Piece("3F"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongOnly1or9(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongOnly1or9(combinaisons)).toBe(
             MahjongScoring.OnlyExtremNumero
         );
     });
@@ -105,25 +105,25 @@ describe(" Test the isMahjongOnly1or9 algo", () => {
                 new Piece("1R"),
                 new Piece("1R"),
                 new Piece("1R"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
                 new Piece("9R"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1F"),
                 new Piece("1F"),
                 new Piece("1F"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongOnly1or9(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongOnly1or9(combinaisons)).toBe(
             undefined
         );
     });

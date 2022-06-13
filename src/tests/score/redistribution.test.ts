@@ -13,12 +13,17 @@ describe("test the redistribution", () => {
                     new Piece("2R"),
                     new Piece("2R"),
                     new Piece("2R"),
-                ]),
+                ],
+                NumeroVent.Est,
+                NumeroVent.Nord
+                ),
                 new Combinaison([
                     new Piece("1C"),
                     new Piece("2C"),
                     new Piece("3C"),
-                ]),
+                ],
+                NumeroVent.Est,
+                NumeroVent.Nord),
             ],
             NumeroVent.Est,
             "Titouan",
@@ -31,12 +36,18 @@ describe("test the redistribution", () => {
                     new Piece("2R"),
                     new Piece("2R"),
                     new Piece("2R"),
-                ]),
+                ],
+                NumeroVent.Sud,
+                NumeroVent.Nord
+                ),
                 new Combinaison([
                     new Piece("2C"),
                     new Piece("2C"),
                     new Piece("2C"),
-                ]),
+                ],
+                NumeroVent.Sud,
+                NumeroVent.Nord
+                ),
             ],
             NumeroVent.Sud,
             "Tushita",
@@ -49,17 +60,26 @@ describe("test the redistribution", () => {
                     new Piece("2R"),
                     new Piece("2R"),
                     new Piece("2R"),
-                ]),
+                ],
+                NumeroVent.Ouest,
+                NumeroVent.Nord
+                ),
                 new Combinaison([
                     new Piece("1C"),
                     new Piece("1C"),
                     new Piece("1C"),
-                ]),
+                ],
+                NumeroVent.Ouest,
+                NumeroVent.Nord
+                ),
                 new Combinaison([
                     new Piece("1B"),
                     new Piece("1B"),
                     new Piece("1B"),
-                ]),
+                ],
+                NumeroVent.Ouest,
+                NumeroVent.Nord
+                ),
             ],
             NumeroVent.Ouest,
             "Clement",
@@ -95,7 +115,9 @@ describe("test the redistribution", () => {
                     new Piece("2R"),
                     new Piece("2R"),
                     new Piece("2R"),
-                ])
+                ],
+                NumeroVent.Est,
+                NumeroVent.Nord)
             ],
             NumeroVent.Est,
             "Titouan",
@@ -108,17 +130,26 @@ describe("test the redistribution", () => {
                     new Piece("1R"),
                     new Piece("2R"),
                     new Piece("3R"),
-                ]),
+                ],
+                NumeroVent.Ouest,
+                NumeroVent.Nord
+                ),
                 new Combinaison([
                     new Piece("1C"),
                     new Piece("2C"),
                     new Piece("3C"),
-                ]),
+                ],
+                NumeroVent.Ouest,
+                NumeroVent.Nord
+                ),
                 new Combinaison([
                     new Piece("OV"),
                     new Piece("OV"),
                     new Piece("OV"),
-                ]),
+                ],
+                NumeroVent.Ouest,
+                NumeroVent.Nord
+                ),
             ],
             NumeroVent.Ouest,
             "Clement",
@@ -130,10 +161,17 @@ describe("test the redistribution", () => {
                     new Piece("2R"),
                     new Piece("2R"),
                     new Piece("2R"),
-                ], CombinaisonExposeType.HIDDEN),
+                ],
+                NumeroVent.Sud, 
+                NumeroVent.Nord, 
+                CombinaisonExposeType.HIDDEN
+                ),
                 new Combinaison([
                     new Piece("2F")
-                ]),
+                ],
+                NumeroVent.Sud, 
+                NumeroVent.Nord
+                ),
             ],
             NumeroVent.Sud,
             "Tushita",

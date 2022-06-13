@@ -98,6 +98,8 @@ function convertSearchParamsToState(
                                 piece.famille as Famille
                             );
                         }),
+                        joueur.numeroVent as NumeroVent,
+                        initManche.dominant as NumeroVent,
                         combinaison.exposeType as CombinaisonExposeType
                     );
                 }),

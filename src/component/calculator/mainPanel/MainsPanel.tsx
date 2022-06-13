@@ -34,7 +34,10 @@ export function MainsPanel({ utilitiesActu }: MainsPanelProps) {
     >(utilitiesActu.getLastState().gameState);
     for (const [joueur, i] of joueurGen) {
         panes.push(
-            <TabPane tab={joueur.name} key={"mainPanelForJoueur" + i}>
+            <TabPane
+                tab={joueur.name + " (" + joueur.main.length + ")"}
+                key={"mainPanelForJoueur" + i}
+            >
                 <PlayerTab
                     combiSelected={combiSelected}
                     setCombiSelected={setCombiSelected}
@@ -55,7 +58,13 @@ export function MainsPanel({ utilitiesActu }: MainsPanelProps) {
                 ></MahjongPiecesImage>
             </Col>
             <Col className="gutter-row" span={15}>
-                <Tabs centered style={{ height: "100%" }}>
+                <Tabs
+                    centered
+                    style={{ height: "100%" }}
+                    onChange={() => {
+                        setCombiSelected(undefined);
+                    }}
+                >
                     {panes}
                 </Tabs>
             </Col>

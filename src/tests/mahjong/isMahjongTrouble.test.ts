@@ -13,7 +13,7 @@ describe("Test the isMahjongTrouble algorithme", () => {
     const dominant: NumeroVent = NumeroVent.Ouest;
     it("should not be a mahjong trouble if the array is empty", () => {
         const combinaisons: Combinaison[] = [];
-        expect(isMahjongTrouble(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongTrouble(combinaisons)).toBe(
             undefined
         );
     });
@@ -22,9 +22,9 @@ describe("Test the isMahjongTrouble algorithme", () => {
             new Combinaison([
                 new Piece("1", Famille.Bambou),
                 new Piece("1", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(
+        expect(isMahjongTrouble(toTest)).toBe(
             MahjongScoring.Trouble
         );
     });
@@ -33,13 +33,13 @@ describe("Test the isMahjongTrouble algorithme", () => {
             new Combinaison([
                 new Piece("1", Famille.Bambou),
                 new Piece("1", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2", Famille.Bambou),
                 new Piece("2", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(
+        expect(isMahjongTrouble(toTest)).toBe(
             MahjongScoring.Trouble
         );
     });
@@ -48,18 +48,18 @@ describe("Test the isMahjongTrouble algorithme", () => {
             new Combinaison([
                 new Piece("1", Famille.Bambou),
                 new Piece("1", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2", Famille.Bambou),
                 new Piece("2", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(
+        expect(isMahjongTrouble(toTest)).toBe(
             MahjongScoring.Trouble
         );
     });
@@ -68,23 +68,23 @@ describe("Test the isMahjongTrouble algorithme", () => {
             new Combinaison([
                 new Piece("1", Famille.Bambou),
                 new Piece("1", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2", Famille.Bambou),
                 new Piece("2", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(
+        expect(isMahjongTrouble(toTest)).toBe(
             MahjongScoring.Trouble
         );
     });
@@ -93,23 +93,23 @@ describe("Test the isMahjongTrouble algorithme", () => {
             new Combinaison([
                 new Piece("1", Famille.Bambou),
                 new Piece("1", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2", Famille.Bambou),
                 new Piece("2", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("E", Famille.Vent),
                 new Piece("E", Famille.Vent),
                 new Piece("E", Famille.Vent),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(
+        expect(isMahjongTrouble(toTest)).toBe(
             MahjongScoring.Trouble
         );
     });
@@ -118,24 +118,24 @@ describe("Test the isMahjongTrouble algorithme", () => {
             new Combinaison([
                 new Piece("1", Famille.Bambou),
                 new Piece("1", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Saison),
                 new Piece("4", Famille.Saison),
                 new Piece("2", Famille.Saison),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(
+        expect(isMahjongTrouble(toTest)).toBe(
             MahjongScoring.Trouble
         );
     });
@@ -144,47 +144,47 @@ describe("Test the isMahjongTrouble algorithme", () => {
             new Combinaison([
                 new Piece("1", Famille.Caractere),
                 new Piece("1", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Saison),
                 new Piece("4", Famille.Saison),
                 new Piece("2", Famille.Saison),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongTrouble(toTest)).toBe(undefined);
     });
     it("should not be a mahjong trouble with four combi, with one of dragon and one of saison because there is a combi of character", () => {
         const toTest = [
             new Combinaison([
                 new Piece("1", Famille.Caractere),
                 new Piece("1", Famille.Caractere),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
                 new Piece("3", Famille.Bambou),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
                 new Piece("R", Famille.Dragon),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("3", Famille.Saison),
                 new Piece("4", Famille.Saison),
                 new Piece("2", Famille.Saison),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongTrouble(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongTrouble(toTest)).toBe(undefined);
     });
 });

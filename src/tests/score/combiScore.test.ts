@@ -43,8 +43,8 @@ describe("CombiScore", () => {
     const joueur: NumeroVent = NumeroVent.Est;
     const dominant: NumeroVent = NumeroVent.Ouest;
     it("should return 0 for empty combi", () => {
-        const combi: Combinaison[] = [new Combinaison([])];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        const combi: Combinaison[] = [new Combinaison([], joueur, dominant)];
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames([], [])
         );
     });
@@ -54,19 +54,28 @@ describe("CombiScore", () => {
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
             new Combinaison([
                 new Piece("3C"),
                 new Piece("3C"),
                 new Piece("3C"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("2R"),
                 new Piece("3R"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
         ];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames(
                 ["Brelan", "Brelan", "Suite"],
                 [true, true, true]
@@ -79,10 +88,17 @@ describe("CombiScore", () => {
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
-            new Combinaison([new Piece("1C")]),
+            ],
+            joueur,
+            dominant
+            ),
+            new Combinaison(
+                [new Piece("1C")],
+                joueur,
+                dominant
+            ),
         ];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames(["Brelan"], [true])
         );
     });
@@ -92,10 +108,16 @@ describe("CombiScore", () => {
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
-            new Combinaison([new Piece("1S")]),
+            ],
+            joueur,
+            dominant
+            ),
+            new Combinaison([new Piece("1S")],
+                joueur,
+                dominant
+            ),
         ];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames(
                 ["Brelan", "honneur du joueur"],
                 [true, true]
@@ -108,9 +130,12 @@ describe("CombiScore", () => {
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
         ];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames(
                 ["Brelan de vents ou de dragons dominant"],
                 [true]
@@ -123,9 +148,12 @@ describe("CombiScore", () => {
                 new Piece("1S"),
                 new Piece("2S"),
                 new Piece("3S"),
-            ])
+            ],
+            joueur,
+            dominant
+            ),
         ];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames(
                 ["honneur", "honneur", "honneur du joueur"],
                 [true, true, true]
@@ -139,20 +167,29 @@ describe("CombiScore", () => {
                 new Piece("BD"),
                 new Piece("BD"),
                 new Piece("BD"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("2R"),
                 new Piece("3R"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
             new Combinaison([
                 new Piece("1F"),
                 new Piece("2F"),
                 new Piece("3F"),
                 new Piece("4F"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
         ];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames(
                 ["honneur Carre", "Suite", "Carre de vents ou de dragons"],
                 [true, true, true]
@@ -166,20 +203,30 @@ describe("CombiScore", () => {
                 new Piece("BD"),
                 new Piece("BD"),
                 new Piece("BD"),
-            ], CombinaisonExposeType.HIDDEN),
+            ],
+            joueur,
+            dominant, 
+            CombinaisonExposeType.HIDDEN
+            ),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("2R"),
                 new Piece("3R"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
             new Combinaison([
                 new Piece("1F"),
                 new Piece("2F"),
                 new Piece("3F"),
                 new Piece("4F"),
-            ]),
+            ],
+            joueur,
+            dominant
+            ),
         ];
-        expect(calculateCombiScore(combi, joueur, dominant)).toStrictEqual(
+        expect(calculateCombiScore(combi)).toStrictEqual(
             getCombinaisonScoreWithNames(
                 ["honneur Carre", "Suite", "Carre de vents ou de dragons"],
                 [true, true, false]

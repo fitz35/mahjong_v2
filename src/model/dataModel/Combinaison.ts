@@ -37,23 +37,27 @@ export class Combinaison {
 
     public readonly exposeType;
 
+    public readonly combiCalculated : CombiCalculated[];
+
     /**
      * sort the numero of the piece if it is numero
      * @param pieces 
      */
-    constructor(pieces : Piece[], exposeType : CombinaisonExposeType = CombinaisonExposeType.VISIBLE) {
+    constructor(
+        pieces : Piece[], 
+        joueurVent : NumeroVent, 
+        dominantVent : NumeroVent,
+        exposeType : CombinaisonExposeType = CombinaisonExposeType.VISIBLE
+    ) {
         this.pieces = pieces;
         this.exposeType = exposeType;
         sort<Piece>(this.pieces, compareForSuiteSort);
+        this.combiCalculated = getCombinaison(this.pieces, joueurVent, dominantVent);
     }
 
     public isValid = () : boolean => {
         // joueur and dominant not important, so set to Est
         return isCombiValid(this.pieces, NumeroVent.Est, NumeroVent.Est);
-    };
-
-    public getCombinaison = (joueurVent : NumeroVent, dominantVent : NumeroVent) : CombiCalculated[] => {
-        return getCombinaison(this.pieces, joueurVent, dominantVent);
     };
     
 }

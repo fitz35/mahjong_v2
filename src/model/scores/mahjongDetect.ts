@@ -6,8 +6,7 @@ import {
     isHonneurFamille,
     isSuiteFamille,
     MahjongScoring,
-    ModificateurCombi,
-    NumeroVent,
+    ModificateurCombi
 } from "../dataModel/dataUtils";
 
 /**
@@ -18,13 +17,11 @@ import {
  * @returns the mahjongScoring if it is a color "pur" or only dragonAndVant, undefined otherwise
  */
 export function isMahjongFullColor(
-    combinaisons: Combinaison[],
-    joueurVent: NumeroVent,
-    dominant: NumeroVent
+    combinaisons: Combinaison[]
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
         const combi: CombiCalculated[] =
-            combinaisons[0].getCombinaison(joueurVent, dominant);
+            combinaisons[0].combiCalculated;
         if (combi.length !== 0) {
             const familleRef: Famille = combi[0].famille;
             //check if all the combinaison are the same Family
@@ -33,7 +30,7 @@ export function isMahjongFullColor(
             for (let i = 1; i < combinaisons.length; i++) {
                 const combi: CombiCalculated[] = combinaisons[
                     i
-                ].getCombinaison(joueurVent, dominant);
+                ].combiCalculated;
                 if (combi.length === 0) {
                     isSameFamily = false;
                 } else {
@@ -70,20 +67,18 @@ export function isMahjongFullColor(
  * @returns the mahjongScoring if it is a trouble mahjong, undefined otherwise
  */
 export function isMahjongTrouble(
-    combinaisons: Combinaison[],
-    joueurVent: NumeroVent,
-    dominant: NumeroVent
+    combinaisons: Combinaison[]
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
         const combi: CombiCalculated[] =
-            combinaisons[0].getCombinaison(joueurVent, dominant);
+            combinaisons[0].combiCalculated;
         if (combi.length !== 0) {
             let refFamille: Famille | undefined = undefined;
             let trouble = true;
             for (let i = 0; i < combinaisons.length; i++) {
                 const combi: CombiCalculated[] = combinaisons[
                     i
-                ].getCombinaison(joueurVent, dominant);
+                ].combiCalculated;
                 if (combi.length === 0) {
                     trouble = false;
                 } else {
@@ -117,13 +112,11 @@ export function isMahjongTrouble(
  * @returns the mahjongScoring if it is a full brelan, a full pair or a full suite, undefined otherwise
  */
 export function isMahjongPairBrelanSuite(
-    combinaisons: Combinaison[],
-    joueurVent: NumeroVent,
-    dominant: NumeroVent
+    combinaisons: Combinaison[]
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
         const combi: CombiCalculated[] =
-            combinaisons[0].getCombinaison(joueurVent, dominant);
+            combinaisons[0].combiCalculated;
         if (combi.length !== 0) {
             let isPair = true;
             let isBrelan = true;
@@ -131,7 +124,7 @@ export function isMahjongPairBrelanSuite(
             for (let i = 0; i < combinaisons.length; i++) {
                 const combi: CombiCalculated[] = combinaisons[
                     i
-                ].getCombinaison(joueurVent, dominant);
+                ].combiCalculated;
                 if (combi.length === 0) {
                     isPair = false;
                     isBrelan = false;
@@ -170,19 +163,17 @@ export function isMahjongPairBrelanSuite(
  * test if the array of combinaison can be a mahjong of only 1 or 9
  */
 export function isMahjongOnly1or9(
-    combinaisons: Combinaison[],
-    joueurVent: NumeroVent,
-    dominant: NumeroVent
+    combinaisons: Combinaison[]
 ): MahjongScoring | undefined {
     if (combinaisons.length !== 0) {
         const combi: CombiCalculated[] =
-            combinaisons[0].getCombinaison(joueurVent, dominant);
+            combinaisons[0].combiCalculated;
         if (combi.length !== 0) {
             let isOnly = true;
             for (let i = 0; i < combinaisons.length; i++) {
                 const combi: CombiCalculated[] = combinaisons[
                     i
-                ].getCombinaison(joueurVent, dominant);
+                ].combiCalculated;
                 if (combi.length === 0) {
                     isOnly = false;
                 } else {
@@ -214,9 +205,7 @@ export function isMahjongOnly1or9(
  * @returns all the mahjong scoring possible
  */
 export function getMahjongScoring(
-    combinaisons: Combinaison[],
-    joueurVent: NumeroVent,
-    dominant: NumeroVent
+    combinaisons: Combinaison[]
 ): MahjongScoring[] {
     const mahjongScoring: MahjongScoring[] = [MahjongScoring.normal];
     // if there is no combinaison, return an empty array
@@ -225,17 +214,17 @@ export function getMahjongScoring(
     } else {
         // test all the possible mahjong scoring
         const mahjongScoringTrouble: MahjongScoring | undefined =
-            isMahjongTrouble(combinaisons, joueurVent, dominant);
+            isMahjongTrouble(combinaisons);
         if (mahjongScoringTrouble !== undefined) {
             mahjongScoring.push(mahjongScoringTrouble);
         }
         const mahjongScoringPairBrelanSuite: MahjongScoring | undefined =
-            isMahjongPairBrelanSuite(combinaisons, joueurVent, dominant);
+            isMahjongPairBrelanSuite(combinaisons);
         if (mahjongScoringPairBrelanSuite !== undefined) {
             mahjongScoring.push(mahjongScoringPairBrelanSuite);
         }
         const mahjongScoringOnly1or9: MahjongScoring | undefined =
-            isMahjongOnly1or9(combinaisons, joueurVent, dominant);
+            isMahjongOnly1or9(combinaisons);
         if (mahjongScoringOnly1or9 !== undefined) {
             mahjongScoring.push(mahjongScoringOnly1or9);
         }

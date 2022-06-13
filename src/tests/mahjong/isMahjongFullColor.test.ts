@@ -10,7 +10,7 @@ describe("Test isMahjongFullColor algorithme", () => {
     const dominant: NumeroVent = NumeroVent.Ouest;
     it("should not be a mahjong full color because there is no combinaison", () => {
         const combinaisons: Combinaison[] = [];
-        expect(isMahjongFullColor(combinaisons, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(combinaisons)).toBe(
             undefined
         );
     });
@@ -21,9 +21,9 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(toTest)).toBe(
             MahjongScoring.CouleurPur
         );
     });
@@ -34,15 +34,15 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(toTest)).toBe(
             MahjongScoring.CouleurPur
         );
     });
@@ -53,21 +53,21 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1C"),
                 new Piece("2C"),
                 new Piece("3C"),
                 new Piece("4C"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(toTest)).toBe(
             MahjongScoring.CouleurPur
         );
     });
@@ -78,15 +78,15 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2R"),
                 new Piece("2R"),
                 new Piece("2R"),
                 new Piece("2R"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
     it("Should say it is not a pur color with 3 combi,with a combi no define", () => {
         const toTest = [
@@ -95,21 +95,21 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("2C"),
                 new Piece("3C"),
                 new Piece("4C"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
     it("Should say it is not a pur color with 3 combi,with a combi no define at the begining", () => {
         const toTest = [
@@ -118,21 +118,21 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("2C"),
                 new Piece("3C"),
                 new Piece("4C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
     it("Should say it is not a pur color with 3 combi,with all combi no define", () => {
         const toTest = [
@@ -141,21 +141,21 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("2C"),
                 new Piece("3C"),
                 new Piece("4C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("2C"),
                 new Piece("3C"),
                 new Piece("4C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("2C"),
                 new Piece("3C"),
                 new Piece("4C"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
     it("Should say it is a pur color with honnor", () => {
         const toTest = [
@@ -164,22 +164,22 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("1C"),
                 new Piece("1C"),
                 new Piece("1C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
                 new Piece("2C"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1C"),
                 new Piece("2C"),
                 new Piece("3C"),
                 new Piece("4C"),
-            ]),
-            new Combinaison([new Piece("1F")]),
+            ], joueur, dominant),
+            new Combinaison([new Piece("1F")], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(toTest)).toBe(
             MahjongScoring.CouleurPur
         );
     });
@@ -191,9 +191,9 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("EV"),
                 new Piece("EV"),
                 new Piece("EV"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(toTest)).toBe(
             MahjongScoring.OnlyDragonAndVent
         );
     });
@@ -204,15 +204,15 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("EV"),
                 new Piece("EV"),
                 new Piece("EV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(toTest)).toBe(
             MahjongScoring.OnlyDragonAndVent
         );
     });
@@ -223,21 +223,21 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("EV"),
                 new Piece("EV"),
                 new Piece("EV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("NV"),
                 new Piece("NV"),
                 new Piece("NV"),
                 new Piece("NV"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(
+        expect(isMahjongFullColor(toTest)).toBe(
             MahjongScoring.OnlyDragonAndVent
         );
     });
@@ -248,15 +248,15 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("EV"),
                 new Piece("EV"),
                 new Piece("EV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("2R"),
                 new Piece("2R"),
                 new Piece("2R"),
                 new Piece("2R"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
     it("should say it is not a ventOuDragon color with 3 combi,with a combi no define", () => {
         const toTest = [
@@ -265,21 +265,21 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("EV"),
                 new Piece("EV"),
                 new Piece("EV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("OV"),
                 new Piece("NV"),
                 new Piece("SV"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
     it("should say it is not a ventOuDragon color with 3 combi,with a combi no define at the begining", () => {
         const toTest = [
@@ -288,21 +288,21 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("OV"),
                 new Piece("NV"),
                 new Piece("SV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("EV"),
                 new Piece("EV"),
                 new Piece("EV"),
                 new Piece("EV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
                 new Piece("OV"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
     it("should say it is not a ventOuDragon color with 3 combi,with all combi no define", () => {
         const toTest = [
@@ -311,20 +311,20 @@ describe("Test isMahjongFullColor algorithme", () => {
                 new Piece("OV"),
                 new Piece("NV"),
                 new Piece("SV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("OV"),
                 new Piece("NV"),
                 new Piece("SV"),
-            ]),
+            ], joueur, dominant),
             new Combinaison([
                 new Piece("1R"),
                 new Piece("OV"),
                 new Piece("NV"),
                 new Piece("SV"),
-            ]),
+            ], joueur, dominant),
         ];
-        expect(isMahjongFullColor(toTest, joueur, dominant)).toBe(undefined);
+        expect(isMahjongFullColor(toTest)).toBe(undefined);
     });
 });

@@ -53,7 +53,7 @@ export class Joueur {
     /**
      * get the mahjong scoring possible with the array of combinaison
      */
-    getMahjongScoring(dominant: NumeroVent): MahjongScoring[] {
-        return getMahjongScoring(this.combinaisons, this.vent, dominant);
+    getMahjongScoring(): MahjongScoring[] {
+        return getMahjongScoring(this.combinaisons);
     }
 }

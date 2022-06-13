@@ -125,18 +125,29 @@ export function PlayerTab({
     // if we had a combi :
     const onCombiAdd = (exposeType: CombinaisonExposeType) => {
         utilitiesActu.addCombinaison(
-            new Combinaison([], exposeType),
+            new Combinaison(
+                [],
+                joueur.vent,
+                utilitiesActu.getLastState().gameState.dominantVent,
+                exposeType
+            ),
             joueurIndex
         );
     };
 
     return (
-        <Tabs type="card" centered>
+        <Tabs
+            type="card"
+            centered
+            onChange={() => {
+                setCombiSelected(undefined);
+            }}
+        >
             <TabPane
                 tab={
                     <span>
                         <EyeOutlined />
-                        visibles
+                        visibles ({visibleCombi.length})
                     </span>
                 }
                 key="visible"
@@ -157,7 +168,7 @@ export function PlayerTab({
                 tab={
                     <span>
                         <EyeInvisibleOutlined />
-                        cachées
+                        cachées ({hiddenCombi.length})
                     </span>
                 }
                 key="cache"
@@ -178,7 +189,7 @@ export function PlayerTab({
                 tab={
                     <span>
                         <PlusSquareOutlined />
-                        honneurs
+                        honneurs ({honnorCombi.length})
                     </span>
                 }
                 key="honneur"
