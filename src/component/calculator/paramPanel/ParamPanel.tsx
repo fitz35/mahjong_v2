@@ -6,7 +6,7 @@ import {
     RedoOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Col, Form, message, Row, Select, Space } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Famille, NumeroVent } from "../../../model/dataModel/dataUtils";
 import { Piece } from "../../../model/dataModel/Piece";
 import {
@@ -81,12 +81,16 @@ interface formData {
  * display the different parameters of the calculator
  * @returns
  */
-export function ParamPanel({
-    utilitiesActu,
-    utilitiesHistory,
-}: ParamPanelProps) {
+export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
     const [form] = Form.useForm();
     const [canBeModify, setCanBeModify] = useState(false);
+
+    const actuallyState = utilitiesActu.getLastState();
+
+    // reset field when the state change
+    useEffect(() => {
+        form.resetFields();
+    }, [form, actuallyState]);
 
     const onFinish = (values: formData) => {
         MyLogger.debug("values : ", values);
@@ -306,9 +310,7 @@ export function ParamPanel({
                         </Button>
                     </Col>
                     <Col span={8} offset={12}>
-                        <SavePanel
-                            utilitiesHisto={utilitiesHistory}
-                        ></SavePanel>
+                        <SavePanel></SavePanel>
                     </Col>
                 </Row>
                 <Space size={[8, 16]} wrap>

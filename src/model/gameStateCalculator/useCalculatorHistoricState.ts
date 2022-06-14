@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Combinaison } from "../dataModel/Combinaison";
 import { NumeroVent } from "../dataModel/dataUtils";
 import { Piece } from "../dataModel/Piece";
 import { MancheCalculatorState, JoueurCalculatorState } from "./MancheCalculatorState";
 import { GlobalCulatorState } from "./GlobalCalculatorState";
-import { convertHistoricAsSearchParams } from "./GameStateSearchParamsUtilities";
-
+import { convertHistoricAsSearchParams, convertUrlSearchParamsInHistoricCalculator, getGameSearchParamsCalculatorKey } from "./GameStateSearchParamsUtilities";
+import { useSearchParams } from "react-router-dom";
+import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
 
 /**
  * represente a combi to be selected
@@ -121,21 +122,66 @@ export interface UtilitiesActualType {
  */
 export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHistoryType] {
     const [historicState, setHistoricState] = useState<GlobalCulatorState[]>([GlobalCulatorState.getDefault()]);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        if(!searchParams.has(getGameSearchParamsCalculatorKey())) {
+            setSearchParams(convertHistoricAsSearchParams(historicState));
+        }
+    }, [historicState, searchParams, setSearchParams]);
+
+    useEffect(() => {
+        // if the url change , we update the state
+        if (
+            searchParams.has(getGameSearchParamsCalculatorKey())
+        ) {
+            let isSubscribed = true;
+            const fetchData = async () => {
+                const datas: MancheCalculatorState[] | undefined =
+                    await convertUrlSearchParamsInHistoricCalculator(
+                        searchParams
+                    );
+                if (isSubscribed) {
+                    if (datas !== undefined) {
+                        // we have found a new historic
+                        setHistoricState(
+                            datas.map((data) => new GlobalCulatorState(data))
+                        );
+                    } else {
+                        //else we had an error to the historic, and restore the default one
+                        setHistoricState(
+                            [
+                                GlobalCulatorState.getDefault(
+                                    new InvalidSearchParamException()
+                                )
+                            ]
+                        );
+                    }
+                }
+            };
+            fetchData();
+            return () => {
+                isSubscribed = false;
+            };
+        }else{
+            setHistoricState([GlobalCulatorState.getDefault()]);
+        }
+    }, [searchParams]);
 
     ///////////////////////////////////////////////////////////////////////:
     // history method
     ///////////////////////////////////////////////////////////////////////:
 
     const replaceHistoricState = (newState: GlobalCulatorState[]) => {
-        setHistoricState(newState);
+        setSearchParams(convertHistoricAsSearchParams(newState));
     };
 
     const addHistoricState = (newState: GlobalCulatorState) => {
-        setHistoricState([...historicState, newState]);
+        replaceHistoricState([...historicState, newState]);
     };
 
     const removeHistoricState = () => {
-        setHistoricState(historicState.slice(0, historicState.length - 2));
+        replaceHistoricState(historicState.slice(0, historicState.length - 2));
     };
 
     const getHistoricLength = () => {
@@ -171,7 +217,7 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         const newHistoricState = [...historicState];
         newHistoricState[historicState.length - 1] = newState;
 
-        setHistoricState(newHistoricState);
+        replaceHistoricState(newHistoricState);
     };
 
 
@@ -274,3 +320,4 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
 
     return [utilitiesActual, utilitiesHistory];
 }
+

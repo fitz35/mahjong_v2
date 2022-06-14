@@ -1,13 +1,7 @@
 import { Collapse } from "antd";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
-import { MancheCalculatorState } from "../../model/gameStateCalculator/MancheCalculatorState";
 import { MainsPanel } from "./mainPanel/MainsPanel";
-import {
-    convertUrlSearchParamsInHistoricCalculator,
-    getGameSearchParamsCalculatorKey,
-} from "../../model/gameStateCalculator/GameStateSearchParamsUtilities";
 import { GlobalCulatorState } from "../../model/gameStateCalculator/GlobalCalculatorState";
 import { UserException } from "../../error/user/UserException";
 import { ParamPanel } from "./paramPanel/ParamPanel";
@@ -24,6 +18,7 @@ interface CustomCalculatorProps {
 export const CustomCalculator = ({
     isInError = undefined,
 }: CustomCalculatorProps) => {
+    // have already load the search params (no need to reload it)
     const [utilitiesActu, utilitiesHisto] = useCalculatorHistoricState();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -34,44 +29,17 @@ export const CustomCalculator = ({
                 GlobalCulatorState.getDefault(isInError)
             );
         }
-        // else, we charge the game with the parameters
-        else if (searchParams.has(getGameSearchParamsCalculatorKey())) {
-            let isSubscribed = true;
-
-            const fetchData = async () => {
-                const datas: MancheCalculatorState[] | undefined =
-                    await convertUrlSearchParamsInHistoricCalculator(
-                        searchParams
-                    );
-                if (isSubscribed) {
-                    if (datas !== undefined) {
-                        // we have found a new historic
-                        utilitiesHisto.replaceHistoricState(
-                            datas.map((data) => new GlobalCulatorState(data))
-                        );
-                    } else {
-                        //else we had an error to the historic, and restore the default one
-                        utilitiesHisto.addHistoricState(
-                            GlobalCulatorState.getDefault(
-                                new InvalidSearchParamException()
-                            )
-                        );
-                    }
-                }
-                searchParams.delete(getGameSearchParamsCalculatorKey());
-                setSearchParams(searchParams);
-            };
-            fetchData();
-            return () => {
-                isSubscribed = false;
-            };
+        if (utilitiesActu.getLastState().isError()) {
+            utilitiesActu.getLastState().getError()?.openNotification();
+            utilitiesActu.removeError();
         }
-    }, [isInError, searchParams, setSearchParams, utilitiesHisto]);
-
-    if (utilitiesActu.getLastState().isError()) {
-        utilitiesActu.getLastState().getError()?.openNotification();
-        utilitiesActu.removeError();
-    }
+    }, [
+        isInError,
+        searchParams,
+        setSearchParams,
+        utilitiesActu,
+        utilitiesHisto,
+    ]);
 
     return (
         <>
