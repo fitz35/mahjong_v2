@@ -1,4 +1,4 @@
-import { Col, Row, Tabs } from "antd";
+import { Button, Col, Row, Tabs } from "antd";
 import { useState } from "react";
 import {
     MancheCalculatorState,
@@ -10,6 +10,7 @@ import {
     UtilitiesHistoryType,
 } from "../../../model/gameStateCalculator/useCalculatorHistoricState";
 import { getJoueurGenerator } from "../../../model/utils/joueursUtils";
+import { MyLogger } from "../../../model/utils/logger";
 import { MahjongPiecesImage } from "./mahjongPiecesImage/MahjongPiecesImage";
 import { PlayerTab } from "./PlayerTab";
 
@@ -26,6 +27,7 @@ export function MainsPanel({ utilitiesActu }: MainsPanelProps) {
     const [combiSelected, setCombiSelected] = useState<
         CombiSelected | undefined
     >(undefined);
+    MyLogger.debug("MainsPanel", "MainsPanel", "combiSelected", combiSelected);
     // generation of the panel for every joueur
     const panes: JSX.Element[] = [];
     const joueurGen = getJoueurGenerator<
@@ -64,6 +66,7 @@ export function MainsPanel({ utilitiesActu }: MainsPanelProps) {
                     onChange={() => {
                         setCombiSelected(undefined);
                     }}
+                    tabBarExtraContent={<Button>Valider le mahjong</Button>}
                 >
                     {panes}
                 </Tabs>

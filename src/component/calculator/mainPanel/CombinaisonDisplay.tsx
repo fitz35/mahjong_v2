@@ -1,5 +1,5 @@
 import { CloseCircleTwoTone } from "@ant-design/icons";
-import { Button, Col, List, Row } from "antd";
+import { Button, Col, List, Row, Tooltip } from "antd";
 import { Combinaison } from "../../../model/dataModel/Combinaison";
 import { Piece } from "../../../model/dataModel/Piece";
 import { CombiSelected } from "../../../model/gameStateCalculator/useCalculatorHistoricState";
@@ -37,8 +37,16 @@ export function CombinaisonDisplay({
     onCombiRemove,
     onPieceClick,
 }: CombinaisonDisplayProps) {
+    let combiClassName = "combinaison";
+    if (isSelected) {
+        combiClassName += " combinaison-selected";
+    }
+    if (!combinaison.isValid()) {
+        combiClassName += " combinaison-invalid";
+    }
+
     return (
-        <Row className={isSelected ? "combinaison-selected" : ""}>
+        <Row className={combiClassName}>
             <Col
                 span={23}
                 onClick={() => {
@@ -53,16 +61,21 @@ export function CombinaisonDisplay({
                     dataSource={combinaison.pieces}
                     renderItem={(item: Piece, pieceIndex: number) => (
                         <List.Item>
-                            <img
-                                onClick={() => {
-                                    onPieceClick(pieceIndex, {
-                                        combiIndex: combinaisonIndex,
-                                        playerIndex: joueurIndex,
-                                    });
-                                }}
-                                alt={item.getCode()}
-                                src={item.getImageUrl()}
-                            ></img>
+                            <Tooltip
+                                placement="bottom"
+                                title={item.getFrDisplayName()}
+                            >
+                                <img
+                                    onClick={() => {
+                                        onPieceClick(pieceIndex, {
+                                            combiIndex: combinaisonIndex,
+                                            playerIndex: joueurIndex,
+                                        });
+                                    }}
+                                    alt={item.getCode()}
+                                    src={item.getImageUrl()}
+                                ></img>
+                            </Tooltip>
                         </List.Item>
                     )}
                 />

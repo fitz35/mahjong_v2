@@ -1,8 +1,16 @@
 import { UserException } from "../../error/user/UserException";
 import {
+    JoueurCalculatorState,
     mancheCalculatorInitialState,
     MancheCalculatorState
 } from "./MancheCalculatorState";
+import piecesInAGame from "../../data/piecesInAGame.json";
+import { getJoueurGenerator } from "../utils/joueursUtils";
+import { Piece } from "../dataModel/Piece";
+
+interface piecesInAGameType {
+    [key: string]: number
+}
 
 /**
  * calculator state
@@ -10,17 +18,52 @@ import {
 export class GlobalCulatorState {
     private error: UserException | undefined;
 
+    private piecesInGame: piecesInAGameType;
+
     constructor(
         public readonly gameState: MancheCalculatorState,
         error: UserException | undefined = undefined
     ) {
         this.error = error;
+        this.piecesInGame = {
+            ...piecesInAGame
+        };
+        // remove every piece from the game
+        const joueurGenerator = getJoueurGenerator<JoueurCalculatorState, MancheCalculatorState>(this.gameState);
+        for (const [joueur,] of joueurGenerator) {
+            for (const combi of joueur.main) {
+                for(const piece of combi.pieces) {
+                    this.piecesInGame[piece.getCode()]--;
+                }
+            }
+        }
     }
 
 
     // set a new game state and return a new calculator state
     public setGameState(gameState: MancheCalculatorState): GlobalCulatorState {
         return new GlobalCulatorState(gameState);
+    }
+
+    //////////////////////////////////////////////////////
+    // piece management
+    //////////////////////////////////////////////////////
+    /**
+     * if a piece is in the game, return true
+     * @param piece the piece to check
+     * @returns 
+     */
+    public isPieceInGame(piece: Piece): boolean {
+        return this.piecesInGame[piece.getCode()] > 0;
+    }
+
+    /**
+     * return the number of pieces in the game
+     * @param piece the piece to check
+     * @returns the number of pieces in the game
+     */
+    public getAmountOfPiece(piece: Piece): number {
+        return this.piecesInGame[piece.getCode()];
     }
 
     //////////////////////////////////////////////////////

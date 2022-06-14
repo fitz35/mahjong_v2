@@ -83,6 +83,13 @@ export interface UtilitiesActualType {
     removeCombinaison : (combi : CombiSelected) => void;
 
     /**
+     * get a combinaison from a joueur
+     * @param combi the combi to get (combinaisonIndex the combinaison index to get, joueurIndex the joueur to get the combinaison from)
+     * @returns the combinaison
+     */
+    getCombinaison: (combi : CombiSelected) => Combinaison;
+
+    /**
      * add a piece to a combi and a joueur
      * @param piece the piece to add
      * @param combi the combi to add the piece to (joueurIndex and combiIndex)
@@ -195,6 +202,28 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         modifyLastState(newState);
     };
 
+    const getCombinaison = (combi : CombiSelected) => {
+        let joueur : JoueurCalculatorState;
+        switch(combi.playerIndex) {
+            case 0:
+                joueur = getLastState().gameState.joueur1;
+                break;
+            case 1:
+                joueur = getLastState().gameState.joueur2;
+                break;
+            case 2:
+                joueur = getLastState().gameState.joueur3;
+                break;
+            case 3:
+                joueur = getLastState().gameState.joueur4;
+                break;
+            default:
+                throw new Error("playerIndex is not valid");
+        }
+
+        return joueur.main[combi.combiIndex];
+    };
+
     const addCombinaison = (combinaison : Combinaison, joueurIndex : number) => {
         const oldState = getLastState();
         let newState = GlobalCulatorState.copyWithoutError(oldState);
@@ -236,6 +265,7 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         modifyActuParams,
         getLastState,
         removeError,
+        getCombinaison,
         addCombinaison,
         removeCombinaison,
         addPieceInCombinaison,

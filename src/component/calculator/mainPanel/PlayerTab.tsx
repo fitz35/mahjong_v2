@@ -47,7 +47,6 @@ export function PlayerTab({
     utilitiesActu,
 }: PlayerTabProps) {
     const onCombiRemove = (combi: CombiSelected) => {
-        utilitiesActu.removeCombinaison(combi);
         // if we remove the combi selected, we set it to undefined
         if (
             combiSelected !== undefined &&
@@ -55,7 +54,19 @@ export function PlayerTab({
             combi.combiIndex === combiSelected.combiIndex
         ) {
             setCombiSelected(undefined);
+        } // if the combi selected is a same player combi to remove, we set it to minus 1 if it i more than 0
+        else if (
+            combiSelected !== undefined &&
+            combi.playerIndex === combiSelected.playerIndex &&
+            combiSelected.combiIndex > 0
+        ) {
+            setCombiSelected({
+                combiIndex: combiSelected.combiIndex - 1,
+                playerIndex: combiSelected.playerIndex,
+            });
         }
+
+        utilitiesActu.removeCombinaison(combi);
     };
 
     const visibleCombi: JSX.Element[] = [];

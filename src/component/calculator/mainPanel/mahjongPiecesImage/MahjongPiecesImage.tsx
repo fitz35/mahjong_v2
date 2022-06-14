@@ -117,10 +117,14 @@ function generationArea(
     };
 
     const onAreaClick = (x_in: number, y_in: number, piece: Piece) => {
-        if (combiSelected) {
-            utilitiesActu.addPieceInCombinaison(piece, combiSelected);
+        if (utilitiesActu.getLastState().isPieceInGame(piece)) {
+            if (combiSelected) {
+                utilitiesActu.addPieceInCombinaison(piece, combiSelected);
+            } else {
+                message.error("Veuillez selectionner une combinaison");
+            }
         } else {
-            message.error("Veuillez selectionner une combinaison");
+            message.error("Cette pièce n'est plus dans la partie");
         }
     };
 
@@ -302,6 +306,7 @@ export function MahjongPiecesImage({
                 x={tooltipInfos.x}
                 y={tooltipInfos.y}
                 piece={tooltipInfos.piece}
+                utilitiesActu={utilitiesActu}
                 areaData={areaDataState.areaData}
             ></Tooltip>
         );

@@ -1,7 +1,7 @@
 import { compareForSuiteSort, getCombinaison } from "../scores/combinaisonDetect";
 import { sort } from "../utils/sort";
 import { Piece } from "./Piece";
-import { CombiCalculated, NumeroVent } from "./dataUtils";
+import { CombiCalculated, isHonneurFamille, NumeroVent } from "./dataUtils";
 
 
 export enum CombinaisonExposeType {
@@ -15,12 +15,38 @@ export enum CombinaisonExposeType {
  * @param pieces the pieces to tests
  * @return if the pieces are a valid combinaison
  */
-export function isCombiValid(pieces : Piece[], joueur : NumeroVent, dominantVent : NumeroVent) : boolean {
+export function isCombiValid(
+    pieces : Piece[], 
+    joueur : NumeroVent, 
+    dominantVent : NumeroVent, 
+    combinaisonType : CombinaisonExposeType
+) : boolean {
     // if no piece, valid
     if(pieces.length >= 1){
+        // check combinaison type
+        let typeOk = true;
+        for(const piece of pieces){
+            if(combinaisonType === CombinaisonExposeType.VISIBLE || combinaisonType === CombinaisonExposeType.HIDDEN){
+                // all ok except famille honnor
+                if(isHonneurFamille(piece.famille)){
+                    typeOk = false;
+                    break;
+                }
+            }else{
+                // only famille honnor is ok
+                if(!isHonneurFamille(piece.famille)){
+                    typeOk = false;
+                    break;
+                }
+            }
+        }
+        if(typeOk){
         // if it is a combinaison, valid
-        if(getCombinaison(pieces, joueur, dominantVent) !== undefined){
-            return true;
+            if(getCombinaison(pieces, joueur, dominantVent).length > 0){
+                return true;
+            }else{
+                return false;
+            }
         }else{
             return false;
         }
@@ -57,7 +83,10 @@ export class Combinaison {
 
     public isValid = () : boolean => {
         // joueur and dominant not important, so set to Est
-        return isCombiValid(this.pieces, NumeroVent.Est, NumeroVent.Est);
+        return isCombiValid(this.pieces, NumeroVent.Est, NumeroVent.Est, this.exposeType);
     };
     
+    public pieceIsValidInCombi = (piece : Piece) : boolean => {
+        return isCombiValid([...this.pieces, piece], NumeroVent.Est, NumeroVent.Est, this.exposeType);
+    };
 }
