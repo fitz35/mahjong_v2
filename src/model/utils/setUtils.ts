@@ -16,3 +16,18 @@ export function compareSet<T>(set1 : Set<T>, set2 : Set<T>) : boolean {
     }
     return true;
 }
+
+/**
+ * 
+ * @param array the array to check
+ * @returns the array without undefined values
+ */
+export function eliminateUndefined<T>(array : (T | undefined)[]) : T[] {
+    const result : T[] = [];
+    for(const elt of array){
+        if(elt !== undefined){
+            result.push(elt);
+        }
+    }
+    return result;
+}

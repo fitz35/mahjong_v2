@@ -5,6 +5,8 @@ import {
     ArrayMinSize,
     IsBoolean,
     IsIn,
+    IsInt,
+    IsOptional,
     IsString,
     Length,
     ValidateNested,
@@ -21,6 +23,7 @@ import {
 } from "./MancheCalculatorState";
 import { getJoueurGenerator } from "../utils/joueursUtils";
 import { GlobalCulatorState } from "./GlobalCalculatorState";
+import { MyLogger } from "../utils/logger";
 
 ////////////////////////////////////////////////////////////////////
 // plain object tobe in the param
@@ -77,6 +80,15 @@ class SearchParamsManche {
     @Expose()
     @IsBoolean()
     public isDefault = false;
+
+    @Expose()
+    @IsString()
+    @IsOptional()
+    public mahjongPlayer?: string;
+    @Expose()
+    @IsInt()
+    @IsOptional()
+    public mahjongUndetectedId? : number;
 }
 
 /**
@@ -115,7 +127,9 @@ function convertSearchParamsToState(
         joueurs[2],
         joueurs[3],
         initManche.dominant as NumeroVent,
-        initManche.isDefault
+        initManche.isDefault,
+        initManche.mahjongPlayer,
+        initManche.mahjongUndetectedId
     );
 }
 
@@ -284,7 +298,9 @@ export function convertHistoricAsSearchParams(historics : GlobalCulatorState[]) 
                     convertJoueurToSearchParams(historic.gameState.joueur4),
                 ],
                 dominant: historic.gameState.dominantVent,
-                isDefault: historic.gameState.isDefault
+                isDefault: historic.gameState.isDefault,
+                mahjongPlayer: historic.gameState.mahjongPlayer,
+                mahjongUndetectedId: historic.gameState.mahjongUndetectedId,
             };
         }
     );
@@ -328,6 +344,7 @@ export async function convertUrlSearchParamsInHistoricCalculator(
             }
             return gameStates;
         } catch (e) {
+            MyLogger.debug("error : ", e);
             return undefined;
         }
     } else {

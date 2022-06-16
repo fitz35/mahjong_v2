@@ -28,7 +28,7 @@ export type CombiScore = {
  * @param combinaison the combinaison to test
  * @returns the combinaison ruling
  */
-function getCombiScoringRulesFromCombinaison(
+export function getCombiScoringRulesFromCombinaison(
     combinaison: CombiCalculated
 ): CombiScoringRule | undefined {
     // get all combinaison rules

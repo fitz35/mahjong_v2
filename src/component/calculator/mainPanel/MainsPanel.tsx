@@ -10,7 +10,7 @@ import {
     UtilitiesHistoryType,
 } from "../../../model/gameStateCalculator/useCalculatorHistoricState";
 import { getJoueurGenerator } from "../../../model/utils/joueursUtils";
-import { MyLogger } from "../../../model/utils/logger";
+import { MahjongDrawer } from "../mahjongDrawer/MahjongDrawer";
 import { MahjongPiecesImage } from "./mahjongPiecesImage/MahjongPiecesImage";
 import { PlayerTab } from "./PlayerTab";
 
@@ -23,11 +23,15 @@ interface MainsPanelProps {
     utilitiesHistory: UtilitiesHistoryType;
 }
 
-export function MainsPanel({ utilitiesActu }: MainsPanelProps) {
+export function MainsPanel({
+    utilitiesActu,
+    utilitiesHistory,
+}: MainsPanelProps) {
     const [combiSelected, setCombiSelected] = useState<
         CombiSelected | undefined
     >(undefined);
-    MyLogger.debug("MainsPanel", "MainsPanel", "combiSelected", combiSelected);
+    const [drawerVisible, setDrawerVisible] = useState(false);
+
     // generation of the panel for every joueur
     const panes: JSX.Element[] = [];
     const joueurGen = getJoueurGenerator<
@@ -66,10 +70,20 @@ export function MainsPanel({ utilitiesActu }: MainsPanelProps) {
                     onChange={() => {
                         setCombiSelected(undefined);
                     }}
-                    tabBarExtraContent={<Button>Valider le mahjong</Button>}
+                    tabBarExtraContent={
+                        <Button onClick={() => setDrawerVisible(true)}>
+                            Valider le mahjong
+                        </Button>
+                    }
                 >
                     {panes}
                 </Tabs>
+                <MahjongDrawer
+                    utilitiesActu={utilitiesActu}
+                    utilitiesHistory={utilitiesHistory}
+                    visible={drawerVisible}
+                    onClose={() => setDrawerVisible(false)}
+                ></MahjongDrawer>
             </Col>
         </Row>
     );

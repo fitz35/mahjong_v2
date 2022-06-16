@@ -36,6 +36,8 @@ export class MancheCalculatorState {
     readonly joueur4: JoueurCalculatorState;
     readonly dominantVent: NumeroVent;
     isDefault: boolean;
+    readonly mahjongPlayer: string | undefined;
+    readonly mahjongUndetectedId : number | undefined;
 
     constructor(
         joueur1: JoueurCalculatorState,
@@ -43,7 +45,9 @@ export class MancheCalculatorState {
         joueur3: JoueurCalculatorState,
         joueur4: JoueurCalculatorState,
         dominantVent: NumeroVent,
-        isDefault: boolean
+        isDefault: boolean,
+        mahjongPlayer?: string,
+        mahjongUndetectedId?: number
     ) {
         this.joueur1 = joueur1;
         this.joueur2 = joueur2;
@@ -51,6 +55,39 @@ export class MancheCalculatorState {
         this.joueur4 = joueur4;
         this.dominantVent = dominantVent;
         this.isDefault = isDefault;
+        this.mahjongPlayer = mahjongPlayer;
+        this.mahjongUndetectedId = mahjongUndetectedId;
+    }
+
+    setMahjongPlayer(player: number, mahjongUndetected : number | undefined) : MancheCalculatorState {
+        let mahjongPlayer : string;
+        switch (player) {
+            case 0:
+                mahjongPlayer = this.joueur1.name;
+                break;
+            case 1:
+                mahjongPlayer = this.joueur2.name;
+                break;
+            case 2:
+                mahjongPlayer = this.joueur3.name;
+                break;
+            case 3:
+                mahjongPlayer = this.joueur4.name;
+                break;
+            default:
+                throw new Error("index must be between 0 and 3");
+        }
+
+        return new MancheCalculatorState(
+            this.joueur1, 
+            this.joueur2, 
+            this.joueur3, 
+            this.joueur4, 
+            this.dominantVent, 
+            false,
+            mahjongPlayer,
+            mahjongUndetected
+        );
     }
 
     /**
@@ -65,7 +102,9 @@ export class MancheCalculatorState {
             this.joueur3, 
             this.joueur4, 
             this.dominantVent, 
-            false
+            false,
+            this.mahjongPlayer,
+            this.mahjongUndetectedId
         );
     }
 
@@ -81,7 +120,9 @@ export class MancheCalculatorState {
             this.joueur3, 
             this.joueur4, 
             this.dominantVent, 
-            false
+            false,
+            this.mahjongPlayer,
+            this.mahjongUndetectedId
         );
     }
 
@@ -97,7 +138,9 @@ export class MancheCalculatorState {
             joueur3, 
             this.joueur4, 
             this.dominantVent, 
-            false
+            false,
+            this.mahjongPlayer,
+            this.mahjongUndetectedId
         );
     }
 
@@ -113,7 +156,9 @@ export class MancheCalculatorState {
             this.joueur3, 
             joueur4, 
             this.dominantVent, 
-            false
+            false,
+            this.mahjongPlayer,
+            this.mahjongUndetectedId
         );
     }
 
@@ -146,7 +191,9 @@ export class MancheCalculatorState {
             joueur3, 
             joueur4, 
             this.dominantVent, 
-            false
+            false,
+            this.mahjongPlayer,
+            this.mahjongUndetectedId
         );
     }
 
@@ -162,7 +209,9 @@ export class MancheCalculatorState {
             this.joueur3, 
             this.joueur4, 
             dominantVent, 
-            false
+            false,
+            this.mahjongPlayer,
+            this.mahjongUndetectedId
         );
     }
 

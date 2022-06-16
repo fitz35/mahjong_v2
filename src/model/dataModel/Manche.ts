@@ -1,5 +1,6 @@
 import { Joueur } from "./Joueur";
 import { NumeroVent } from "./dataUtils";
+import { JoueurCalculatorState, MancheCalculatorState } from "../gameStateCalculator/MancheCalculatorState";
 
 /**
  * new manche
@@ -31,6 +32,15 @@ export class Manche {
     }
 
     /**
+     * 
+     * @param index the index of the player
+     * @returns the player
+     */
+    getPlayerByIndex(index: number): Joueur {
+        return this.joueurs[index];
+    }
+
+    /**
      * get a player by his name
      * @param name the name of the player
      * @returns the player
@@ -47,7 +57,7 @@ export class Manche {
     /**
      * dispatch the point to the player
      */
-    dispatchPoint(): void {
+    private dispatchPoint(): void {
         const mahjongPlayerI = this.getPlayer(this.mahjongName);
         if (mahjongPlayerI !== undefined) {
             // begin to assign for each player the flat point (before redistribution)
@@ -133,4 +143,30 @@ export class Manche {
             }
         }
     }
+}
+
+
+function convertPlayerStateToJoueur(player: JoueurCalculatorState): Joueur {
+    return new Joueur(
+        player.main,
+        player.vent,
+        player.name,
+        player.points
+    );
+}
+
+export function convertMancheStateToManche(mancheState : MancheCalculatorState) : Manche | undefined {
+    if(mancheState.mahjongPlayer !== undefined) {
+        return new Manche(
+            mancheState.dominantVent,
+            mancheState.mahjongPlayer,
+            convertPlayerStateToJoueur(mancheState.joueur1),
+            convertPlayerStateToJoueur(mancheState.joueur2),
+            convertPlayerStateToJoueur(mancheState.joueur3),
+            convertPlayerStateToJoueur(mancheState.joueur4)
+        );
+    }else{
+        return undefined;
+    }
+    
 }

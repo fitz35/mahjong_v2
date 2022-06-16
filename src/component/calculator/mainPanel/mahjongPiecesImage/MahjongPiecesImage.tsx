@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Piece } from "../../../../model/dataModel/Piece";
 import { Famille } from "../../../../model/dataModel/dataUtils";
-import { MyLogger } from "../../../../model/utils/logger";
 import {
     CombiSelected,
     UtilitiesActualType,
@@ -250,7 +249,6 @@ function useRefDimension(
                         imgRef.current.offsetWidth,
                         imgRef.current.offsetHeight
                     );
-                    MyLogger.debug("newAreaData : ", newAreaData);
                     setAreaDataState({
                         areaData: newAreaData,
                     });

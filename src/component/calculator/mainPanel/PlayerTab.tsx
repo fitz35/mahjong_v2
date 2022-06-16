@@ -135,6 +135,10 @@ export function PlayerTab({
 
     // if we had a combi :
     const onCombiAdd = (exposeType: CombinaisonExposeType) => {
+        setCombiSelected({
+            combiIndex: joueur.main.length,
+            playerIndex: joueurIndex,
+        });
         utilitiesActu.addCombinaison(
             new Combinaison(
                 [],

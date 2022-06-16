@@ -105,6 +105,13 @@ export interface UtilitiesActualType {
     removePieceInCombinaison : (pieceIndex : number, combi : CombiSelected) => void;
 
     /**
+     * modify the state to have a mahjong player and an undetecteble majhong (and retrieve the state)
+     * @param joueurIndex the index of the joueur
+     * @param mahjongUndetectable the index of the mahjiong
+     */
+    calculateMahjongPlayer : (joueurIndex : number, mahjongUndetectable : number | undefined) => GlobalCulatorState;
+
+    /**
      * 
      * @returns the last game state
      */
@@ -307,6 +314,54 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         modifyLastState(newState);
     };
 
+    const modifyMahjongPlayer = (
+        joueurIndex : number, 
+        mahjongUndetectable : number | undefined
+    ) : GlobalCulatorState => {
+        const oldState = getLastState();
+        let newState = GlobalCulatorState.copyWithoutError(oldState);
+        newState = newState.setGameState(
+            oldState.gameState.setMahjongPlayer(joueurIndex, mahjongUndetectable)
+        );
+        
+        // logic of end of a round
+        const newHistoricState = [...historicState, new GlobalCulatorState(
+            new MancheCalculatorState(
+                new JoueurCalculatorState(
+                    [],
+                    oldState.gameState.joueur4.vent, // decalage of the vent
+                    oldState.gameState.joueur1.name,
+                    oldState.gameState.joueur1.points // TODO : calculate the point
+                ),
+                new JoueurCalculatorState(
+                    [],
+                    oldState.gameState.joueur1.vent, // decalage of the vent
+                    oldState.gameState.joueur2.name,
+                    oldState.gameState.joueur2.points // TODO : calculate the point
+                ),
+                new JoueurCalculatorState(
+                    [],
+                    oldState.gameState.joueur2.vent, // decalage of the vent
+                    oldState.gameState.joueur3.name,
+                    oldState.gameState.joueur3.points // TODO : calculate the point
+                ),
+                new JoueurCalculatorState(
+                    [],
+                    oldState.gameState.joueur3.vent, // decalage of the vent
+                    oldState.gameState.joueur4.name,
+                    oldState.gameState.joueur4.points // TODO : calculate the point
+                ),
+                oldState.gameState.dominantVent,
+                false
+            )
+        )];
+        newHistoricState[historicState.length - 2] = newState;
+        
+
+        replaceHistoricState(newHistoricState);
+        return newState;
+    };
+
     const utilitiesActual : UtilitiesActualType = {
         modifyActuParams,
         getLastState,
@@ -315,7 +370,8 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         addCombinaison,
         removeCombinaison,
         addPieceInCombinaison,
-        removePieceInCombinaison
+        removePieceInCombinaison,
+        calculateMahjongPlayer: modifyMahjongPlayer
     };
 
     return [utilitiesActual, utilitiesHistory];
