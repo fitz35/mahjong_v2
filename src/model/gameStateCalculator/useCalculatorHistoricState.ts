@@ -7,6 +7,7 @@ import { GlobalCulatorState } from "./GlobalCalculatorState";
 import { convertHistoricAsSearchParams, convertUrlSearchParamsInHistoricCalculator, getGameSearchParamsCalculatorKey } from "./GameStateSearchParamsUtilities";
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
+import { MyLogger } from "../utils/logger";
 
 /**
  * represente a combi to be selected
@@ -35,7 +36,7 @@ export interface UtilitiesHistoryType {
     removeHistoricState: () => void;
     
     /**
-     * reset the historic
+     * get the historic length
      */
     getHistoricLength: () => number;
 
@@ -130,6 +131,8 @@ export interface UtilitiesActualType {
 export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHistoryType] {
     const [historicState, setHistoricState] = useState<GlobalCulatorState[]>([GlobalCulatorState.getDefault()]);
     const [searchParams, setSearchParams] = useSearchParams();
+
+    MyLogger.debug("useCalculatorHistoricState", "historicState", historicState);
 
     useEffect(() => {
         if(!searchParams.has(getGameSearchParamsCalculatorKey())) {
@@ -355,7 +358,8 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
                 false
             )
         )];
-        newHistoricState[historicState.length - 2] = newState;
+        newHistoricState[newHistoricState.length - 2] = newState;
+        MyLogger.debug("newHistoricState : ", newHistoricState);
         
 
         replaceHistoricState(newHistoricState);

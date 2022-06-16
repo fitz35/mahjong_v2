@@ -6,6 +6,7 @@ import { GlobalCulatorState } from "../../model/gameStateCalculator/GlobalCalcul
 import { UserException } from "../../error/user/UserException";
 import { ParamPanel } from "./paramPanel/ParamPanel";
 import { useCalculatorHistoricState } from "../../model/gameStateCalculator/useCalculatorHistoricState";
+import { MancheResultTab } from "./mancheResultTab/MancheResultTab";
 const { Panel } = Collapse;
 
 interface CustomCalculatorProps {
@@ -41,6 +42,17 @@ export const CustomCalculator = ({
         utilitiesHisto,
     ]);
 
+    // display the historic
+    const panels: JSX.Element[] = [];
+    for (let i = 0; i < utilitiesHisto.getHistoricLength() - 1; i++) {
+        panels.push(
+            <MancheResultTab
+                key={i}
+                mancheState={utilitiesHisto.getHistoricState(i).gameState}
+            ></MancheResultTab>
+        );
+    }
+
     return (
         <>
             <Collapse defaultActiveKey={["mains"]}>
@@ -55,6 +67,9 @@ export const CustomCalculator = ({
                         utilitiesActu={utilitiesActu}
                         utilitiesHistory={utilitiesHisto}
                     ></MainsPanel>
+                </Panel>
+                <Panel header="Historique" key={"historic"}>
+                    {panels}
                 </Panel>
             </Collapse>
         </>

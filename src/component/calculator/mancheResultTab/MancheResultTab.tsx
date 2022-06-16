@@ -34,7 +34,6 @@ interface DataType {
 }
 
 export function MancheResultTab({ mancheState }: MancheResultTabProps) {
-    const [manche, setManche] = useState<Manche | undefined>(undefined);
     const [data, setData] = useState<DataType[] | undefined>(undefined);
 
     useEffect(() => {
@@ -44,7 +43,6 @@ export function MancheResultTab({ mancheState }: MancheResultTabProps) {
                 const newManche: Manche | undefined =
                     convertMancheStateToManche(mancheState);
                 if (newManche !== undefined) {
-                    setManche(newManche);
                     const data: DataType[] = [];
 
                     // for each player, get the data to display
@@ -154,6 +152,7 @@ export function MancheResultTab({ mancheState }: MancheResultTabProps) {
                 dataSource={combinaisons}
                 pagination={false}
             />
+            // TODO : add mahjong for the mahjong player
         );
     };
 
@@ -163,6 +162,7 @@ export function MancheResultTab({ mancheState }: MancheResultTabProps) {
             dataIndex: "name",
             key: "name",
         },
+        Table.EXPAND_COLUMN,
         {
             title: "Points avant redistribution",
             dataIndex: "pointBeforeRedis",
@@ -184,6 +184,7 @@ export function MancheResultTab({ mancheState }: MancheResultTabProps) {
                 },
             }}
             dataSource={data}
+            pagination={false}
         />
     );
 }
