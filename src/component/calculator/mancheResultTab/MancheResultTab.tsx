@@ -1,37 +1,21 @@
 import { Divider, Tag } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import { useEffect, useState } from "react";
-import {
-    Combinaison,
-    CombinaisonExposeType,
-} from "../../../model/dataModel/Combinaison";
-import { CombiCalculated } from "../../../model/dataModel/dataUtils";
+import { CombinaisonExposeType } from "../../../model/dataModel/Combinaison";
 import {
     convertMancheStateToManche,
     Manche,
 } from "../../../model/dataModel/Manche";
 import { Piece } from "../../../model/dataModel/Piece";
 import { MancheCalculatorState } from "../../../model/gameStateCalculator/MancheCalculatorState";
-import {
-    CombiScoringRule,
-    MahjongScoringRule,
-} from "../../../model/rules/interfacesScoringRules";
-import {
-    getCombiScoringRulesFromCombinaison,
-    calculateMahjongScoringRules,
-    CombiScore,
-    calculateCombiScore,
-    calculate,
-    calculateBestMahjongScoring,
-} from "../../../model/scores/calculateScore";
-import { eliminateUndefined } from "../../../model/utils/setUtils";
+import { convertMancheToDataDisplay } from "./ConvertMancheToDataDisplay";
 
 interface MancheResultTabProps {
     mancheState: MancheCalculatorState;
     numberOfManche: number;
 }
 
-interface CombinaisonDataType {
+export interface CombinaisonDataType {
     key: string;
     name: string;
     pieces: Piece[];
@@ -41,7 +25,7 @@ interface CombinaisonDataType {
     combiType: CombinaisonExposeType;
 }
 
-interface MahjongDataType {
+export interface MahjongDataType {
     key: string;
     name: string;
     flatPoints: number;
@@ -49,7 +33,7 @@ interface MahjongDataType {
     bestMahjong: boolean;
 }
 
-interface PlayerDataType {
+export interface PlayerDataType {
     key: string;
     name: string;
     flatPoints: number;
@@ -75,127 +59,7 @@ export function MancheResultTab({
                 const newManche: Manche | undefined =
                     convertMancheStateToManche(mancheState);
                 if (newManche !== undefined) {
-                    const data: PlayerDataType[] = [];
-
-                    // for each player, get the data to display
-                    for (let i = 0; i < 4; i++) {
-                        const player = newManche.getPlayerByIndex(i);
-                        // get the score
-                        const combiScore = calculateCombiScore(
-                            player.combinaisons
-                        );
-                        let mahjong: MahjongScoringRule[] = [];
-                        let mahjongDataType: MahjongDataType[] = [];
-                        // detect the mahjong
-                        if (player.name === mahjongPlayer) {
-                            mahjong = calculateMahjongScoringRules(
-                                player.combinaisons
-                            );
-                            mahjongDataType = mahjong.map((value) => {
-                                return {
-                                    key: value.name,
-                                    name: value.name,
-                                    flatPoints: value.open,
-                                    multPoints: value.multiplicator,
-                                    bestMahjong: false,
-                                };
-                            });
-                            if (newManche.mahjongUndected != undefined) {
-                                mahjong.push(newManche.mahjongUndected);
-                                mahjongDataType.push({
-                                    key: newManche.mahjongUndected.name,
-                                    name: newManche.mahjongUndected.name,
-                                    flatPoints: newManche.mahjongUndected.open,
-                                    multPoints:
-                                        newManche.mahjongUndected.multiplicator,
-                                    bestMahjong: false,
-                                });
-                            }
-                        }
-
-                        // get the best mahjong
-                        const bestMahjong = calculateBestMahjongScoring(
-                            combiScore,
-                            mahjong
-                        );
-                        if (bestMahjong !== undefined) {
-                            mahjongDataType = mahjongDataType.map((value) => {
-                                if (value.name === bestMahjong.name) {
-                                    return {
-                                        ...value,
-                                        bestMahjong: true,
-                                    };
-                                }
-                                return value;
-                            });
-                        }
-
-                        // get the best score
-                        const combiAndMahjongScore: CombiScore = calculate(
-                            [combiScore],
-                            eliminateUndefined([bestMahjong])
-                        );
-
-                        const dataPlayer: PlayerDataType = {
-                            key: player.name,
-                            name: player.name,
-                            flatPoints: combiAndMahjongScore.addition,
-                            multPoints: combiAndMahjongScore.multiplicateur,
-                            pointBeforeRedis:
-                                player.getScoreBeforeRedistribution(),
-                            pointAfterRedis: player.getCurrentMancheScore(),
-                            points:
-                                player.scores + player.getCurrentMancheScore(),
-                            // get the data for each combinaison
-                            combinaisons: player.combinaisons.flatMap(
-                                (combi: Combinaison, indexPlayer: number) => {
-                                    // convert combi into a CombiCalculated
-                                    return eliminateUndefined(
-                                        combi.combiCalculated.map(
-                                            (
-                                                combiCalculated: CombiCalculated,
-                                                index: number
-                                            ) => {
-                                                // convert a combiCalculated into a CombiScore to have the score
-                                                const combiScoring:
-                                                    | CombiScoringRule
-                                                    | undefined =
-                                                    getCombiScoringRulesFromCombinaison(
-                                                        combiCalculated
-                                                    );
-                                                if (
-                                                    combiScoring !== undefined
-                                                ) {
-                                                    return {
-                                                        key:
-                                                            indexPlayer.toString() +
-                                                            " " +
-                                                            index.toString(),
-                                                        name: combiScoring.name,
-                                                        pieces: combi.pieces,
-                                                        visiblePoints:
-                                                            combiScoring.open,
-                                                        hiddenPoints:
-                                                            combiScoring.hidden,
-                                                        multPoints:
-                                                            combiScoring.multiplicator,
-                                                        combiType:
-                                                            combi.exposeType,
-                                                    };
-                                                } else {
-                                                    return undefined;
-                                                }
-                                            }
-                                        )
-                                    );
-                                }
-                            ),
-                            mahjong: mahjongDataType,
-                        };
-                        data.push(dataPlayer);
-                    }
-
-                    setData(data);
+                    setData(convertMancheToDataDisplay(newManche));
                 }
             };
 
