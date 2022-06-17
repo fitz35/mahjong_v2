@@ -30,12 +30,14 @@ interface FormData {
 
 export function MahjongDrawer({
     utilitiesActu,
+    utilitiesHistory,
     visible,
     onClose,
 }: PlayerTabProps) {
     const [state, setState] = useState<GlobalCulatorState>(
         utilitiesActu.getLastState()
     );
+    const [manche] = useState<number>(utilitiesHistory.getHistoricLength());
     const [form] = Form.useForm();
 
     const onFinish = (values: FormData) => {
@@ -175,7 +177,10 @@ export function MahjongDrawer({
                     </Form.Item>
                 </Card>
             </Form>
-            <MancheResultTab mancheState={state.gameState}></MancheResultTab>
+            <MancheResultTab
+                mancheState={state.gameState}
+                numberOfManche={manche}
+            ></MancheResultTab>
         </Drawer>
     );
 }

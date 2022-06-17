@@ -49,6 +49,7 @@ export const CustomCalculator = ({
             <MancheResultTab
                 key={i}
                 mancheState={utilitiesHisto.getHistoricState(i).gameState}
+                numberOfManche={i + 1}
             ></MancheResultTab>
         );
     }

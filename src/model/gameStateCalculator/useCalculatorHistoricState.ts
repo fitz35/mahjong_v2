@@ -8,6 +8,7 @@ import { convertHistoricAsSearchParams, convertUrlSearchParamsInHistoricCalculat
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
 import { MyLogger } from "../utils/logger";
+import { convertMancheStateToManche, Manche } from "../dataModel/Manche";
 
 /**
  * represente a combi to be selected
@@ -326,6 +327,21 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         newState = newState.setGameState(
             oldState.gameState.setMahjongPlayer(joueurIndex, mahjongUndetectable)
         );
+
+        const newManche: Manche | undefined =
+                    convertMancheStateToManche(newState.gameState);
+
+        let pointToAdd1 = 0;
+        let pointToAdd2 = 0;
+        let pointToAdd3 = 0;
+        let pointToAdd4 = 0;
+        if(newManche !== undefined){
+            pointToAdd1 = newManche.joueur1.getCurrentMancheScore();
+            pointToAdd2 = newManche.joueur2 !== undefined ? newManche.joueur2.getCurrentMancheScore() : 0;
+            pointToAdd3 = newManche.joueur3 !== undefined ? newManche.joueur3.getCurrentMancheScore() : 0;
+            pointToAdd4 = newManche.joueur4 !== undefined ? newManche.joueur4.getCurrentMancheScore() : 0;
+        }
+
         
         // logic of end of a round
         const newHistoricState = [...historicState, new GlobalCulatorState(
@@ -334,33 +350,31 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
                     [],
                     oldState.gameState.joueur4.vent, // decalage of the vent
                     oldState.gameState.joueur1.name,
-                    oldState.gameState.joueur1.points // TODO : calculate the point
+                    oldState.gameState.joueur1.points + pointToAdd1,
                 ),
                 new JoueurCalculatorState(
                     [],
                     oldState.gameState.joueur1.vent, // decalage of the vent
                     oldState.gameState.joueur2.name,
-                    oldState.gameState.joueur2.points // TODO : calculate the point
+                    oldState.gameState.joueur2.points + pointToAdd2,
                 ),
                 new JoueurCalculatorState(
                     [],
                     oldState.gameState.joueur2.vent, // decalage of the vent
                     oldState.gameState.joueur3.name,
-                    oldState.gameState.joueur3.points // TODO : calculate the point
+                    oldState.gameState.joueur3.points + pointToAdd3,
                 ),
                 new JoueurCalculatorState(
                     [],
                     oldState.gameState.joueur3.vent, // decalage of the vent
                     oldState.gameState.joueur4.name,
-                    oldState.gameState.joueur4.points // TODO : calculate the point
+                    oldState.gameState.joueur4.points + pointToAdd4,
                 ),
                 oldState.gameState.dominantVent,
                 false
             )
         )];
-        newHistoricState[newHistoricState.length - 2] = newState;
-        MyLogger.debug("newHistoricState : ", newHistoricState);
-        
+        newHistoricState[newHistoricState.length - 2] = newState;        
 
         replaceHistoricState(newHistoricState);
         return newState;

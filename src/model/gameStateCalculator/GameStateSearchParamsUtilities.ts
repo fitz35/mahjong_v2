@@ -56,8 +56,7 @@ class SearchParamsJoueur {
     @ValidateNested()
     public main: SearchParamsCombinaison[] = [];
     @Expose()
-    @ValidateNested()
-    public points: number[] = [];
+    public points = 0;
     @Expose()
     @IsString()
     public name = "";
@@ -139,25 +138,25 @@ export const defaultMancheSearchParamsCalculator: SearchParamsManche =
             {
                 main: [],
                 vent: NumeroVent.Est as string,
-                points: [],
+                points: 0,
                 name: "Joueur 1",
             },
             {
                 main: [],
                 vent: NumeroVent.Sud as string,
-                points: [],
+                points: 0,
                 name: "Joueur 2",
             },
             {
                 main: [],
                 vent: NumeroVent.Ouest as string,
-                points: [],
+                points: 0,
                 name: "Joueur 3",
             },
             {
                 main: [],
                 vent: NumeroVent.Nord as string,
-                points: [],
+                points: 0,
                 name: "Joueur 4",
             },
         ],
@@ -205,39 +204,6 @@ export function checkVentCoherence(
         }
     }
     return !invalidVent;
-}
-
-/**
- *
- * @param pointOfPlayer the point of the player
- * @returns the point of the player if the point is valid else undefined
- */
-function checkPointsCoherence(
-    gameParamsCalculator: MancheCalculatorState
-): boolean {
-    let invalidPoint = false;
-    let pointsRef: number | undefined = undefined;
-    const players = getJoueurGenerator<
-        JoueurCalculatorState,
-        MancheCalculatorState
-    >(gameParamsCalculator);
-    for (const [player] of players) {
-        if (player !== undefined) {
-            if (pointsRef === undefined) {
-                pointsRef = player.points.length;
-            } else {
-                if (player.points.length !== pointsRef) {
-                    // if the array of points is not the same size, we set the invalid point flag to true and we stop the loop
-                    invalidPoint = true;
-                    break;
-                }
-            }
-        } else {
-            invalidPoint = true;
-            break;
-        }
-    }
-    return !invalidPoint;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -336,8 +302,7 @@ export async function convertUrlSearchParamsInHistoricCalculator(
             // if the param is invalid, we set the default value and recharge the url
             for(const gameState of gameStates) {
                 if (
-                    !checkVentCoherence(gameState) ||
-                    !checkPointsCoherence(gameState)
+                    !checkVentCoherence(gameState)
                 ) {
                     return undefined;
                 }

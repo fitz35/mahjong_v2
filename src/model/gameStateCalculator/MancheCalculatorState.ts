@@ -11,13 +11,13 @@ export class JoueurCalculatorState {
 
     name: string;
         
-    points: number[]; // cumulated
+    points: number; // cumulated
 
     constructor(
         main: Combinaison[],
         vent: NumeroVent,
         name: string,
-        points: number[]
+        points: number
     ) {
         this.main = main;
         this.vent = vent;
@@ -500,25 +500,25 @@ export const mancheCalculatorInitialState = new MancheCalculatorState(
         [],
         NumeroVent.Est,
         "Joueur 1",
-        []
+        0
     ),
     new JoueurCalculatorState(
         [],
         NumeroVent.Sud,
         "Joueur 2",
-        []
+        0
     ),
     new JoueurCalculatorState(
         [],
         NumeroVent.Ouest,
         "Joueur 3",
-        []
+        0
     ),
     new JoueurCalculatorState(
         [],
         NumeroVent.Nord,
         "Joueur 4",
-        []
+        0
     ),
     NumeroVent.Est,
     true

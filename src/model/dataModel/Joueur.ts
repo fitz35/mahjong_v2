@@ -1,3 +1,4 @@
+import { MahjongScoringRule } from "../rules/interfacesScoringRules";
 import { calculateFlatScoring } from "../scores/calculateScore";
 import { getMahjongScoring } from "../scores/mahjongDetect";
 import { Combinaison } from "./Combinaison";
@@ -12,7 +13,7 @@ export class Joueur {
         public readonly combinaisons: Array<Combinaison>,
         public readonly vent: NumeroVent,
         public readonly name: string,
-        public readonly scores: Array<number>
+        public readonly scores: number
     ) {
         this.combinaisons = combinaisons;
         this.vent = vent;
@@ -35,8 +36,18 @@ export class Joueur {
      * @param mahjong if this player has mahjong
      * @param dominant the dominant vent
      */
-    setFlatScoring(mahjong : boolean, dominant: NumeroVent): void {
-        this.scoreBeforeRedistribution =  calculateFlatScoring(this.combinaisons, this.vent, dominant, mahjong);
+    setFlatScoring(
+        mahjong : boolean, 
+        dominant: NumeroVent,
+        mahjongUndected: MahjongScoringRule | undefined = undefined
+    ): void {
+        this.scoreBeforeRedistribution =  calculateFlatScoring(
+            this.combinaisons, 
+            this.vent, 
+            dominant, 
+            mahjong,
+            mahjongUndected
+        );
         this.scoreInCurrentManche = 0;
     }
 

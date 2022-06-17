@@ -1,6 +1,8 @@
 import { Joueur } from "./Joueur";
 import { NumeroVent } from "./dataUtils";
 import { JoueurCalculatorState, MancheCalculatorState } from "../gameStateCalculator/MancheCalculatorState";
+import { MahjongScoringRule } from "../rules/interfacesScoringRules";
+import {getMahjongScoringRulesFromId} from "../rules/readScoringRules";
 
 /**
  * new manche
@@ -14,7 +16,8 @@ export class Manche {
         public readonly joueur1: Joueur,
         public readonly joueur2?: Joueur,
         public readonly joueur3?: Joueur,
-        public readonly joueur4?: Joueur
+        public readonly joueur4?: Joueur,
+        public readonly mahjongUndected: MahjongScoringRule | undefined = undefined
     ) {
         this.joueurs = [];
 
@@ -64,7 +67,8 @@ export class Manche {
             for (let i = 0; i < this.joueurs.length; i++) {
                 this.joueurs[i].setFlatScoring(
                     i === mahjongPlayerI,
-                    this.dominant
+                    this.dominant,
+                    this.mahjongUndected
                 );
             }
 
@@ -151,7 +155,7 @@ function convertPlayerStateToJoueur(player: JoueurCalculatorState): Joueur {
         player.main,
         player.vent,
         player.name,
-        player.points
+        player.points,
     );
 }
 
@@ -163,7 +167,9 @@ export function convertMancheStateToManche(mancheState : MancheCalculatorState) 
             convertPlayerStateToJoueur(mancheState.joueur1),
             convertPlayerStateToJoueur(mancheState.joueur2),
             convertPlayerStateToJoueur(mancheState.joueur3),
-            convertPlayerStateToJoueur(mancheState.joueur4)
+            convertPlayerStateToJoueur(mancheState.joueur4),
+            mancheState.mahjongUndetectedId !== undefined ? 
+                getMahjongScoringRulesFromId(mancheState.mahjongUndetectedId) : undefined, 
         );
     }else{
         return undefined;

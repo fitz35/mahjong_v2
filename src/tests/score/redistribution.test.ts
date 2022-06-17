@@ -27,7 +27,7 @@ describe("test the redistribution", () => {
             ],
             NumeroVent.Est,
             "Titouan",
-            []
+            0
         );
 
         const player2: Joueur = new Joueur(
@@ -51,7 +51,7 @@ describe("test the redistribution", () => {
             ],
             NumeroVent.Sud,
             "Tushita",
-            []
+            0
         );
 
         const player3: Joueur = new Joueur(
@@ -83,10 +83,10 @@ describe("test the redistribution", () => {
             ],
             NumeroVent.Ouest,
             "Clement",
-            []
+            0
         );
 
-        const player4: Joueur = new Joueur([], NumeroVent.Nord, "Dorian", []);
+        const player4: Joueur = new Joueur([], NumeroVent.Nord, "Dorian", 0);
 
         new Manche(
             NumeroVent.Nord,
@@ -121,7 +121,7 @@ describe("test the redistribution", () => {
             ],
             NumeroVent.Est,
             "Titouan",
-            []
+            0
         );
 
         const player2: Joueur = new Joueur(
@@ -153,7 +153,7 @@ describe("test the redistribution", () => {
             ],
             NumeroVent.Ouest,
             "Clement",
-            []
+            0
         );
         const player3: Joueur = new Joueur(
             [
@@ -175,9 +175,9 @@ describe("test the redistribution", () => {
             ],
             NumeroVent.Sud,
             "Tushita",
-            []
+            0
         );
-        const player4: Joueur = new Joueur([], NumeroVent.Nord, "Dorian", []);
+        const player4: Joueur = new Joueur([], NumeroVent.Nord, "Dorian", 0);
 
         new Manche(
             NumeroVent.Nord,
