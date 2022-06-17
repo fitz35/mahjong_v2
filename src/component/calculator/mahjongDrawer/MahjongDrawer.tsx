@@ -1,6 +1,4 @@
 import { Alert, Button, Card, Drawer, Form, message, Select } from "antd";
-import { useState } from "react";
-import { GlobalCulatorState } from "../../../model/gameStateCalculator/GlobalCalculatorState";
 import {
     JoueurCalculatorState,
     MancheCalculatorState,
@@ -19,6 +17,7 @@ const { Option } = Select;
 interface PlayerTabProps {
     utilitiesActu: UtilitiesActualType;
     utilitiesHistory: UtilitiesHistoryType;
+    mancheIndex: number;
     visible: boolean;
     onClose: () => void;
 }
@@ -31,24 +30,20 @@ interface FormData {
 export function MahjongDrawer({
     utilitiesActu,
     utilitiesHistory,
+    mancheIndex,
     visible,
     onClose,
 }: PlayerTabProps) {
-    const [state, setState] = useState<GlobalCulatorState>(
-        utilitiesActu.getLastState()
-    );
-    const [manche] = useState<number>(utilitiesHistory.getHistoricLength());
     const [form] = Form.useForm();
 
     const onFinish = (values: FormData) => {
-        const newState = utilitiesActu.calculateMahjongPlayer(
+        utilitiesActu.calculateMahjongPlayer(
             parseInt(values.mahjongPlayer),
             values.mahjongType !== undefined
                 ? parseInt(values.mahjongType)
                 : undefined
         );
         message.success("Le mahjong a bien était pris en compte !");
-        setState(newState);
     };
 
     const onFinishFailed = () => {
@@ -123,7 +118,6 @@ export function MahjongDrawer({
             closable={true}
             onClose={() => {
                 onClose();
-                setState(utilitiesActu.getLastState());
             }}
             visible={visible}
         >
@@ -178,8 +172,10 @@ export function MahjongDrawer({
                 </Card>
             </Form>
             <MancheResultTab
-                mancheState={state.gameState}
-                numberOfManche={manche}
+                mancheState={
+                    utilitiesHistory.getHistoricState(mancheIndex).gameState
+                }
+                numberOfManche={mancheIndex + 1}
             ></MancheResultTab>
         </Drawer>
     );

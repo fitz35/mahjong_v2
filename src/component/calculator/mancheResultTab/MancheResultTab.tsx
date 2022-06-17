@@ -1,4 +1,4 @@
-import { Divider } from "antd";
+import { Divider, Tag } from "antd";
 import Table, { ColumnsType } from "antd/lib/table";
 import { useEffect, useState } from "react";
 import {
@@ -221,8 +221,11 @@ export function MancheResultTab({
                 render: (pieces: Piece[]) => {
                     return (
                         <span>
-                            {pieces.map((piece: Piece) => {
-                                return piece.getCode() + " ";
+                            {pieces.map((piece: Piece, index: number) => {
+                                return (
+                                    piece.getFrDisplayName() +
+                                    (index < pieces.length - 1 ? ", " : " ")
+                                );
                             })}
                         </span>
                     );
@@ -237,7 +240,7 @@ export function MancheResultTab({
                     record: CombinaisonDataType
                 ) => {
                     return (
-                        <span
+                        <div
                             className={
                                 record.combiType ===
                                     CombinaisonExposeType.VISIBLE ||
@@ -248,7 +251,7 @@ export function MancheResultTab({
                             }
                         >
                             {visiblePoints}
-                        </span>
+                        </div>
                     );
                 },
             },
@@ -258,7 +261,7 @@ export function MancheResultTab({
                 key: "hiddenPoints",
                 render: (hiddenPoints: number, record: CombinaisonDataType) => {
                     return (
-                        <span
+                        <div
                             className={
                                 record.combiType ===
                                 CombinaisonExposeType.HIDDEN
@@ -267,7 +270,7 @@ export function MancheResultTab({
                             }
                         >
                             {hiddenPoints}
-                        </span>
+                        </div>
                     );
                 },
             },
@@ -295,16 +298,14 @@ export function MancheResultTab({
                 key: "multPoints",
             },
             {
-                title: "Le meilleur",
+                title: "Le meilleur ?",
                 dataIndex: "bestMahjong",
                 key: "bestMahjong",
                 render: (value: boolean) => {
-                    return (
-                        <span
-                            className={value ? "historic-combinaison-type" : ""}
-                        >
-                            {value ? "Oui" : "Non"}
-                        </span>
+                    return value ? (
+                        <Tag color="green">oui</Tag>
+                    ) : (
+                        <Tag color="red">non</Tag>
                     );
                 },
             },
@@ -322,14 +323,14 @@ export function MancheResultTab({
         }
 
         return (
-            <>
+            <div>
                 <Table
                     columns={columnsCombi}
                     dataSource={combinaisons}
                     pagination={false}
                 />
                 {mahjongTable}
-            </>
+            </div>
         );
     };
 
@@ -346,26 +347,32 @@ export function MancheResultTab({
             title: "Points d'addition",
             dataIndex: "flatPoints",
             key: "flatPoints",
+            sorter: (a, b) => a.flatPoints - b.flatPoints,
         },
         {
             title: "Points de multiplication",
             dataIndex: "multPoints",
             key: "multPoints",
+            sorter: (a, b) => a.multPoints - b.multPoints,
         },
         {
             title: "Points avant redistribution",
             dataIndex: "pointBeforeRedis",
             key: "pointBeforeRedis",
+            sorter: (a, b) => a.pointBeforeRedis - b.pointBeforeRedis,
         },
         {
             title: "Points après redistribution",
             dataIndex: "pointAfterRedis",
             key: "pointAfterRedis",
+            sorter: (a, b) => a.pointAfterRedis - b.pointAfterRedis,
         },
         {
             title: "Points totaux",
             dataIndex: "points",
             key: "points",
+            defaultSortOrder: "descend",
+            sorter: (a, b) => a.points - b.points,
         },
     ];
 
