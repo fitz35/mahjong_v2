@@ -171,7 +171,7 @@ export function MahjongDrawer({
                     </Form.Item>
                 </Card>
             </Form>
-            <MancheResultTab
+            <MancheResultTab // TODO : array doesn't show correctly
                 mancheState={
                     utilitiesHistory.getHistoricState(mancheIndex).gameState
                 }

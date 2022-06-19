@@ -345,7 +345,7 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         
         // logic of end of a round
         const newHistoricState = [...historicState, new GlobalCulatorState(
-            new MancheCalculatorState(
+            new MancheCalculatorState( // TODO : décalage des vent a revoir
                 new JoueurCalculatorState(
                     [],
                     oldState.gameState.joueur4.vent, // decalage of the vent
@@ -370,7 +370,7 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
                     oldState.gameState.joueur4.name,
                     oldState.gameState.joueur4.points + pointToAdd4,
                 ),
-                oldState.gameState.dominantVent,
+                oldState.gameState.dominantVent, // TODO : random it
                 false
             )
         )];
