@@ -67,19 +67,19 @@ export const CustomCalculator = ({
 
     for (let i = 0; i < utilitiesHisto.getHistoricLength() - 1; i++) {
         lineData[0].data.push({
-            x: i + 1,
+            x: i,
             y: utilitiesHisto.getHistoricState(i).gameState.joueur1.points,
         });
         lineData[1].data.push({
-            x: i + 1,
+            x: i,
             y: utilitiesHisto.getHistoricState(i).gameState.joueur2.points,
         });
         lineData[2].data.push({
-            x: i + 1,
+            x: i,
             y: utilitiesHisto.getHistoricState(i).gameState.joueur3.points,
         });
         lineData[3].data.push({
-            x: i + 1,
+            x: i,
             y: utilitiesHisto.getHistoricState(i).gameState.joueur4.points,
         });
         panels.push(
@@ -92,19 +92,19 @@ export const CustomCalculator = ({
     }
     // get the last manche
     lineData[0].data.push({
-        x: utilitiesHisto.getHistoricLength(),
+        x: utilitiesHisto.getHistoricLength() - 1,
         y: utilitiesActu.getLastState().gameState.joueur1.points,
     });
     lineData[1].data.push({
-        x: utilitiesHisto.getHistoricLength(),
+        x: utilitiesHisto.getHistoricLength() - 1,
         y: utilitiesActu.getLastState().gameState.joueur2.points,
     });
     lineData[2].data.push({
-        x: utilitiesHisto.getHistoricLength(),
+        x: utilitiesHisto.getHistoricLength() - 1,
         y: utilitiesActu.getLastState().gameState.joueur3.points,
     });
     lineData[3].data.push({
-        x: utilitiesHisto.getHistoricLength(),
+        x: utilitiesHisto.getHistoricLength() - 1,
         y: utilitiesActu.getLastState().gameState.joueur4.points,
     });
 

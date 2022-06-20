@@ -69,6 +69,25 @@ export function convertHonneurNumberToVentNumber(numero : string) : NumeroVent {
 }
 
 /**
+ * 
+ * @param vent the vent to convert
+ * @returns the next vent
+ */
+export function getNextVent(vent : NumeroVent) : NumeroVent {
+    const corresp : Array<NumeroVent> = [NumeroVent.Est, NumeroVent.Sud, NumeroVent.Ouest, NumeroVent.Nord];
+    return corresp[(corresp.indexOf(vent) + 1) % 4];
+}
+
+/**
+ * 
+ * @returns a random vent
+ */
+export function getRandomVent() : NumeroVent {
+    const corresp : Array<NumeroVent> = [NumeroVent.Est, NumeroVent.Sud, NumeroVent.Ouest, NumeroVent.Nord];
+    return corresp[Math.floor(Math.random() * 4)];
+}
+
+/**
  * check if numero can be applied to famille
  * @param numero 
  * @param famille 

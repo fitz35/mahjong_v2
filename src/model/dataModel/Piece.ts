@@ -123,7 +123,7 @@ export class Piece {
         if(this.famille === Famille.Bambou || 
             this.famille === Famille.Caractere || 
             this.famille === Famille.Cercle || 
-            this.famille === Famille.Fleurs || 
+            this.famille === Famille.Fleurs ||
             this.famille === Famille.Saison){
             return this.getNumeroDisplay() + " " + this.getFamilleDisplay();
         }

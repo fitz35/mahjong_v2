@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Combinaison } from "../dataModel/Combinaison";
-import { NumeroVent } from "../dataModel/dataUtils";
+import { getNextVent, getRandomVent, NumeroVent } from "../dataModel/dataUtils";
 import { Piece } from "../dataModel/Piece";
 import { MancheCalculatorState, JoueurCalculatorState } from "./MancheCalculatorState";
 import { GlobalCulatorState } from "./GlobalCalculatorState";
 import { convertHistoricAsSearchParams, convertUrlSearchParamsInHistoricCalculator, getGameSearchParamsCalculatorKey } from "./GameStateSearchParamsUtilities";
 import { useSearchParams } from "react-router-dom";
 import { InvalidSearchParamException } from "../../error/user/InvalidSearchParamException";
-import { MyLogger } from "../utils/logger";
 import { convertMancheStateToManche, Manche } from "../dataModel/Manche";
 
 /**
@@ -35,6 +34,11 @@ export interface UtilitiesHistoryType {
      * remove the last game state from the historic
      */
     removeHistoricState: () => void;
+
+    /**
+     * reset the historic
+     */
+    resetHistoricState: () => void;
     
     /**
      * get the historic length
@@ -51,7 +55,7 @@ export interface UtilitiesHistoryType {
     /**
      * get the state as a string to be the url
      */
-     getAsSearchParams : () => string;
+    getAsSearchParams : () => string;
     
 }
 
@@ -133,11 +137,18 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
     const [historicState, setHistoricState] = useState<GlobalCulatorState[]>([GlobalCulatorState.getDefault()]);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    MyLogger.debug("useCalculatorHistoricState", "historicState", historicState);
-
     useEffect(() => {
         if(!searchParams.has(getGameSearchParamsCalculatorKey())) {
-            setSearchParams(convertHistoricAsSearchParams(historicState));
+            // we try to get the historic from the local storage
+            const localStorageValue = localStorage.getItem(getGameSearchParamsCalculatorKey());
+            if(localStorageValue !== null && localStorageValue !== "") {
+                setSearchParams(new URLSearchParams(localStorageValue));
+            }else {
+                setSearchParams(convertHistoricAsSearchParams(historicState));
+            }
+        }else{
+            // if the url has a search param, we convert it to the historic (save it locally)
+            localStorage.setItem(getGameSearchParamsCalculatorKey(), searchParams.toString());
         }
     }, [historicState, searchParams, setSearchParams]);
 
@@ -195,6 +206,10 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         replaceHistoricState(historicState.slice(0, historicState.length - 2));
     };
 
+    const resetHistoricState = () => {
+        replaceHistoricState([GlobalCulatorState.getDefault()]);
+    };
+
     const getHistoricLength = () => {
         return historicState.length;
     };
@@ -211,6 +226,7 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
 
     const utilitiesHistory : UtilitiesHistoryType = {
         replaceHistoricState,
+        resetHistoricState,
         addHistoricState,
         removeHistoricState,
         getHistoricLength,
@@ -345,32 +361,32 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
         
         // logic of end of a round
         const newHistoricState = [...historicState, new GlobalCulatorState(
-            new MancheCalculatorState( // TODO : décalage des vent a revoir
+            new MancheCalculatorState(
                 new JoueurCalculatorState(
                     [],
-                    oldState.gameState.joueur4.vent, // decalage of the vent
+                    getNextVent(oldState.gameState.joueur1.vent), // decalage of the vent
                     oldState.gameState.joueur1.name,
                     oldState.gameState.joueur1.points + pointToAdd1,
                 ),
                 new JoueurCalculatorState(
                     [],
-                    oldState.gameState.joueur1.vent, // decalage of the vent
+                    getNextVent(oldState.gameState.joueur2.vent), // decalage of the vent
                     oldState.gameState.joueur2.name,
                     oldState.gameState.joueur2.points + pointToAdd2,
                 ),
                 new JoueurCalculatorState(
                     [],
-                    oldState.gameState.joueur2.vent, // decalage of the vent
+                    getNextVent(oldState.gameState.joueur3.vent), // decalage of the vent
                     oldState.gameState.joueur3.name,
                     oldState.gameState.joueur3.points + pointToAdd3,
                 ),
                 new JoueurCalculatorState(
                     [],
-                    oldState.gameState.joueur3.vent, // decalage of the vent
+                    getNextVent(oldState.gameState.joueur4.vent), // decalage of the vent
                     oldState.gameState.joueur4.name,
                     oldState.gameState.joueur4.points + pointToAdd4,
                 ),
-                oldState.gameState.dominantVent, // TODO : random it
+                getRandomVent(), // random it
                 false
             )
         )];

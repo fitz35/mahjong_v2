@@ -1,4 +1,5 @@
 import { Alert, Button, Card, Drawer, Form, message, Select } from "antd";
+import { useState } from "react";
 import {
     JoueurCalculatorState,
     MancheCalculatorState,
@@ -29,19 +30,21 @@ interface FormData {
 
 export function MahjongDrawer({
     utilitiesActu,
-    utilitiesHistory,
     mancheIndex,
     visible,
     onClose,
 }: PlayerTabProps) {
+    const [manche, setManche] = useState<MancheCalculatorState | undefined>();
     const [form] = Form.useForm();
 
     const onFinish = (values: FormData) => {
-        utilitiesActu.calculateMahjongPlayer(
-            parseInt(values.mahjongPlayer),
-            values.mahjongType !== undefined
-                ? parseInt(values.mahjongType)
-                : undefined
+        setManche(
+            utilitiesActu.calculateMahjongPlayer(
+                parseInt(values.mahjongPlayer),
+                values.mahjongType !== undefined
+                    ? parseInt(values.mahjongType)
+                    : undefined
+            ).gameState
         );
         message.success("Le mahjong a bien était pris en compte !");
     };
@@ -171,12 +174,12 @@ export function MahjongDrawer({
                     </Form.Item>
                 </Card>
             </Form>
-            <MancheResultTab // TODO : array doesn't show correctly
-                mancheState={
-                    utilitiesHistory.getHistoricState(mancheIndex).gameState
-                }
-                numberOfManche={mancheIndex + 1}
-            ></MancheResultTab>
+            {manche !== undefined && (
+                <MancheResultTab
+                    mancheState={manche}
+                    numberOfManche={mancheIndex + 1}
+                ></MancheResultTab>
+            )}
         </Drawer>
     );
 }

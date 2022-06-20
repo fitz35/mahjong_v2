@@ -5,9 +5,25 @@ import {
     EditOutlined,
     RedoOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Col, Form, message, Row, Select, Space } from "antd";
+import {
+    Button,
+    Card,
+    Col,
+    Form,
+    Input,
+    message,
+    Popconfirm,
+    Row,
+    Select,
+    Space,
+} from "antd";
 import { useEffect, useState } from "react";
-import { Famille, NumeroVent } from "../../../model/dataModel/dataUtils";
+import {
+    Famille,
+    getNextVent,
+    getRandomVent,
+    NumeroVent,
+} from "../../../model/dataModel/dataUtils";
 import { Piece } from "../../../model/dataModel/Piece";
 import {
     MancheCalculatorState,
@@ -81,7 +97,10 @@ interface formData {
  * display the different parameters of the calculator
  * @returns
  */
-export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
+export function ParamPanel({
+    utilitiesActu,
+    utilitiesHistory,
+}: ParamPanelProps) {
     const [form] = Form.useForm();
     const [canBeModify, setCanBeModify] = useState(false);
 
@@ -197,19 +216,19 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
         form.setFields([
             {
                 name: "vent0",
-                value: vent4,
+                value: getNextVent(vent1),
             },
             {
                 name: "vent1",
-                value: vent1,
+                value: getNextVent(vent2),
             },
             {
                 name: "vent2",
-                value: vent2,
+                value: getNextVent(vent3),
             },
             {
                 name: "vent3",
-                value: vent3,
+                value: getNextVent(vent4),
             },
         ]);
     };
@@ -252,6 +271,25 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
         ]);
     };
 
+    const onRandomVentDominant = () => {
+        form.setFields([
+            {
+                name: "ventDominant",
+                value: getRandomVent(),
+            },
+        ]);
+    };
+
+    const onConfirmReset = () => {
+        // confirm
+        utilitiesHistory.resetHistoricState();
+        message.success("Historique réinitialisé");
+    };
+
+    const onNotConfirmReset = () => {
+        // nothing to do
+    };
+
     // generation of the card for every player
     const cardGeneration = [];
     const iterator = getJoueurGenerator<
@@ -272,12 +310,15 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
         }
     }
 
+    const labelCol = 10;
+    const wrapperCol = 14;
+
     return (
         <>
             <Form
                 name="basic"
-                labelCol={{ span: 11 }}
-                wrapperCol={{ span: 13 }}
+                labelCol={{ span: labelCol }}
+                wrapperCol={{ span: wrapperCol }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -309,8 +350,19 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
                             Valider !
                         </Button>
                     </Col>
-                    <Col span={8} offset={12}>
+                    <Col span={6} offset={9}>
                         <SavePanel></SavePanel>
+                    </Col>
+                    <Col span={5}>
+                        <Popconfirm
+                            title="Etes-vous sur de vouloir réinitialiser la partie ?"
+                            onConfirm={onConfirmReset}
+                            onCancel={onNotConfirmReset}
+                            okText="Oui"
+                            cancelText="Non"
+                        >
+                            <Button type="primary">Reset !</Button>
+                        </Popconfirm>
                     </Col>
                 </Row>
                 <Space size={[8, 16]} wrap>
@@ -321,21 +373,38 @@ export function ParamPanel({ utilitiesActu }: ParamPanelProps) {
                         style={{ width: 300, height: 200 }}
                     >
                         <Form.Item
-                            name={"ventDominant"}
                             label="Vent dominant"
-                            initialValue={
-                                utilitiesActu.getLastState().gameState
-                                    .dominantVent
-                            }
-                            rules={[{ required: true }]}
+                            wrapperCol={{ span: 24 }}
                         >
-                            <Select
-                                disabled={!canBeModify}
-                                placeholder="Vent dominant"
-                            >
-                                {getSelectOptionsForVents()}
-                            </Select>
+                            <Input.Group compact>
+                                <Form.Item
+                                    name={"ventDominant"}
+                                    initialValue={
+                                        utilitiesActu.getLastState().gameState
+                                            .dominantVent
+                                    }
+                                    rules={[{ required: true }]}
+                                    noStyle
+                                >
+                                    <Select
+                                        disabled={!canBeModify}
+                                        placeholder="Vent dominant"
+                                        style={{ width: "110px" }}
+                                    >
+                                        {getSelectOptionsForVents()}
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item noStyle>
+                                    <Button
+                                        type="primary"
+                                        disabled={!canBeModify}
+                                        icon={<RedoOutlined />}
+                                        onClick={onRandomVentDominant}
+                                    ></Button>
+                                </Form.Item>
+                            </Input.Group>
                         </Form.Item>
+
                         <Form.Item>
                             <Button
                                 type="primary"
