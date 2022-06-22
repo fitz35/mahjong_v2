@@ -1,7 +1,9 @@
+import { CustomPlay } from "../component/play/CustomPlay";
+
 export default function Play() {
     return (
         <main>
-            <h2>Jouer</h2>
+            <CustomPlay></CustomPlay>
         </main>
     );
 }
