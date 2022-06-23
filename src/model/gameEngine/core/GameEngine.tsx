@@ -2,7 +2,11 @@ import { useEffect, useRef } from "react";
 import { OnClickAction } from "./gameState/Actions";
 import { Position } from "./gameState/Entity";
 import { getInvolvedEntityIds } from "./gameState/entityUpdate";
-import { Game, OnActionCallback } from "./gameState/GameEngineState";
+import {
+    Game,
+    GameEngineState,
+    OnActionCallback,
+} from "./gameState/GameEngineState";
 import { useGameLoop } from "./useGameLoop";
 
 interface GameEngineProps<T extends Game> {
@@ -11,6 +15,8 @@ interface GameEngineProps<T extends Game> {
 
     game: T;
     callbacks: OnActionCallback<T>[];
+
+    onGameChange?: (game: GameEngineState<T>) => void;
 }
 /**
  * manage the game engine
@@ -21,6 +27,7 @@ export function GameEngine<T extends Game>({
     height,
     game,
     callbacks,
+    onGameChange,
 }: GameEngineProps<T>) {
     const [newGameState, addAction] = useGameLoop({
         G: game,
@@ -32,7 +39,7 @@ export function GameEngine<T extends Game>({
             height,
         },
         onActionCallbacks: callbacks,
-        //aleaEvent: aleaEvent,
+        initG: game,
     });
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -49,7 +56,10 @@ export function GameEngine<T extends Game>({
                 }
             }
         }
-    }, [canvasRef, height, newGameState, width]);
+        if (onGameChange !== undefined) {
+            onGameChange(newGameState);
+        }
+    }, [canvasRef, height, newGameState, onGameChange, width]);
 
     // handle click action
     const onCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {

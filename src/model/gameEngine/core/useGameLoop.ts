@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { eliminateUndefined } from "../../utils/setUtils";
-import { Action, OnAleaEventAction, OnHitboxAction, OnUserAction } from "./gameState/Actions";
+import { Action, ActionType, OnAleaEventAction, OnHitboxAction, OnUserAction } from "./gameState/Actions";
 import { Game, GameEngineState } from "./gameState/GameEngineState";
 import { useTimer } from "./useTimer";
 
@@ -13,13 +13,18 @@ function handleAction<T extends Game>(
     const userAction : OnUserAction[] = [];
     // call the action
     for (const action of actions) {
-        for(const actionCallback of gameState.onActionCallbacks){
-            if(action.type === actionCallback.type){
-                const [gameStateApply, newContext, newAction] = 
-                        actionCallback.onAction(newGameState.G, newGameState.ctx, action);
-                newGameState.G = gameStateApply;
-                newGameState.ctx = newContext;
-                userAction.push(...newAction);
+        // test the reset action
+        if(action.type === ActionType.onReset){
+            return { ...newGameState, G : gameState.initG };
+        }else{
+            for(const actionCallback of gameState.onActionCallbacks){
+                if(action.type === actionCallback.type){
+                    const [gameStateApply, newContext, newAction] = 
+                            actionCallback.onAction(newGameState.G, newGameState.ctx, action);
+                    newGameState.G = gameStateApply;
+                    newGameState.ctx = newContext;
+                    userAction.push(...newAction);
+                }
             }
         }
     }

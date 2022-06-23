@@ -47,4 +47,5 @@ export interface GameEngineState<T extends Game> {
     G: T;
     ctx: Context;
     onActionCallbacks: OnActionCallback<T>[];
+    initG : T;
 }

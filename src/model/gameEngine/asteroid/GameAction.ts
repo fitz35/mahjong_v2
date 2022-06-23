@@ -1,5 +1,5 @@
 import { MyLogger } from "../../utils/logger";
-import { Action, ActionType, OnClickAction } from "../core/gameState/Actions";
+import { Action, ActionType, OnClickAction, OnResetAction } from "../core/gameState/Actions";
 import { Context, OnActionCallback } from "../core/gameState/GameEngineState";
 import { AsteroidEntity } from "./entities/AsteroidEntity";
 import { PlayerEntity } from "./entities/PlayerEntity";
@@ -37,9 +37,9 @@ export const gameActions : OnActionCallback<GameParam>[] = [
     },
     {
         type : ActionType.onHitbox,
-        onAction : (game: GameParam, ctx: Context, action: Action) => {
+        onAction : (game: GameParam, ctx: Context) => {
             MyLogger.info("onHitbox");
-            return [game, ctx, []];
+            return [game, {...ctx, turn : ctx.turn + 1}, [new OnResetAction()]];
         }
     },
     {

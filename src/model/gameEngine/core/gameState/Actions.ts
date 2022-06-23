@@ -7,6 +7,8 @@ export enum ActionType {
     onClick = "onClick",
     onKeyDown = "onKeyDown",
     onHitbox = "onHitbox",
+    onReset = "onReset",
+
     onUserEvent = "onUserEvent",
     onAleaEvent = "onAleaEvent",
 }
@@ -70,5 +72,14 @@ export class OnAleaEventAction extends Action {
 export abstract class OnUserAction extends Action {
     constructor(entitieId: string[]) {
         super(ActionType.onUserEvent, "userAction", entitieId);
+    }
+}
+
+/**
+ * on reset action
+ */
+export class OnResetAction extends Action {
+    constructor() {
+        super(ActionType.onReset, "reset", []);
     }
 }
