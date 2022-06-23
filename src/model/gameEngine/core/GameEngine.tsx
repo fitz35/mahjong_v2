@@ -28,6 +28,8 @@ export function GameEngine<T extends Game>({
             turn: 0,
             numberOfPlayer: 4,
             playerToPlay: 0,
+            width,
+            height,
         },
         onActionCallbacks: callbacks,
         //aleaEvent: aleaEvent,

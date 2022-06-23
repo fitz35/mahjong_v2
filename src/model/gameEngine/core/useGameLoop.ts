@@ -67,11 +67,19 @@ function callbackGame<T extends Game>(
     const newGameState = handleAction(gameState, [...actions, ...hitBoxAction, ...aleaEvent]);
     
     // update the entities
-    newGameState.G.entities = newGameState.G.entities.map(entity => {
+    newGameState.G.entities = eliminateUndefined(newGameState.G.entities.map(entity => {
         entity = entity.updatePosition(timeElapsed/1000);
         entity = entity.updateVelocity(timeElapsed/1000);
-        return entity;
-    });
+        // eliminate the entity if it is out of the screen
+        if(entity.position.x < 0 || 
+            entity.position.x > gameState.ctx.width || 
+            entity.position.y < 0 || 
+            entity.position.y > gameState.ctx.height){
+            return undefined;
+        }else{
+            return entity;
+        }
+    }));
 
     return newGameState;
 }

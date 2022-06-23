@@ -28,6 +28,8 @@ export interface Context {
     turn: number;
     playerToPlay: number;
     numberOfPlayer: number;
+    width : number;
+    height : number;
 }
 
 /**
