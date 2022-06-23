@@ -42,11 +42,9 @@ export abstract class Entity {
      * @param positionClick the position of the click
      * @returns if the entity is hit
      */
-    onHitbox(positionClick : Position) : boolean {
-        return this.position.x > positionClick.x && 
-                this.position.x < positionClick.x + 10 &&
-                this.position.y > positionClick.y &&
-                this.position.y < positionClick.y + 10;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onHitbox(positionClick : Position | Entity[] | Entity) : Entity[] {
+        return [];
     }
 
     /**

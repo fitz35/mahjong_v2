@@ -1,24 +1,61 @@
 import { useEffect, useState } from "react";
-import { Action, Game, GameEngineState } from "./gameState/GameEngineState";
+import { eliminateUndefined } from "../../utils/setUtils";
+import { Action, OnHitboxAction, OnUserAction } from "./gameState/Actions";
+import { Game, GameEngineState } from "./gameState/GameEngineState";
 import { useTimer } from "./useTimer";
 
+
+function handleAction<T extends Game>(
+    gameState : GameEngineState<T>, 
+    actions : Action[]
+) : GameEngineState<T> {
+    const newGameState = { ...gameState };
+    const userAction : OnUserAction[] = [];
+    // call the action
+    for (const action of actions) {
+        for(const actionCallback of gameState.onActionCallbacks){
+            if(action.type === actionCallback.type){
+                const [gameStateApply, newContext, newAction] = 
+                        actionCallback.onAction(newGameState.G, newGameState.ctx, action);
+                newGameState.G = gameStateApply;
+                newGameState.ctx = newContext;
+                userAction.push(...newAction);
+            }
+        }
+    }
+    if(userAction.length > 0){
+        return handleAction(newGameState, userAction);
+    }else{
+        return newGameState;
+    }
+}
+
+
+/**
+ * 
+ * @param timeElapsed the time elapsed since the last trigger of the game
+ * @param gameState the old game state
+ * @param actions the actions to be triggered
+ * @returns the new game state
+ */
 function callbackGame<T extends Game>(
     timeElapsed : number, 
     gameState : GameEngineState<T>, 
     actions : Action[]
 ) : GameEngineState<T> {
-    const newGameState = { ...gameState };
-    // call the action
-    for (const action of actions) {
-        for(const actionCallback of gameState.onActionCallbacks){
-            if(action.type === actionCallback.type){
-                const [gameStateApply, newContext] = actionCallback.onAction(newGameState.G, newGameState.ctx, action);
-                newGameState.G = gameStateApply;
-                newGameState.ctx = newContext;
-            }
+    // compute hitbox
+    const hitBoxAction : OnHitboxAction[] = eliminateUndefined(gameState.G.entities.flatMap(entity => {
+        const entityHits = entity.onHitbox(gameState.G.entities);
+        if(entityHits.length > 0){
+            return new OnHitboxAction(entityHits.map(hit => hit.id));
+        }else{
+            return undefined;
         }
-    }
+    }));
 
+    // call the action
+    const newGameState = handleAction(gameState, [...actions, ...hitBoxAction]);
+    
     // update the entities
     newGameState.G.entities = newGameState.G.entities.map(entity => {
         entity = entity.updatePosition(timeElapsed/1000);

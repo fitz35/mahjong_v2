@@ -1,11 +1,8 @@
 import { useEffect, useRef } from "react";
+import { OnClickAction } from "./gameState/Actions";
 import { Position } from "./gameState/Entity";
 import { getInvolvedEntityIds } from "./gameState/entityUpdate";
-import {
-    Game,
-    OnActionCallback,
-    OnClickAction,
-} from "./gameState/GameEngineState";
+import { Game, OnActionCallback } from "./gameState/GameEngineState";
 import { useGameLoop } from "./useGameLoop";
 
 interface GameEngineProps<T extends Game> {

@@ -88,6 +88,7 @@ export abstract class TargetEntity extends Entity {
                 this.go(); // recalcul the destination (avoid the error of the rounding)
                 return super.updatePosition(timeElapsed);
             }else{
+                this.setPosition(this.target);
                 return this;
             }
         }else{

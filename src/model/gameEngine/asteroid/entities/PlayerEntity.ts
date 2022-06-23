@@ -1,5 +1,5 @@
 import { TargetEntity } from "../../core/entities/TargetEntity";
-import { Position } from "../../core/gameState/Entity";
+import { Entity, Position } from "../../core/gameState/Entity";
 
 
 export class PlayerEntity extends TargetEntity {
@@ -20,4 +20,18 @@ export class PlayerEntity extends TargetEntity {
         ctx.closePath();
     }
 
+
+    onHitbox(positionClick: Entity | Position | Entity[]): Entity[] {
+        if (positionClick instanceof Array) {
+            const hit : Entity[] = [];
+            for(const entity of positionClick) {
+                if (entity.onHitbox(this).length > 0) {
+                    hit.push(entity);
+                }
+            }
+            return hit;
+        }else{
+            return [];
+        }
+    }
 }

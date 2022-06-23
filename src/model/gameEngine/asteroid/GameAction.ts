@@ -1,4 +1,6 @@
-import { Action, ActionType, Context, OnActionCallback, OnClickAction } from "../core/gameState/GameEngineState";
+import { MyLogger } from "../../utils/logger";
+import { Action, ActionType, OnClickAction } from "../core/gameState/Actions";
+import { Context, OnActionCallback } from "../core/gameState/GameEngineState";
 import { PlayerEntity } from "./entities/PlayerEntity";
 import { GameParam } from "./GameParam";
 
@@ -21,7 +23,7 @@ export const gameActions : OnActionCallback<GameParam>[] = [
                 }
             });
 
-            return [newGame, ctx];
+            return [newGame, ctx, []];
         }
     },
     {
@@ -29,7 +31,14 @@ export const gameActions : OnActionCallback<GameParam>[] = [
         onAction : (game: GameParam, ctx: Context) => {
             const newGame = {...game};
             newGame.numberOfClicks += 1;
-            return [newGame, ctx];
+            return [newGame, ctx, []];
+        }
+    },
+    {
+        type : ActionType.onHitbox,
+        onAction : (game: GameParam, ctx: Context, action: Action) => {
+            MyLogger.info("onHitbox");
+            return [game, ctx, []];
         }
     }
 ];
