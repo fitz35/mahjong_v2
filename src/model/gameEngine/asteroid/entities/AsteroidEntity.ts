@@ -1,8 +1,12 @@
+import { getUnitVector, multiplyVector } from "../../core/dataUtils";
 import { Entity, Position } from "../../core/gameState/Entity";
 
 export class AsteroidEntity extends Entity {
-    constructor(id : string, position : Position) {
-        super(id, position, {x : 0, y: 0}, {x : 0, y: 0});
+    constructor(id : string) {
+        super(id, 
+            {x : Math.ceil(Math.random()*500), y : Math.ceil(Math.random()*500)}, 
+            multiplyVector(getUnitVector({x : Math.random() - 0.5, y : Math.random() - 0.5}), 50), 
+            {x : 0, y: 0});
     }
 
     onDraw(ctx : CanvasRenderingContext2D) : void {

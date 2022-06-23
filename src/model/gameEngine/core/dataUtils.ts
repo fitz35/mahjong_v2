@@ -10,6 +10,19 @@ export function getNorme<T extends {x : number, y : number}>(vector : T) : numbe
 }
 
 /**
+ * 
+ * @param vector the vector
+ * @returns the unit vector
+ */
+export function getUnitVector<T extends {x : number, y : number}>(vector : T) : {x : number, y : number} {
+    const norme = getNorme(vector);
+    return {
+        x : vector.x/norme,
+        y : vector.y/norme
+    };
+}
+
+/**
  * get the unit vector of a position to another
  * @param from the position to get the unit vector from
  * @param to the position to get the unit vector to
@@ -18,10 +31,21 @@ export function getNorme<T extends {x : number, y : number}>(vector : T) : numbe
 export function getUnitVectorTowardAnOther(from: Position, to: Position): Position {
     const x = to.x - from.x;
     const y = to.y - from.y;
-    const length = getNorme({x, y});
+    return getUnitVector({x, y});
+}
+
+/**
+ * 
+ * @param vector the vector
+ * @param factor the factor to multiply the vector by
+ * @returns the vector multiplied by the factor
+ */
+export function multiplyVector
+<T extends {x : number, y : number}>
+(vector: T, factor: number): {x : number, y : number} {
     return {
-        x: x / length,
-        y: y / length,
+        x : vector.x * factor,
+        y : vector.y * factor
     };
 }
 

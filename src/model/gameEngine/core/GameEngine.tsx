@@ -30,6 +30,7 @@ export function GameEngine<T extends Game>({
             playerToPlay: 0,
         },
         onActionCallbacks: callbacks,
+        //aleaEvent: aleaEvent,
     });
 
     const canvasRef = useRef<HTMLCanvasElement>(null);

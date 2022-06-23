@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { eliminateUndefined } from "../../utils/setUtils";
-import { Action, OnHitboxAction, OnUserAction } from "./gameState/Actions";
+import { Action, OnAleaEventAction, OnHitboxAction, OnUserAction } from "./gameState/Actions";
 import { Game, GameEngineState } from "./gameState/GameEngineState";
 import { useTimer } from "./useTimer";
 
@@ -53,8 +53,18 @@ function callbackGame<T extends Game>(
         }
     }));
 
+    // compute alea event
+    const aleaEvent : OnAleaEventAction[] = eliminateUndefined(gameState.G.aleaEvents.flatMap(aleaEvent => {
+        const alea = Math.random()*100;
+        if(aleaEvent.frequency > alea){
+            return new OnAleaEventAction([], aleaEvent.id);
+        }else{
+            return undefined;
+        }
+    }));
+
     // call the action
-    const newGameState = handleAction(gameState, [...actions, ...hitBoxAction]);
+    const newGameState = handleAction(gameState, [...actions, ...hitBoxAction, ...aleaEvent]);
     
     // update the entities
     newGameState.G.entities = newGameState.G.entities.map(entity => {

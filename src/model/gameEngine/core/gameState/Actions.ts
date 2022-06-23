@@ -8,6 +8,7 @@ export enum ActionType {
     onKeyDown = "onKeyDown",
     onHitbox = "onHitbox",
     onUserEvent = "onUserEvent",
+    onAleaEvent = "onAleaEvent",
 }
 
 /**
@@ -51,6 +52,15 @@ export class OnKeyDownAction extends Action {
 export class OnHitboxAction extends Action {
     constructor(entitieId: string[]) {
         super(ActionType.onHitbox, "hitbox", entitieId);
+    }
+}
+
+/**
+ * on alea event
+ */
+export class OnAleaEventAction extends Action {
+    constructor(entitieId: string[], id: string) {
+        super(ActionType.onAleaEvent, "alea " + id, entitieId);
     }
 }
 

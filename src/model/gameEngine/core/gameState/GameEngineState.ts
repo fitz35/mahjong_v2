@@ -5,11 +5,17 @@ import { Entity } from "./Entity";
 /////////////////////////////////////////////////////////////
 // Game
 
+export interface AleaInterface {
+    id : string,
+    frequency : number, // in parts of 100 (ex : 1 = 1% of the time)
+}
+
 /**
  * the game state
  */
 export interface Game {
     entities: Entity[];
+    aleaEvents: AleaInterface[];
 }
 
 /////////////////////////////////////////////////////////////
