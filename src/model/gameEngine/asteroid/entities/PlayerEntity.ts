@@ -1,5 +1,5 @@
-import { TargetEntity } from "../core/entities/TargetEntity";
-import { Position } from "../core/gameState/Entity";
+import { TargetEntity } from "../../core/entities/TargetEntity";
+import { Position } from "../../core/gameState/Entity";
 
 
 export class PlayerEntity extends TargetEntity {

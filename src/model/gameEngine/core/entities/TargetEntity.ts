@@ -5,7 +5,7 @@ import { Entity, Position } from "../gameState/Entity";
  * a special entity with the objectif to rush a target
  */
 export abstract class TargetEntity extends Entity {
-    private static AREA = 2;
+    private static AREA = 0;
 
 
     public baseVelocity : number;
@@ -30,10 +30,14 @@ export abstract class TargetEntity extends Entity {
         if(this.target === undefined){
             return false;
         }else{
-            return this.position.x >= this.target.x - TargetEntity.AREA &&
-                    this.position.x <= this.target.x + TargetEntity.AREA &&
-                    this.position.y >= this.target.y - TargetEntity.AREA &&
-                    this.position.y <= this.target.y + TargetEntity.AREA; 
+            return (Math.ceil(this.position.x) >= this.target.x - TargetEntity.AREA &&
+                    Math.ceil(this.position.x) <= this.target.x + TargetEntity.AREA &&
+                    Math.ceil(this.position.y) >= this.target.y - TargetEntity.AREA &&
+                    Math.ceil(this.position.y) <= this.target.y + TargetEntity.AREA) ||
+                    (Math.floor(this.position.x) >= this.target.x - TargetEntity.AREA &&
+                    Math.floor(this.position.x) <= this.target.x + TargetEntity.AREA &&
+                    Math.floor(this.position.y) >= this.target.y - TargetEntity.AREA &&
+                    Math.floor(this.position.y) <= this.target.y + TargetEntity.AREA); 
         }
     }
 
@@ -81,6 +85,7 @@ export abstract class TargetEntity extends Entity {
     public updatePosition(timeElapsed: number): Entity {
         if(this.target !== undefined){
             if(!this.isArrival()){
+                this.go(); // recalcul the destination (avoid the error of the rounding)
                 return super.updatePosition(timeElapsed);
             }else{
                 return this;

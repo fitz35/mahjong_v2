@@ -1,4 +1,4 @@
-import { Action, ActionType, Context, OnActionCallback, OnClickAction } from "./core/gameState/GameEngineState";
+import { Action, ActionType, Context, OnActionCallback, OnClickAction } from "../core/gameState/GameEngineState";
 import { PlayerEntity } from "./entities/PlayerEntity";
 import { GameParam } from "./GameParam";
 

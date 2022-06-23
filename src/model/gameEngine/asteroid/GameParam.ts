@@ -1,5 +1,5 @@
-import { Entity } from "./core/gameState/Entity";
-import { Game } from "./core/gameState/GameEngineState";
+import { Entity } from "../core/gameState/Entity";
+import { Game } from "../core/gameState/GameEngineState";
 import { PlayerEntity } from "./entities/PlayerEntity";
 
 export interface GameParam extends Game {

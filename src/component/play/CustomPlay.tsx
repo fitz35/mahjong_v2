@@ -1,6 +1,6 @@
 import { GameEngine } from "../../model/gameEngine/core/GameEngine";
-import { gameActions } from "../../model/gameEngine/GameAction";
-import { gameParam } from "../../model/gameEngine/GameParam";
+import { gameActions } from "../../model/gameEngine/asteroid/GameAction";
+import { gameParam } from "../../model/gameEngine/asteroid/GameParam";
 
 export function CustomPlay() {
     return (
