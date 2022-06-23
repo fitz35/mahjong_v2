@@ -23,5 +23,13 @@ export const gameActions : OnActionCallback<GameParam>[] = [
 
             return [newGame, ctx];
         }
+    },
+    {
+        type : ActionType.onClick,
+        onAction : (game: GameParam, ctx: Context) => {
+            const newGame = {...game};
+            newGame.numberOfClicks += 1;
+            return [newGame, ctx];
+        }
     }
 ];

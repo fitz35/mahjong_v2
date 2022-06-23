@@ -1,6 +1,6 @@
-import { GameEngine } from "../../gameEngine/core/GameEngine";
-import { gameActions } from "../../gameEngine/GameAction";
-import { gameParam } from "../../gameEngine/GameParam";
+import { GameEngine } from "../../model/gameEngine/core/GameEngine";
+import { gameActions } from "../../model/gameEngine/GameAction";
+import { gameParam } from "../../model/gameEngine/GameParam";
 
 export function CustomPlay() {
     return (

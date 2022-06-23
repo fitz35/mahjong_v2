@@ -1,4 +1,3 @@
-import { MyLogger } from "../../../model/utils/logger";
 import { getNorme, getUnitVectorTowardAnOther } from "../dataUtils";
 import { Entity, Position } from "../gameState/Entity";
 
@@ -6,7 +5,7 @@ import { Entity, Position } from "../gameState/Entity";
  * a special entity with the objectif to rush a target
  */
 export abstract class TargetEntity extends Entity {
-    private static AREA = 10;
+    private static AREA = 2;
 
 
     public baseVelocity : number;
@@ -49,7 +48,6 @@ export abstract class TargetEntity extends Entity {
                 y : unitVector.y * this.baseVelocity,
             };
 
-            MyLogger.debug(`${this.id} go to`, this.velocity);
         }
     }
 

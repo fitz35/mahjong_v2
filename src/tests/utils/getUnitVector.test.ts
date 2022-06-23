@@ -1,4 +1,4 @@
-import { getUnitVectorTowardAnOther } from "../../gameEngine/core/dataUtils";
+import { getUnitVectorTowardAnOther } from "../../model/gameEngine/core/dataUtils";
 
 
 describe("getUnitVector", () => {

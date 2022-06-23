@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { MyLogger } from "../../model/utils/logger";
 import { Action, Game, GameEngineState } from "./gameState/GameEngineState";
 import { useTimer } from "./useTimer";
 

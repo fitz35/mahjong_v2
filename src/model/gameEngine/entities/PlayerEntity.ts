@@ -13,8 +13,11 @@ export class PlayerEntity extends TargetEntity {
     }
 
     onDraw(ctx: CanvasRenderingContext2D): void {
+        ctx.beginPath();
         ctx.fillStyle = "red";
-        ctx.fillRect(Math.ceil(this.position.x), Math.ceil(this.position.y), 10, 10);
+        ctx.fillRect(this.position.x, this.position.y, 10, 10);
+        ctx.fill();
+        ctx.closePath();
     }
 
 }

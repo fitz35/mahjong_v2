@@ -4,7 +4,7 @@ import { PlayerEntity } from "./entities/PlayerEntity";
 
 export interface GameParam extends Game {
     entities : Entity[];
-
+    numberOfClicks : number;
 }
 
 export const gameParam : GameParam = {
@@ -15,7 +15,8 @@ export const gameParam : GameParam = {
                 x : 0,
                 y : 0
             },
-            10
+            50
         )
-    ]
+    ],
+    numberOfClicks : 0
 };

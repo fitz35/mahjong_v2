@@ -1,5 +1,3 @@
-import { MyLogger } from "../../../model/utils/logger";
-
 /**
  * the position of the entitie
  */
@@ -90,7 +88,6 @@ export abstract class Entity {
     * @returns the new position
     */
     updatePosition(timeElapsed : number) : Entity{
-        MyLogger.debug(`${this.id} updatePosition`, timeElapsed);
         return this.setPosition(
             {
                 x : this.position.x + this.velocity.x * timeElapsed,

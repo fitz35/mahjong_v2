@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { MyLogger } from "../../model/utils/logger";
 import { Position } from "./gameState/Entity";
 import { getInvolvedEntityIds } from "./gameState/entityUpdate";
 import {
@@ -61,7 +60,6 @@ export function GameEngine<T extends Game>({
                 x: event.pageX - canvasRect.left,
                 y: event.pageY - canvasRect.top,
             };
-            MyLogger.debug(`click on canvas at ${pos.x} ${pos.y}`);
             addAction(
                 new OnClickAction(
                     getInvolvedEntityIds(newGameState.G.entities, pos),
@@ -74,7 +72,8 @@ export function GameEngine<T extends Game>({
     return (
         <canvas
             ref={canvasRef}
-            style={{ width: width, height: height }}
+            width={width}
+            height={height}
             onClick={onCanvasClick}
         />
     );
