@@ -52,7 +52,7 @@ function callbackGame<T extends Game>(
     const hitBoxAction : OnHitboxAction[] = eliminateUndefined(gameState.G.entities.flatMap(entity => {
         const entityHits = entity.onHitbox(gameState.G.entities);
         if(entityHits.length > 0){
-            return new OnHitboxAction(entityHits.map(hit => hit.id));
+            return new OnHitboxAction(entityHits);
         }else{
             return undefined;
         }

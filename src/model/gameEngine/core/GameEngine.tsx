@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { OnClickAction } from "./gameState/Actions";
 import { Position } from "./gameState/Entity";
-import { getInvolvedEntityIds } from "./gameState/entityUpdate";
+import { getInvolvedEntity } from "./gameState/entityUpdate";
 import {
     Game,
     GameEngineState,
@@ -35,6 +35,7 @@ export function GameEngine<T extends Game>({
             turn: 0,
             numberOfPlayer: 4,
             playerToPlay: 0,
+            point: 0,
             width,
             height,
         },
@@ -72,7 +73,7 @@ export function GameEngine<T extends Game>({
             };
             addAction(
                 new OnClickAction(
-                    getInvolvedEntityIds(newGameState.G.entities, pos),
+                    getInvolvedEntity(newGameState.G.entities, pos),
                     pos
                 )
             );

@@ -1,7 +1,7 @@
-import { MyLogger } from "../../utils/logger";
-import { Action, ActionType, OnClickAction, OnResetAction } from "../core/gameState/Actions";
+import { Action, ActionType, OnClickAction, OnHitboxAction, OnResetAction } from "../core/gameState/Actions";
 import { Context, OnActionCallback } from "../core/gameState/GameEngineState";
 import { AsteroidEntity } from "./entities/AsteroidEntity";
+import { FuelEntity } from "./entities/FuelEntity";
 import { PlayerEntity } from "./entities/PlayerEntity";
 import { GameParam } from "./GameParam";
 
@@ -37,9 +37,20 @@ export const gameActions : OnActionCallback<GameParam>[] = [
     },
     {
         type : ActionType.onHitbox,
-        onAction : (game: GameParam, ctx: Context) => {
-            MyLogger.info("onHitbox");
-            return [game, {...ctx, turn : ctx.turn + 1}, [new OnResetAction()]];
+        onAction : (game: GameParam, ctx: Context, action : Action) => {
+            let point = ctx.point;
+            const newGame = {...game};
+            if(action instanceof OnHitboxAction) {
+                for(const entitie of action.entitieId) {
+                    if(entitie instanceof AsteroidEntity) {
+                        return [game, {...ctx, turn : ctx.turn + 1, point : point}, [new OnResetAction()]];
+                    }else if(entitie instanceof FuelEntity) {
+                        point += 1;
+                        newGame.entities = newGame.entities.filter(newE => newE.id !== entitie.id);
+                    }  
+                }
+            }
+            return [newGame, {...ctx, point : point}, []];
         }
     },
     {
@@ -49,6 +60,9 @@ export const gameActions : OnActionCallback<GameParam>[] = [
             if(action.payload === "alea apparitionAsteroid") {
                 const asteroid = new AsteroidEntity("wall" + Math.random()*100000);
                 newGame.entities = [...game.entities, asteroid];
+            }else if(action.payload === "alea apparitionFuel") {
+                const fuel = new FuelEntity("fuel" + Math.random()*100000);
+                newGame.entities = [...game.entities, fuel];
             }
             return [newGame, ctx, []];
         }

@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export function CustomPlay() {
     const [perdu, setPerdu] = useState(0);
+    const [gagne, setGagne] = useState(0);
     return (
         <div>
             <GameEngine
@@ -14,12 +15,14 @@ export function CustomPlay() {
                 callbacks={gameActions}
                 onGameChange={(game) => {
                     setPerdu(game.ctx.turn);
+                    setGagne(game.ctx.point);
                 }}
             ></GameEngine>
             <span>
-                perdu :{perdu}
+                perdu :{" " + perdu + " "}
                 foix
             </span>
+            <span>points :{" " + gagne + " "}</span>
         </div>
     );
 }

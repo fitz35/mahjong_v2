@@ -1,4 +1,4 @@
-import { Position } from "./Entity";
+import { Entity, Position } from "./Entity";
 
 /**
  * the possible action to be done by the game engine
@@ -19,8 +19,8 @@ export enum ActionType {
 export class Action {
     type: ActionType;
     payload: string;
-    entitieId: string[];
-    constructor(type: ActionType, payload: string, entitieId: string[]) {
+    entitieId: Entity[];
+    constructor(type: ActionType, payload: string, entitieId: Entity[]) {
         this.type = type;
         this.payload = payload;
         this.entitieId = entitieId;
@@ -33,7 +33,7 @@ export class Action {
 export class OnClickAction extends Action {
     position : Position;
 
-    constructor(entitieId: string[], position: Position) {
+    constructor(entitieId: Entity[], position: Position) {
         super(ActionType.onClick, "click", entitieId);
         this.position = position;
     }
@@ -43,7 +43,7 @@ export class OnClickAction extends Action {
  * on key down action
  */
 export class OnKeyDownAction extends Action {
-    constructor(entitieId: string[], key: string) {
+    constructor(entitieId: Entity[], key: string) {
         super(ActionType.onKeyDown, key, entitieId);
     }
 }
@@ -52,7 +52,7 @@ export class OnKeyDownAction extends Action {
  * on hitbox action
  */
 export class OnHitboxAction extends Action {
-    constructor(entitieId: string[]) {
+    constructor(entitieId: Entity[]) {
         super(ActionType.onHitbox, "hitbox", entitieId);
     }
 }
@@ -61,7 +61,7 @@ export class OnHitboxAction extends Action {
  * on alea event
  */
 export class OnAleaEventAction extends Action {
-    constructor(entitieId: string[], id: string) {
+    constructor(entitieId: Entity[], id: string) {
         super(ActionType.onAleaEvent, "alea " + id, entitieId);
     }
 }
@@ -70,7 +70,7 @@ export class OnAleaEventAction extends Action {
  * on user action
  */
 export abstract class OnUserAction extends Action {
-    constructor(entitieId: string[]) {
+    constructor(entitieId: Entity[]) {
         super(ActionType.onUserEvent, "userAction", entitieId);
     }
 }

@@ -23,6 +23,10 @@ export const gameParam : GameParam = {
         {
             id : "apparitionAsteroid",
             frequency : 10
+        },
+        {
+            id : "apparitionFuel",
+            frequency : 1
         }
     ]
 };
