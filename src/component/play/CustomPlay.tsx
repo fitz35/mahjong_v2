@@ -9,8 +9,8 @@ export function CustomPlay() {
     return (
         <div>
             <GameEngine
-                width={500}
-                height={500}
+                width={800}
+                height={800}
                 game={gameParam}
                 callbacks={gameActions}
                 onGameChange={(game) => {

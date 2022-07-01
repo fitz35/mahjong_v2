@@ -1,5 +1,5 @@
 import { getSquaredDistanceBetweenTwoPositions } from "../core/dataUtils";
-import { Action, ActionType, OnClickAction, OnHitboxAction, OnResetAction } from "../core/gameState/Actions";
+import { Action, ActionType, OnHitboxAction, onMouseMoveAction, OnResetAction } from "../core/gameState/Actions";
 import { Context, OnActionCallback } from "../core/gameState/GameEngineState";
 import { AsteroidEntity } from "./entities/AsteroidEntity";
 import { FuelEntity } from "./entities/FuelEntity";
@@ -8,11 +8,11 @@ import { GameParam } from "./GameParam";
 
 export const gameActions : OnActionCallback<GameParam>[] = [
     {
-        type : ActionType.onClick,
+        type : ActionType.onMouseMove,
         onAction : (game: GameParam, ctx: Context, action: Action) => {
             const newGame = {...game};
             newGame.entities = game.entities.map(entiti => {
-                if( action instanceof OnClickAction){
+                if( action instanceof onMouseMoveAction) {
                     if(entiti instanceof PlayerEntity) {
                         entiti.setTarget(action.position);
                         entiti.go();
@@ -59,7 +59,7 @@ export const gameActions : OnActionCallback<GameParam>[] = [
         onAction : (game: GameParam, ctx: Context, action: Action) => {
             const newGame = {...game};
             if(action.payload === "alea apparitionAsteroid") {
-                const position = {x : Math.ceil(Math.random()*500), y : Math.ceil(Math.random()*500)};
+                const position = {x : Math.ceil(Math.random()*ctx.width), y : Math.ceil(Math.random()*ctx.height)};
                 let player : PlayerEntity | undefined = undefined;
                 for(const entitie of newGame.entities) {
                     if(entitie instanceof PlayerEntity) {

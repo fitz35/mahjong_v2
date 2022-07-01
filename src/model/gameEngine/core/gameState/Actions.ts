@@ -7,6 +7,7 @@ import { Context, Game } from "./GameEngineState";
 export enum ActionType {
     onClick = "onClick",
     onKeyDown = "onKeyDown",
+    onMouseMove = "onMouseMove",
     onHitbox = "onHitbox",
     onReset = "onReset",
 
@@ -36,6 +37,19 @@ export class OnClickAction extends Action {
 
     constructor(entitieId: Entity[], position: Position) {
         super(ActionType.onClick, "click", entitieId);
+        this.position = position;
+    }
+}
+
+
+/**
+ * on mouse move action
+ */
+export class onMouseMoveAction extends Action {
+    position : Position;
+
+    constructor(entitieId: Entity[], position: Position) {
+        super(ActionType.onMouseMove, "mouseMove", entitieId);
         this.position = position;
     }
 }

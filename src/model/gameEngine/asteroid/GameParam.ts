@@ -16,21 +16,21 @@ export const gameParam : GameParam = {
                 x : 0,
                 y : 0
             },
-            100
+            200
         ),
     ],
     numberOfClicks : 0,
     aleaEvents : [
         {
             id : "apparitionAsteroid",
-            frequency : 10,
+            frequency : 20,
             guardFunction : () => {
                 return true;
             }
         },
         {
             id : "apparitionFuel",
-            frequency : 1,
+            frequency : 1.5,
             guardFunction : () => {
                 return true;
             }

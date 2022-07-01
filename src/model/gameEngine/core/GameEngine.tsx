@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { OnClickAction } from "./gameState/Actions";
+import { OnClickAction, onMouseMoveAction } from "./gameState/Actions";
 import { Position } from "./gameState/Entity";
 import { getInvolvedEntity } from "./gameState/entityUpdate";
 import {
@@ -80,12 +80,31 @@ export function GameEngine<T extends Game>({
         }
     };
 
+    // handle click action
+    const onCanvasMouseMoove = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const canvasRect = canvas.getBoundingClientRect();
+            const pos: Position = {
+                x: event.pageX - canvasRect.left,
+                y: event.pageY - canvasRect.top,
+            };
+            addAction(
+                new onMouseMoveAction(
+                    getInvolvedEntity(newGameState.G.entities, pos),
+                    pos
+                )
+            );
+        }
+    };
+
     return (
         <canvas
             ref={canvasRef}
             width={width}
             height={height}
             onClick={onCanvasClick}
+            onMouseMove={onCanvasMouseMoove}
         />
     );
 }
