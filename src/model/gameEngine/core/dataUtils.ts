@@ -49,3 +49,14 @@ export function multiplyVector
     };
 }
 
+/**
+ * 
+ * @param from the position to get the unit vector from
+ * @param to the position to get the unit vector to
+ * @returns the squarred distance
+ */
+export function getSquaredDistanceBetweenTwoPositions(from: Position, to: Position): number {
+    const x = to.x - from.x;
+    const y = to.y - from.y;
+    return x*x + y*y;
+}

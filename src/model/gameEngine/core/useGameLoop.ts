@@ -59,10 +59,10 @@ function callbackGame<T extends Game>(
     }));
 
     // compute alea event
-    const aleaEvent : OnAleaEventAction[] = eliminateUndefined(gameState.G.aleaEvents.flatMap(aleaEvent => {
+    const aleaEvent : OnAleaEventAction<T>[] = eliminateUndefined(gameState.G.aleaEvents.flatMap(aleaEvent => {
         const alea = Math.random()*100;
         if(aleaEvent.frequency > alea){
-            return new OnAleaEventAction([], aleaEvent.id);
+            return new OnAleaEventAction([], aleaEvent.id, () => true);
         }else{
             return undefined;
         }

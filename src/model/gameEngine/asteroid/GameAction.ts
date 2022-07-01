@@ -1,3 +1,4 @@
+import { getSquaredDistanceBetweenTwoPositions } from "../core/dataUtils";
 import { Action, ActionType, OnClickAction, OnHitboxAction, OnResetAction } from "../core/gameState/Actions";
 import { Context, OnActionCallback } from "../core/gameState/GameEngineState";
 import { AsteroidEntity } from "./entities/AsteroidEntity";
@@ -58,8 +59,18 @@ export const gameActions : OnActionCallback<GameParam>[] = [
         onAction : (game: GameParam, ctx: Context, action: Action) => {
             const newGame = {...game};
             if(action.payload === "alea apparitionAsteroid") {
-                const asteroid = new AsteroidEntity("wall" + Math.random()*100000);
-                newGame.entities = [...game.entities, asteroid];
+                const position = {x : Math.ceil(Math.random()*500), y : Math.ceil(Math.random()*500)};
+                let player : PlayerEntity | undefined = undefined;
+                for(const entitie of newGame.entities) {
+                    if(entitie instanceof PlayerEntity) {
+                        player = entitie;
+                        break;
+                    }
+                }
+                if(player !== undefined && getSquaredDistanceBetweenTwoPositions(player.position, position) > 50 * 50) {
+                    const asteroid = new AsteroidEntity("wall" + Math.random()*100000, position);
+                    newGame.entities = [...game.entities, asteroid];
+                }
             }else if(action.payload === "alea apparitionFuel") {
                 const fuel = new FuelEntity("fuel" + Math.random()*100000);
                 newGame.entities = [...game.entities, fuel];

@@ -1,10 +1,11 @@
 import { Entity } from "../core/gameState/Entity";
-import { Game } from "../core/gameState/GameEngineState";
+import { AleaInterface, Game } from "../core/gameState/GameEngineState";
 import { PlayerEntity } from "./entities/PlayerEntity";
 
 export interface GameParam extends Game {
     entities : Entity[];
     numberOfClicks : number;
+    aleaEvents: AleaInterface<Game>[];
 }
 
 export const gameParam : GameParam = {
@@ -22,11 +23,17 @@ export const gameParam : GameParam = {
     aleaEvents : [
         {
             id : "apparitionAsteroid",
-            frequency : 10
+            frequency : 10,
+            guardFunction : () => {
+                return true;
+            }
         },
         {
             id : "apparitionFuel",
-            frequency : 1
+            frequency : 1,
+            guardFunction : () => {
+                return true;
+            }
         }
     ]
 };

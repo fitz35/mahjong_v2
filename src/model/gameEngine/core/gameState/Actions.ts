@@ -1,4 +1,5 @@
 import { Entity, Position } from "./Entity";
+import { Context, Game } from "./GameEngineState";
 
 /**
  * the possible action to be done by the game engine
@@ -60,8 +61,15 @@ export class OnHitboxAction extends Action {
 /**
  * on alea event
  */
-export class OnAleaEventAction extends Action {
-    constructor(entitieId: Entity[], id: string) {
+export class OnAleaEventAction<T extends Game> extends Action {
+    
+    /**
+     * 
+     * @param entitieId 
+     * @param id 
+     * @param guardFunction if false, their is no action
+     */
+    constructor(entitieId: Entity[], id: string, public readonly guardFunction: (game: T, ctx: Context) => boolean) {
         super(ActionType.onAleaEvent, "alea " + id, entitieId);
     }
 }

@@ -5,17 +5,18 @@ import { Entity } from "./Entity";
 /////////////////////////////////////////////////////////////
 // Game
 
-export interface AleaInterface {
-    id : string,
-    frequency : number, // in parts of 100 (ex : 1 = 1% of the time)
-}
-
 /**
  * the game state
  */
 export interface Game {
     entities: Entity[];
-    aleaEvents: AleaInterface[];
+    aleaEvents: AleaInterface<this>[];
+}
+
+export interface AleaInterface<T extends Game> {
+    id : string,
+    frequency : number, // in parts of 100 (ex : 1 = 1% of the time)
+    guardFunction: (game: T, ctx: Context) => boolean
 }
 
 /////////////////////////////////////////////////////////////

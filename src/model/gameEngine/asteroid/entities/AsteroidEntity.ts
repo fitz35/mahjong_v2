@@ -1,10 +1,10 @@
-import { getUnitVector, multiplyVector } from "../../core/dataUtils";
+import { getSquaredDistanceBetweenTwoPositions, getUnitVector, multiplyVector } from "../../core/dataUtils";
 import { Entity, Position } from "../../core/gameState/Entity";
 
 export class AsteroidEntity extends Entity {
-    constructor(id : string) {
+    constructor(id : string, position : Position) {
         super(id, 
-            {x : Math.ceil(Math.random()*500), y : Math.ceil(Math.random()*500)}, 
+            position, 
             multiplyVector(getUnitVector({x : Math.random() - 0.5, y : Math.random() - 0.5}), 50), 
             {x : 0, y: 0});
     }
@@ -19,9 +19,7 @@ export class AsteroidEntity extends Entity {
 
     onHitbox(positionClick : Entity | Position | Entity[]) : Entity[] {
         if(positionClick instanceof Entity) {
-            
-            return (positionClick.position.x - this.position.x) * (positionClick.position.x - this.position.x) + 
-                    (positionClick.position.y - this.position.y) * (positionClick.position.y - this.position.y) 
+            return getSquaredDistanceBetweenTwoPositions(this.position, positionClick.position)
                     <= 20*20 ? 
                 [this] : [];
         }else{
