@@ -38,16 +38,6 @@ export abstract class Entity {
     }
 
     /**
-     * 
-     * @param positionClick the position of the click
-     * @returns if the entity is hit
-     */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onHitbox(positionClick : Position | Entity[] | Entity) : Entity[] {
-        return [];
-    }
-
-    /**
      * draw the entitie in the canvas
      * @param ctx the context of the canvas
      */

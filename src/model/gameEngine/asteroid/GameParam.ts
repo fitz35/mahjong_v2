@@ -23,7 +23,7 @@ export const gameParam : GameParam = {
     aleaEvents : [
         {
             id : "apparitionAsteroid",
-            frequency : 20,
+            frequency : 40,
             guardFunction : () => {
                 return true;
             }

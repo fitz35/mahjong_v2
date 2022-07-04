@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { eliminateUndefined } from "../../utils/setUtils";
+import { HitboxEntityInterface } from "./entities/HitboxEntity";
 import { Action, ActionType, OnAleaEventAction, OnHitboxAction, OnUserAction } from "./gameState/Actions";
 import { Game, GameEngineState } from "./gameState/GameEngineState";
 import { useTimer } from "./useTimer";
@@ -49,10 +50,21 @@ function callbackGame<T extends Game>(
     actions : Action[]
 ) : GameEngineState<T> {
     // compute hitbox
-    const hitBoxAction : OnHitboxAction[] = eliminateUndefined(gameState.G.entities.flatMap(entity => {
-        const entityHits = entity.onHitbox(gameState.G.entities);
-        if(entityHits.length > 0){
-            return new OnHitboxAction(entityHits);
+    const hitBoxAction : OnHitboxAction[] = eliminateUndefined(gameState.G.entities.flatMap((entity, entityI) => {
+        // for every entity, check if it has a hitbox and if it is hit by an other entity with hitbox
+        if("hitboxType" in entity){
+            const hits : OnHitboxAction[] = [];
+            for(let i = entityI + 1; i < gameState.G.entities.length; i++){
+                const entityToCheck = gameState.G.entities[i];
+                if(entity.id !== entityToCheck.id && "hitboxType" in entityToCheck){
+                    const baseEntityHit = entity as unknown as HitboxEntityInterface;
+                    const entityToCheckHit = entityToCheck as unknown as HitboxEntityInterface;
+                    if(baseEntityHit.onHitbox(entityToCheckHit)){
+                        hits.push(new OnHitboxAction([entity, entityToCheck]));
+                    }
+                }
+            }
+            return hits;
         }else{
             return undefined;
         }

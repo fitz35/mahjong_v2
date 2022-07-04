@@ -42,15 +42,20 @@ export const gameActions : OnActionCallback<GameParam>[] = [
             let point = ctx.point;
             const newGame = {...game};
             if(action instanceof OnHitboxAction) {
-                for(const entitie of action.entitieId) {
-                    if(entitie instanceof AsteroidEntity) {
-                        return [game, {...ctx, turn : ctx.turn + 1, point : point}, [new OnResetAction()]];
-                    }else if(entitie instanceof FuelEntity) {
-                        point += 1;
-                        newGame.entities = newGame.entities.filter(newE => newE.id !== entitie.id);
-                    }  
-                }
+                if(action.entitieId[0] instanceof AsteroidEntity && action.entitieId[1] instanceof PlayerEntity ||
+                    action.entitieId[0] instanceof PlayerEntity && action.entitieId[1] instanceof AsteroidEntity) {
+                    // collision between asteroid and player
+                    return [game, {...ctx, turn : ctx.turn + 1, point : point}, [new OnResetAction()]];
+                }else if(action.entitieId[0] instanceof FuelEntity && action.entitieId[1] instanceof PlayerEntity ||
+                    action.entitieId[0] instanceof PlayerEntity && action.entitieId[1] instanceof FuelEntity) {
+                    // collision between fuel and player
+                    const fuelEntity = action.entitieId[0] instanceof FuelEntity ? 
+                        action.entitieId[0] : action.entitieId[1];
+                    point += 1;
+                    newGame.entities = newGame.entities.filter(newE => newE.id !== fuelEntity.id);
+                }  
             }
+            
             return [newGame, {...ctx, point : point}, []];
         }
     },

@@ -67,6 +67,10 @@ export class OnKeyDownAction extends Action {
  * on hitbox action
  */
 export class OnHitboxAction extends Action {
+    /**
+     * 
+     * @param entitieId the pair of entitys that hitboxs collide
+     */
     constructor(entitieId: Entity[]) {
         super(ActionType.onHitbox, "hitbox", entitieId);
     }
