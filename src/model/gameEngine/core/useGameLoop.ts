@@ -70,33 +70,41 @@ function callbackGame<T extends Game>(
         }
     }));
 
-    // compute alea event
+    // compute alea event (if no pause)
+    
     const aleaEvent : OnAleaEventAction<T>[] = eliminateUndefined(gameState.G.aleaEvents.flatMap(aleaEvent => {
-        const alea = Math.random()*100;
-        if(aleaEvent.frequency > alea){
-            return new OnAleaEventAction([], aleaEvent.id, () => true);
+        if(!gameState.ctx.pause){
+            const alea = Math.random()*100;
+            if(aleaEvent.frequency > alea){
+                return new OnAleaEventAction([], aleaEvent.id, () => true);
+            }else{
+                return undefined;
+            }
         }else{
             return undefined;
         }
     }));
+    
 
     // call the action
     const newGameState = handleAction(gameState, [...actions, ...hitBoxAction, ...aleaEvent]);
     
-    // update the entities
-    newGameState.G.entities = eliminateUndefined(newGameState.G.entities.map(entity => {
-        entity = entity.updatePosition(timeElapsed/1000);
-        entity = entity.updateVelocity(timeElapsed/1000);
-        // eliminate the entity if it is out of the screen
-        if(entity.position.x < 0 || 
-            entity.position.x > gameState.ctx.width || 
-            entity.position.y < 0 || 
-            entity.position.y > gameState.ctx.height){
-            return undefined;
-        }else{
-            return entity;
-        }
-    }));
+    // update the entities if no pause
+    if(!newGameState.ctx.pause){
+        newGameState.G.entities = eliminateUndefined(newGameState.G.entities.map(entity => {
+            entity = entity.updatePosition(timeElapsed/1000);
+            entity = entity.updateVelocity(timeElapsed/1000);
+            // eliminate the entity if it is out of the screen
+            if(entity.position.x < 0 || 
+                entity.position.x > gameState.ctx.width || 
+                entity.position.y < 0 || 
+                entity.position.y > gameState.ctx.height){
+                return undefined;
+            }else{
+                return entity;
+            }
+        }));
+    }
 
     return newGameState;
 }

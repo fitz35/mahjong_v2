@@ -36,6 +36,7 @@ export function GameEngine<T extends Game>({
             numberOfPlayer: 4,
             playerToPlay: 0,
             point: 0,
+            pause: false,
             width,
             height,
         },

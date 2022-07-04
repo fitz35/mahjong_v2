@@ -30,6 +30,7 @@ export interface Context {
     playerToPlay: number;
     numberOfPlayer: number;
     point : number;
+    pause : boolean;
     width : number;
     height : number;
 }

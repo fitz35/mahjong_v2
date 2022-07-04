@@ -10,7 +10,7 @@ export class AsteroidEntity extends Entity implements HitBoxCircleEntityInterfac
             {x : 0, y: 0});
     }
     hitboxType: HitboxEntityType.CIRCLE = HitboxEntityType.CIRCLE;
-    radius = 10;
+    radius = Math.random()*10 + 10;
     onHitbox(hitboxTocheck: HitboxEntityInterface) : boolean{
         return checkHitbox(this, hitboxTocheck);
     }
