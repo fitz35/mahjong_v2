@@ -13,6 +13,10 @@ export class PlayerEntity extends TargetEntity implements HitBoxCircleEntityInte
         velocity: number
     ) {
         super(id, position, velocity);
+        this.acceleration = {
+            x : 40,
+            y : 40
+        };
     }
 
     hitboxType: HitboxEntityType.CIRCLE = HitboxEntityType.CIRCLE;

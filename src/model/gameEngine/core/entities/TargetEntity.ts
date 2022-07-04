@@ -47,10 +47,20 @@ export abstract class TargetEntity extends Entity {
     public go() {
         if(this.target !== undefined){
             const unitVector = getUnitVectorTowardAnOther(this.position, this.target);
-            this.velocity = {
-                x : unitVector.x * this.baseVelocity,
-                y : unitVector.y * this.baseVelocity,
-            };
+            // get the velocity
+            if(this.velocity.x === 0 && this.velocity.y === 0){
+
+                this.velocity = {
+                    x : unitVector.x * this.baseVelocity,
+                    y : unitVector.y * this.baseVelocity,
+                };
+            }else{
+                const oldNorme = getNorme(this.velocity);
+                this.velocity = {
+                    x : unitVector.x * oldNorme,
+                    y : unitVector.y * oldNorme
+                };
+            }
 
         }
     }
