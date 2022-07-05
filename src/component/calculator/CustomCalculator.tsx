@@ -8,7 +8,6 @@ import { ParamPanel } from "./paramPanel/ParamPanel";
 import { useCalculatorHistoricState } from "../../model/gameStateCalculator/useCalculatorHistoricState";
 import { MancheResultTab } from "./mancheResultTab/MancheResultTab";
 import { ResponsiveLine } from "@nivo/line";
-import { MyLogger } from "../../model/utils/logger";
 const { Panel } = Collapse;
 
 interface CustomCalculatorProps {
@@ -107,8 +106,6 @@ export const CustomCalculator = ({
         x: utilitiesHisto.getHistoricLength() - 1,
         y: utilitiesActu.getLastState().gameState.joueur4.points,
     });
-
-    MyLogger.debug("lineData", lineData);
 
     return (
         <>

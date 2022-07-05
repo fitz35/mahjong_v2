@@ -223,7 +223,6 @@ export function useCalculatorHistoricState() : [UtilitiesActualType, UtilitiesHi
     };
 
 
-
     const utilitiesHistory : UtilitiesHistoryType = {
         replaceHistoricState,
         resetHistoricState,
