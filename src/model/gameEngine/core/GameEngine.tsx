@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
-import { OnClickAction, onMouseMoveAction } from "./gameState/Actions";
+import {
+    OnClickAction,
+    onMouseMoveAction,
+    OnRightClickAction,
+} from "./gameState/Actions";
 import { Position } from "./gameState/Entity";
 import { getInvolvedEntity } from "./gameState/entityUpdate";
 import {
@@ -82,6 +86,25 @@ export function GameEngine<T extends Game>({
     };
 
     // handle click action
+    const onCanvasRightClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        event.preventDefault();
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const canvasRect = canvas.getBoundingClientRect();
+            const pos: Position = {
+                x: event.pageX - canvasRect.left,
+                y: event.pageY - canvasRect.top,
+            };
+            addAction(
+                new OnRightClickAction(
+                    getInvolvedEntity(newGameState.G.entities, pos),
+                    pos
+                )
+            );
+        }
+    };
+
+    // handle click action
     const onCanvasMouseMoove = (event: React.MouseEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
         if (canvas) {
@@ -106,6 +129,7 @@ export function GameEngine<T extends Game>({
             height={height}
             onClick={onCanvasClick}
             onMouseMove={onCanvasMouseMoove}
+            onContextMenu={onCanvasRightClick}
         />
     );
 }
